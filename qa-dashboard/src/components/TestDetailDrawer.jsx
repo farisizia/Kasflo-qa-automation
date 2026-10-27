@@ -142,13 +142,19 @@ function ScreenshotCard({ att, idx, onZoom }) {
         )}
 
         <img 
+          ref={(el) => {
+            if (el && el.complete && el.naturalWidth > 0 && loadStatus !== 'loaded') {
+              setLoadStatus('loaded');
+            }
+          }}
           src={currentUrl} 
           alt={att.name || 'Pratinjau Screenshot'} 
-          loading="lazy"
+          loading="eager"
+          decoding="async"
           onLoad={() => setLoadStatus('loaded')}
           onError={handleImageError}
           className={`w-full h-auto max-h-[460px] object-contain rounded-lg transition-all duration-300 select-none ${
-            loadStatus === 'loaded' ? 'block group-hover:scale-[1.01]' : 'hidden'
+            loadStatus === 'loaded' ? 'block group-hover:scale-[1.01]' : 'opacity-0 absolute pointer-events-none'
           }`}
         />
 
