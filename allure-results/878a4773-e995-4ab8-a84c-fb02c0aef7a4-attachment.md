@@ -1,0 +1,140 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Kasflo-Resto/Katalog/manajemen_stok.spec.js >> Manajemen Stok >> [TC-07] Filter menu berdasarkan kategori pada halaman edit stok
+- Location: tests/Kasflo-Resto/Katalog/manajemen_stok.spec.js:297:3
+
+# Error details
+
+```
+Error: page.goto: net::ERR_INTERNET_DISCONNECTED at https://backoffice-dev.kasflo.id/
+Call log:
+  - navigating to "https://backoffice-dev.kasflo.id/", waiting until "domcontentloaded"
+
+```
+
+# Test source
+
+```ts
+  1   | const { test, expect } = require('@playwright/test');
+  2   | 
+  3   | test.describe('Manajemen Stok', () => {
+  4   |   // Helper selector for actual data rows (excluding empty placeholder row)
+  5   |   function getDataRows(page) {
+  6   |     return page.locator('table tbody tr:not(:has-text("Belum Ada Data")):not(:has-text("No results found"))');
+  7   |   }
+  8   | 
+  9   |   // Shared resilient login helper
+  10  |   async function loginBeforeTest(page) {
+  11  |     if (page.url().includes('/admin/')) {
+  12  |       return page;
+  13  |     }
+  14  | 
+> 15  |     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+      |                ^ Error: page.goto: net::ERR_INTERNET_DISCONNECTED at https://backoffice-dev.kasflo.id/
+  16  | 
+  17  |     if (page.url().includes('/admin/')) {
+  18  |       return page;
+  19  |     }
+  20  | 
+  21  |     const emailInput = page.getByLabel(/Email atau Username/i);
+  22  |     await expect(emailInput).toBeVisible({ timeout: 20000 });
+  23  | 
+  24  |     await emailInput.fill('qakasflo@automation.com');
+  25  |     await page.getByLabel(/Kata Sandi/i).fill('password');
+  26  |     await page.waitForTimeout(500);
+  27  | 
+  28  |     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+  29  |     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
+  30  |     await loginBtn.click();
+  31  | 
+  32  |     try {
+  33  |       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
+  34  |     } catch {
+  35  |       if (!page.url().includes('/admin/')) {
+  36  |         await page.waitForTimeout(1000);
+  37  |         if (await loginBtn.isVisible().catch(() => false)) {
+  38  |           await loginBtn.click({ timeout: 5000 }).catch(() => {});
+  39  |         }
+  40  |         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+  41  |       }
+  42  |     }
+  43  |     return page;
+  44  |   }
+  45  | 
+  46  |   // Helper to ensure at least one stock entry exists (generated via Book Menu)
+  47  |   async function ensureStockExists(page) {
+  48  |     try {
+  49  |       const emptyState = page.locator('table tbody tr', { hasText: /Belum Ada Data|No results found/i });
+  50  |       const hasEmpty = await emptyState.isVisible({ timeout: 2000 }).catch(() => false);
+  51  |       if (hasEmpty) {
+  52  |         await page.goto('/admin/catalog/book-menu/add', { waitUntil: 'domcontentloaded' });
+  53  |         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+  54  |         const bmName = 'Init BM Stock ' + Date.now();
+  55  |         await page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first().fill(bmName);
+  56  | 
+  57  |         const switchEl = page.locator('table tbody tr .mantine-Switch-root, table tbody tr input[type="checkbox"]').first();
+  58  |         if (await switchEl.isVisible({ timeout: 2000 }).catch(() => false)) {
+  59  |           await switchEl.click().catch(() => {});
+  60  |         }
+  61  | 
+  62  |         const simpanBtn = page.getByRole('button', { name: 'Simpan' });
+  63  |         if (await simpanBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+  64  |           await simpanBtn.click().catch(() => {});
+  65  |           await page.waitForURL(/\/admin\/catalog\/book-menu$/, { timeout: 10000 }).catch(() => {});
+  66  |         }
+  67  |       }
+  68  |     } catch {
+  69  |       // Gracefully proceed
+  70  |     } finally {
+  71  |       if (!page.url().includes('/admin/catalog/stock')) {
+  72  |         await page.goto('/admin/catalog/stock', { waitUntil: 'domcontentloaded' }).catch(() => {});
+  73  |       }
+  74  |     }
+  75  |   }
+  76  | 
+  77  |   test.beforeEach(async ({ page }) => {
+  78  |     await test.step('Inisialisasi sesi login dan navigasi ke halaman pengujian', async () => {
+  79  |       // Step 1: Login
+  80  |       await loginBeforeTest(page);
+  81  | 
+  82  |       // Step 2: Navigate to Stock Management page
+  83  |       await page.goto('/admin/catalog/stock', { waitUntil: 'domcontentloaded' });
+  84  | 
+  85  |       // Step 3: Verify stock management page loaded
+  86  |       await expect(page).toHaveURL(/\/admin\/catalog\/stock/);
+  87  |       await expect(page.locator('table')).toBeVisible({ timeout: 15000 });
+  88  |     
+  89  |     });
+  90  |   });
+  91  | 
+  92  |   test('[TC-01] Menampilkan halaman manajemen stok dengan tabel dan header yang sesuai', async ({ page }) => {
+  93  |     await test.step('Verifikasi bahwa sistem berhasil menampilkan halaman manajemen stok dengan tabel dan header yang sesuai', async () => {
+  94  |       // Verify page title / breadcrumb
+  95  |       await expect(page.getByText('Manajemen Stok').first()).toBeVisible();
+  96  | 
+  97  |       // Check table visibility
+  98  |       const table = page.locator('table');
+  99  |       await expect(table).toBeVisible();
+  100 | 
+  101 |       // Verify table headers
+  102 |       const thead = page.locator('thead');
+  103 |       await expect(thead.getByText('Cabang', { exact: true }).first()).toBeVisible();
+  104 |       await expect(thead.getByText('Action', { exact: true }).first()).toBeVisible();
+  105 | 
+  106 |       // Verify action elements in data row if stock entries exist
+  107 |       await ensureStockExists(page);
+  108 |       const dataRows = getDataRows(page);
+  109 |       if (await dataRows.count() > 0) {
+  110 |         const firstRow = dataRows.first();
+  111 |         await expect(firstRow.locator('a[href*="/detail/"]').first()).toBeVisible({ timeout: 10000 });
+  112 |         await expect(firstRow.locator('a[href*="/edit/"]').first()).toBeVisible({ timeout: 10000 });
+  113 |       }
+  114 |     
+  115 |     });
+```

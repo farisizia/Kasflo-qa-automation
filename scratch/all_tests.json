@@ -1,0 +1,526 @@
+{
+  "tests/login.spec.js": {
+    "describe": "Login",
+    "tests": [
+      "[TC-01] Menampilkan form login",
+      "[TC-02] Link Lupa kata sandi mengarah ke /forgot-password",
+      "[TC-03] Link Daftar mengarah ke /register",
+      "[TC-04] Validasi field kosong saat klik tombol Masuk",
+      "[TC-05] Login gagal dengan kredensial yang salah",
+      "[TC-06] Mengisi email dan password pada form login",
+      "[TC-07] Login berhasil dengan kredensial valid"
+    ]
+  },
+  "tests/Bahan Baku/data_bahan_baku.spec.js": {
+    "describe": "Admin → Ingredients → Data Bahan Baku page",
+    "tests": [
+      "menampilkan halaman data bahan baku dengan tabel, header, filter, dan tab yang sesuai",
+      "navigasi ke halaman buat bahan baku mentah dan memverifikasi form elements",
+      "tombol batalkan pada form buat bahan baku mentah kembali ke list tanpa menyimpan",
+      "validasi form buat bahan baku mentah: tombol simpan disabled jika input wajib belum diisi",
+      "tambah bahan baku mentah baru berhasil dan muncul di tabel",
+      "cari/filter data bahan baku dengan search box",
+      "beralih ke tab bahan baku setengah jadi dan kembali ke bahan baku mentah",
+      "navigasi ke halaman buat bahan baku setengah jadi dan memverifikasi form elements",
+      "navigasi ke halaman edit bahan baku mentah via aksi tabel",
+      "edit bahan baku mentah dan simpan perubahan",
+      "batal menghapus bahan baku mentah melalui modal konfirmasi",
+      "hapus bahan baku mentah berhasil dengan konfirmasi modal"
+    ]
+  },
+  "tests/Bahan Baku/kategori_bahan_baku.spec.js": {
+    "describe": "Admin → Ingredients → Ingredient Category page",
+    "tests": [
+      "menampilkan halaman kategori bahan baku dengan tabel dan header yang sesuai",
+      "tambah kategori bahan baku baru berhasil via modal",
+      "validasi input nama kategori kosong pada modal tambah",
+      "edit kategori bahan baku berhasil via modal edit",
+      "hapus kategori bahan baku dengan ikon trash",
+      "cari/filter kategori bahan baku dengan search box",
+      "membuka modal terapkan ke bahan baku dan memverifikasi komponennya",
+      "tombol batal pada modal tambah/edit menutup modal tanpa menyimpan perubahan"
+    ]
+  },
+  "tests/Bahan Baku/resep.spec.js": {
+    "describe": "Admin → Ingredients → Recipe page",
+    "tests": [
+      "menampilkan halaman resep dengan tabel, header, filter, dan tab yang sesuai",
+      "navigasi ke halaman buat resep dan memverifikasi form elements",
+      "tombol batalkan pada form buat resep kembali ke list tanpa menyimpan",
+      "validasi form buat resep: submit tanpa melengkapi data tidak keluar dari halaman add",
+      "membuka modal tambah bahan baku dan membatalkannya",
+      "tambah resep baru berhasil dan muncul di tabel",
+      "cari/filter resep dengan search box",
+      "beralih ke tab data resep setengah jadi dan kembali ke tab data resep",
+      "navigasi ke halaman edit resep via aksi tabel",
+      "edit resep dan simpan perubahan",
+      "batal menghapus resep melalui modal konfirmasi",
+      "hapus resep berhasil dengan konfirmasi modal"
+    ]
+  },
+  "tests/Katalog/buku_menu.spec.js": {
+    "describe": "Admin → Catalog → Book Menu page",
+    "tests": [
+      "menampilkan halaman buku menu dengan tabel",
+      "tambah buku menu baru berhasil",
+      "edit buku menu dengan ikon edit",
+      "hapus buku menu dengan ikon trash",
+      "cari/filter buku menu dengan search box",
+      "verifikasi status toggle buku menu memunculkan konfirmasi",
+      "lihat detail buku menu dengan ikon view"
+    ]
+  },
+  "tests/Katalog/category.spec.js": {
+    "describe": "Admin → Catalog → Category page",
+    "tests": [
+      "menampilkan halaman kategori dengan tabel",
+      "tambah kategori baru berhasil",
+      "edit kategori dengan ikon edit",
+      "hapus kategori dengan ikon trash",
+      "cari/filter kategori dengan search box",
+      "lihat detail/terapkan menu kategori",
+      "verifikasi status toggle kategori memunculkan konfirmasi"
+    ]
+  },
+  "tests/Katalog/manajemen_stok.spec.js": {
+    "describe": "Admin → Catalog → Stock Management page",
+    "tests": [
+      "menampilkan halaman manajemen stok dengan tabel dan header yang sesuai",
+      "cari/filter data manajemen stok dengan search box",
+      "navigasi ke halaman detail manajemen stok dan memverifikasi data menu stok",
+      "navigasi dari halaman detail ke form edit stok",
+      "navigasi ke halaman edit stok langsung dari daftar tabel",
+      "cari/filter menu pada halaman edit stok",
+      "filter menu berdasarkan kategori pada halaman edit stok",
+      "validasi kondisi saat stok tersedia: stok habis nonaktif dan stok unlimited nonaktif",
+      "validasi state disable input stok saat toggle stok unlimited diaktifkan dan enabled saat dinonaktifkan",
+      "mengubah nilai stok dan menyimpan perubahan berhasil (ubah stok)",
+      "mengubah nilai stok menu per kategori dan menyimpan perubahan berhasil (per kategori)",
+      "validasi perilaku stok pada menu paketan: input stok dan stok unlimited disabled",
+      "tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list stok"
+    ]
+  },
+  "tests/Katalog/menu.spec.js": {
+    "describe": "Admin → Catalog → Menu page",
+    "tests": [
+      "menampilkan halaman menu dengan tabel",
+      "tambah menu satuan berhasil",
+      "tambah menu paketan berhasil",
+      "edit menu dengan ikon edit",
+      "hapus menu dengan ikon trash",
+      "cari/filter menu dengan search box",
+      "switch tab Menu Satuan ↔ Menu Paketan",
+      "verifikasi status toggle menu aktif/non-aktif",
+      "lihat detail menu dengan ikon view"
+    ]
+  },
+  "tests/Katalog/menu_self_order.spec.js": {
+    "describe": "Admin → Catalog → Menu Self Order page",
+    "tests": [
+      "menampilkan halaman menu self order dengan tabel dan 4 tombol aksi",
+      "cari/filter data menu self order dengan search box",
+      "membuka modal kode qr self order dan memverifikasi kontennya",
+      "navigasi ke halaman detail menu self order dan memverifikasi komponennya",
+      "filter menu berdasarkan pencarian pada halaman detail",
+      "navigasi ke halaman banner marketing dan memverifikasi tabel promosi",
+      "navigasi ke halaman edit menu self order langsung dari tabel list",
+      "mengubah titik koordinat dan kode outlet lalu menyimpan perubahan (edit self order)",
+      "mengubah jam buka resto pada halaman edit",
+      "cari/filter menu pada halaman edit menu self order",
+      "tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list menu self order"
+    ]
+  },
+  "tests/Katalog/variant.spec.js": {
+    "describe": "Admin → Catalog → Variant page",
+    "tests": [
+      "menampilkan halaman varian dengan tabel",
+      "tambah varian baru berhasil",
+      "edit varian dengan ikon edit",
+      "hapus varian dengan ikon trash",
+      "cari/filter varian dengan search box",
+      "verifikasi status toggle varian memunculkan konfirmasi",
+      "lihat detail varian dengan ikon view"
+    ]
+  },
+  "tests/Laporan Usaha/detail_penjualan.spec.js": {
+    "describe": "Admin → Business Report → Sale Detail (Detail Penjualan) page",
+    "tests": [
+      "menampilkan halaman Detail Penjualan dengan breadcrumb, header, dan filter pencarian",
+      "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+      "memverifikasi filter dropdown Cabang dan Mode Penjualan",
+      "memverifikasi filter dropdown Status dan Metode Pembayaran",
+      "memverifikasi input pencarian transaksi (Cari Disini)",
+      "menampilkan 6 kartu ringkasan metrik penjualan",
+      "memverifikasi struktur tabel detail penjualan dan kolom-kolomnya",
+      "menampilkan baris data transaksi atau indikator Belum Ada Data pada tabel",
+      "dapat mengklik tombol Tampilkan untuk memfilter data laporan",
+      "memverifikasi tombol Unduh Laporan dan interaksi unduh",
+      "memverifikasi kontrol Rows per page dan pagination"
+    ]
+  },
+  "tests/Laporan Usaha/laba_rugi.spec.js": {
+    "describe": "Admin → Business Report → Profit and Loss (Laba Rugi) page",
+    "tests": [
+      "menampilkan halaman Laporan Laba Rugi dengan filter utama dan tombol aksi",
+      "memverifikasi pemilih rentang tanggal pada laporan laba rugi",
+      "memverifikasi filter dropdown Pilih Cabang",
+      "memverifikasi tampilan informasi periode laporan",
+      "memverifikasi struktur rincian laba rugi (Keterangan dan Jumlah)",
+      "memverifikasi baris-baris komponen keuangan (Pendapatan, Kas, Pengeluaran, Laba Rugi)",
+      "mengklik tombol Tampilkan untuk memuat ulang data laba rugi",
+      "memverifikasi tombol Unduh Laporan dan interaksi ekspor data"
+    ]
+  },
+  "tests/Laporan Usaha/produk.spec.js": {
+    "describe": "Admin → Business Report → Product Report (Laporan Produk) page",
+    "tests": [
+      "menampilkan halaman Laporan Produk dengan breadcrumb, title, dan filter",
+      "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+      "memverifikasi filter dropdown Pilih Cabang",
+      "memverifikasi filter dropdown Pilih Mode Penjualan",
+      "memverifikasi filter dropdown Pilih Via",
+      "memverifikasi struktur tabel laporan produk dan kolom-kolomnya",
+      "menampilkan baris data produk atau pesan Belum Ada Data",
+      "mengklik tombol Tampilkan untuk memperbarui data laporan",
+      "memverifikasi tombol Unduh Laporan dan aksi unduh",
+      "memverifikasi kontrol Rows per page dan pagination"
+    ]
+  },
+  "tests/Laporan Usaha/promosi.spec.js": {
+    "describe": "Admin → Business Report → Promotion Report (Laporan Promosi) page",
+    "tests": [
+      "menampilkan halaman Laporan Promosi dengan breadcrumb, title, dan filter",
+      "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+      "memverifikasi input pencarian (Cari disini...)",
+      "memverifikasi filter dropdown Pilih Cabang",
+      "memverifikasi struktur tabel laporan promosi dan kolom-kolomnya",
+      "menampilkan data promosi atau pesan Belum Ada Data pada tabel",
+      "mengklik tombol Tampilkan untuk memuat ulang laporan promosi",
+      "memverifikasi kontrol Rows per page dan pagination"
+    ]
+  },
+  "tests/Laporan Usaha/rangkuman_penjualan.spec.js": {
+    "describe": "Admin → Business Report → Sales Summary (Rangkuman Penjualan) page",
+    "tests": [
+      "menampilkan halaman Rangkuman Penjualan dengan breadcrumb dan filter utama",
+      "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+      "berpindah ke mode filter Bulanan dan memverifikasi perubahan tampilan",
+      "memverifikasi kartu metrik Penjualan Per Waktu",
+      "memverifikasi kartu ringkasan Total Penjualan beserta sub-metriknya",
+      "dapat memilih opsi cabang pada filter Semua Cabang",
+      "memverifikasi responsivitas container data Rangkuman Penjualan"
+    ]
+  },
+  "tests/Manajemen User/absensi.spec.js": {
+    "describe": "Admin → User Management → Absensi page",
+    "tests": [
+      "menampilkan halaman Absensi dengan breadcrumb dan judul halaman",
+      "memverifikasi filter Pilih Cabang pada toolbar",
+      "memverifikasi pemilih rentang tanggal (Pilih Tanggal) pada toolbar",
+      "memverifikasi tombol Refresh untuk memuat ulang data absensi",
+      "memverifikasi struktur tabel data absensi dan kolom-kolomnya",
+      "menampilkan data log absensi atau pesan fallback tabel kosong",
+      "memverifikasi pemfilteran data absensi berdasarkan pemilihan Cabang",
+      "memverifikasi interaksi kalender popover pada input Pilih Tanggal",
+      "memverifikasi responsivitas container tabel absensi pada tampilan desktop"
+    ]
+  },
+  "tests/Manajemen User/manajemen_user.spec.js": {
+    "describe": "Admin → User Management → Manajemen User page",
+    "tests": [
+      "menampilkan halaman Manajemen User dengan breadcrumb dan judul halaman",
+      "memverifikasi 3 kartu batas akun (Owner, Admin, Staff)",
+      "memverifikasi input pencarian dan filter pada toolbar (Cari disini..., Filter Role, Filter Cabang)",
+      "memverifikasi struktur tabel manajemen user dan kolom-kolomnya",
+      "menampilkan baris data user atau indikator pada tabel",
+      "memverifikasi tombol Tambah User dan navigasi ke halaman form tambah user",
+      "memverifikasi form Tambah User beserta field-field input dan tabel keterangan",
+      "memverifikasi validasi form Tambah User ketika field wajib kosong",
+      "memverifikasi validasi format email dan ketidakcocokan kata sandi",
+      "memverifikasi tombol Batal pada halaman form kembali ke halaman manajemen user",
+      "[CRUD] Alur lengkap Create, Read, Update, dan Delete User Karyawan",
+      "[CRUD - Status] menguji interaksi perubahan status aktif / nonaktif karyawan",
+      "[CRUD - Delete Validation] modal konfirmasi hapus menjaga tombol Hapus tetap nonaktif jika username salah ketik"
+    ]
+  },
+  "tests/Pembukuan/data_pembukuan.spec.js": {
+    "describe": "Admin → Cash Account → Cash Account Data (Data Pembukuan) page",
+    "tests": [
+      "menampilkan halaman Data Pembukuan dengan breadcrumb, tabel, dan tombol tambah",
+      "navigasi ke form Tambah Data Pembukuan dan memverifikasi seluruh komponen form",
+      "tombol Batalkan pada form Tambah Data Pembukuan mengembalikan ke halaman Data Pembukuan",
+      "validasi field wajib form Tambah Data Pembukuan saat submit form kosong",
+      "bisa mengisi field pada form Tambah Data Pembukuan",
+      "bisa mengunggah file lampiran gambar pada form dan menghapusnya kembali",
+      "berhasil menambahkan data pembukuan baru via form",
+      "mengklik tombol aksi pada baris data membuka modal Detail Data Pembukuan",
+      "memverifikasi responsivitas tabel data pembukuan dan state baris data"
+    ]
+  },
+  "tests/Pembukuan/kategori_pembukuan.spec.js": {
+    "describe": "Admin → Cash Account → Cash Account Category (Kategori Pembukuan) page",
+    "tests": [
+      "menampilkan halaman Kategori Pembukuan dengan breadcrumb, tabel, tombol tambah, dan filter bar",
+      "membuka modal Tambah Kategori Pembukuan dan memverifikasi seluruh komponen form",
+      "validasi form Tambah Kategori Pembukuan saat submit field kosong",
+      "validasi panjang karakter nama kategori jika kurang dari 2 karakter",
+      "tombol Batal pada modal Tambah Kategori Pembukuan menutup modal dan mereset form",
+      "berhasil menambahkan kategori pembukuan baru tipe Pendapatan via modal",
+      "berhasil menambahkan kategori pembukuan baru tipe Pengeluaran via modal",
+      "interaksi filter bar (pencarian, filter tipe, dan tombol refresh)",
+      "mengklik aksi detail pada baris data mengarahkan ke halaman Detail Kategori Pembukuan",
+      "membuka modal konfirmasi hapus kategori pembukuan, memeriksa teks konfirmasi, input verifikasi, dan membatalkannya via tombol Batal",
+      "menutup modal konfirmasi hapus kategori pembukuan via tombol silang (close button X)",
+      "validasi input konfirmasi nama kategori pada modal hapus (tombol Hapus disabled jika teks salah atau kosong)",
+      "berhasil menghapus kategori pembukuan via modal konfirmasi hapus setelah mengetik nama kategori yang tepat",
+      "memverifikasi responsivitas tabel kategori pembukuan dan baris data"
+    ]
+  },
+  "tests/Pembukuan/laporan_pembukuan.spec.js": {
+    "describe": "Admin → Cash Account → Cash Account Report (Laporan Pembukuan) page",
+    "tests": [
+      "menampilkan halaman Laporan Pembukuan dengan breadcrumb, judul, dan pemilih tipe laporan",
+      "memverifikasi komponen filter pada halaman (Pilih Periode, Pilih Cabang, dan tombol Cari)",
+      "menampilkan tampilan default Laporan Arus Kas dengan heading, info periode, header Keterangan & Jumlah, dan tombol Unduh Laporan",
+      "tombol Unduh Laporan pada Laporan Arus Kas dapat diklik",
+      "berpindah ke tipe Laporan Transaksi dan memverifikasi perubahan tampilan",
+      "memverifikasi 4 kartu ringkasan pada Laporan Transaksi (Total Awal, Total Pendapatan, Total Pengeluaran, Total Akhir)",
+      "memverifikasi struktur tabel Laporan Transaksi dan header kolom",
+      "tombol Unduh Laporan pada Laporan Transaksi dapat diklik",
+      "dapat memilih cabang pada dropdown dan melakukan pencarian dengan tombol Cari",
+      "dapat membuka kalender Pilih Periode untuk rentang tanggal",
+      "memverifikasi responsivitas tampilan data dan state laporan pembukuan"
+    ]
+  },
+  "tests/Pengaturan/atur_rekening.spec.js": {
+    "describe": "Fitur Atur Rekening (Pengaturan Bank Account)",
+    "tests": [
+      "TC01 - Menampilkan seluruh elemen utama halaman Atur Rekening",
+      "TC02 - Menampilkan tabel daftar rekening bank dan status data kosong",
+      "TC03 - Memverifikasi tombol Tarik Dana dalam status disabled saat belum ada rekening",
+      "TC04 - Membuka dan menutup Modal Tambah Rekening",
+      "TC05 - Memvalidasi pesan error saat menyimpan form Tambah Rekening kosong",
+      "TC06 - Interaksi memilih bank dan mengisi Nomor Rekening pada Modal Tambah Rekening",
+      "TC07 - Membuka dan menutup Modal Ganti PIN",
+      "TC08 - Memvalidasi tombol Simpan dalam status disabled saat field PIN kosong"
+    ]
+  },
+  "tests/Pengaturan/data_cabang.spec.js": {
+    "describe": "Admin → Setting → Branch Data (Data Cabang) page",
+    "tests": [
+      "menampilkan halaman Data Cabang dengan header, breadcrumb, card jumlah cabang, tombol Buat Cabang, filter bar, dan tabel",
+      "interaksi input pencarian cabang memfilter data di tabel",
+      "dropdown filter status cabang menyediakan opsi Semua Status, Aktif, dan Nonaktif",
+      "navigasi ke form Buat Cabang via tombol Buat Cabang dan memverifikasi komponen form",
+      "validasi form Buat Cabang saat submit tanpa mengisi field wajib",
+      "[CRUD - Tambah Cabang - Validasi Format] memvalidasi aturan format input (nama minimal 3 karakter, whatsapp angka, email valid)",
+      "[CRUD - Tambah Cabang] alur pengisian lengkap form Buat Cabang dan submit berhasil ke backend",
+      "tombol Batalkan pada form Buat Cabang mengembalikan ke halaman list Data Cabang",
+      "interaksi dropdown bertingkat lokasi: memilih Provinsi mengaktifkan input Kota",
+      "navigasi ke halaman Detail Cabang via aksi baris tabel",
+      "[CRUD - Edit Cabang - Halaman Detail] navigasi edit cabang dari tombol Edit pada halaman Detail Cabang",
+      "navigasi ke halaman Edit Cabang via aksi baris tabel",
+      "[CRUD - Edit Cabang] alur lengkap edit data cabang dari tabel, mengubah informasi dan simpan perubahan",
+      "[CRUD - Edit Cabang - Validasi] validasi form edit saat field wajib dikosongkan",
+      "membuka modal konfirmasi Hapus Cabang pada tabel dan membatalkannya",
+      "[CRUD - Hapus Cabang - Validasi Modal] memvalidasi keharusan mengetik nama cabang yang tepat dan password sebelum hapus",
+      "[CRUD - Hapus Cabang] alur lengkap konfirmasi hapus cabang via modal dengan nama cabang dan password",
+      "[CRUD - Hapus Cabang - Halaman Detail] memicu modal konfirmasi hapus cabang dari tombol Hapus di halaman Detail",
+      "memverifikasi kontrol pagination dan dropdown Rows per page",
+      "memverifikasi responsivitas tabel Data Cabang dan status toggle switch"
+    ]
+  },
+  "tests/Pengaturan/metode_pembayaran.spec.js": {
+    "describe": "Admin → Setting → Payment Method (Metode Pembayaran) page",
+    "tests": [
+      "menampilkan halaman Metode Pembayaran dengan breadcrumb, judul, limit kuota, dan tombol tambah",
+      "memverifikasi struktur tabel metode pembayaran dan kolom-kolomnya",
+      "dapat membuka dropdown Filter Status dan memilih opsi status",
+      "membuka modal Tambah Metode Pembayaran dan memverifikasi seluruh komponen form",
+      "memverifikasi pilihan tipe metode pembayaran pada dropdown modal",
+      "validasi form Tambah Metode Pembayaran saat submit field wajib kosong",
+      "berhasil menambahkan metode pembayaran baru via modal",
+      "membuka modal pengaturan cabang pada baris metode pembayaran dan membatalkannya",
+      "memverifikasi tombol hapus disabled untuk metode pembayaran bawaan (Cash & QRIS)",
+      "memverifikasi responsivitas tabel metode pembayaran dan status aktif"
+    ]
+  },
+  "tests/Pengaturan/pajak_biaya_lainnya.spec.js": {
+    "describe": "Admin → Setting → Tax & Other Charges (Pajak & Biaya Lainnya) page",
+    "tests": [
+      "menampilkan halaman Pajak dan Biaya Lainnya dengan breadcrumb, judul, dan tombol aksi",
+      "memverifikasi komponen form Pajak & Service Charge beserta opsi perhitungannya",
+      "memverifikasi struktur tabel Pengaturan Biaya Tambahan dan tombol Tambah",
+      "dapat memilih outlet pada dropdown cabang",
+      "dapat mengubah metode perhitungan pajak antara Sebelum Diskon dan Sesudah Diskon",
+      "dapat mengisi nilai Pajak %, Service Charge %, dan Charge Takeaway",
+      "dapat mengaktifkan dan menonaktifkan toggle switch Dikenakan Pajak",
+      "menambah baris baru biaya tambahan via tombol Tambah dan mengisi data",
+      "dapat mengubah status switch Aktif pada baris biaya tambahan",
+      "menghapus baris biaya tambahan via tombol ikon hapus",
+      "berhasil menyimpan pengaturan untuk cabang saat ini via tombol Simpan",
+      "berhasil menyimpan pengaturan untuk semua cabang via tombol Simpan Semua Cabang"
+    ]
+  },
+  "tests/Pengaturan/pengaturan_area.spec.js": {
+    "describe": "Admin → Setting → Area Management (Pengaturan Area) page",
+    "tests": [
+      "memverifikasi judul halaman, breadcrumb, dan limit penggunaan Area",
+      "memverifikasi komponen toolbar (filter Cabang, input pencarian) dan struktur tabel",
+      "memverifikasi baris data area termuat dan menampilkan informasi dengan lengkap",
+      "pencarian area berdasarkan kata kunci menampilkan baris yang sesuai",
+      "pencarian dengan kata kunci acak menampilkan keterangan tidak ada data",
+      "filter dropdown Cabang memfilter data area berdasarkan cabang yang dipilih",
+      "membuka modal Tambah Area dan memverifikasi komponen input serta tombol Batal",
+      "validasi form Tambah Area saat submit tanpa mengisi field wajib",
+      "[CRUD - Tambah Area - Validasi Format] memvalidasi batasan panjang karakter Nama Area",
+      "[CRUD - Tambah Area] alur lengkap berhasil menambah area baru",
+      "membuka modal Edit Area dan memverifikasi field Cabang disabled serta tidak ada input jumlah meja",
+      "[CRUD - Edit Area - Validasi] memvalidasi nama area tidak boleh kosong atau kurang dari 3 karakter saat edit",
+      "[CRUD - Edit Area] alur lengkap berhasil memperbarui nama area",
+      "interaksi toggle switch status Area pada baris tabel",
+      "membuka modal konfirmasi Hapus Area pada tabel dan membatalkannya",
+      "[CRUD - Hapus Area] alur lengkap konfirmasi hapus area via modal dengan notifikasi sukses",
+      "tampilan responsif pada ukuran mobile viewport"
+    ]
+  },
+  "tests/Pengaturan/pengaturan_meja.spec.js": {
+    "describe": "Admin → Setting → Table Management (Pengaturan Meja) page",
+    "tests": [
+      "memverifikasi judul dokumen, breadcrumb, dan limit penggunaan Meja",
+      "memverifikasi komponen filter cabang pada header Pengaturan Meja",
+      "memverifikasi kartu meja menampilkan informasi lengkap (nomor meja, pax, area, cabang, minimal bill, status)",
+      "memilih filter cabang dan memverifikasi dropdown filter area muncul secara kondisional",
+      "membersihkan filter cabang mengembalikan tampilan semula",
+      "membuka modal Tambah Meja dan memverifikasi komponen form serta tombol Batal",
+      "validasi form Tambah Meja saat submit tanpa mengisi field wajib",
+      "validasi dinamis input Area pada modal Tambah Meja setelah Cabang dipilih",
+      "[CRUD - Tambah Meja] alur lengkap berhasil menambah meja baru",
+      "hover pada kartu meja menampilkan aksi Edit, Hapus, dan Status",
+      "membuka modal Edit Meja dan memverifikasi field Cabang serta Area disabled",
+      "[CRUD - Edit Meja - Validasi] memvalidasi nomor meja tidak boleh kosong saat edit",
+      "[CRUD - Edit Meja] alur lengkap berhasil memperbarui data meja",
+      "interaksi toggle status meja (Nonaktifkan / Aktifkan) pada overlay kartu meja",
+      "membuka modal konfirmasi Hapus Meja dan membatalkannya",
+      "[CRUD - Hapus Meja] alur lengkap konfirmasi hapus meja via modal dengan notifikasi sukses",
+      "tampilan responsif pada ukuran mobile viewport"
+    ]
+  },
+  "tests/Pengaturan/shift.spec.js": {
+    "describe": "Admin → Pengaturan → Shift",
+    "tests": [
+      "TC01 - Menampilkan halaman Pengaturan Shift dengan header, breadcrumb, absensi, dan tabel shift",
+      "TC02 - Mengaktifkan dan menonaktifkan toggle switch Wajib Absen pada Pengaturan Absensi",
+      "TC03 - Menambah baris baru shift via tombol Tambah Shift",
+      "TC04 - Mengisi nama shift serta memilih Jam Mulai dan Jam Berakhir",
+      "TC05 - Menghapus baris shift via tombol ikon hapus (tempat sampah merah)",
+      "TC06 - Berhasil menyimpan pengaturan shift untuk cabang aktif via tombol Simpan",
+      "TC07 - Berhasil menyimpan pengaturan shift untuk semua cabang via tombol Simpan Semua Cabang"
+    ]
+  },
+  "tests/Pengaturan/struk.spec.js": {
+    "describe": "Admin → Pengaturan → Struk (Receipt)",
+    "tests": [
+      "TC01 - Menampilkan halaman Pengaturan Struk dengan header, breadcrumb, dan tombol aksi",
+      "TC02 - Memverifikasi seluruh komponen form input pada pengaturan struk",
+      "TC03 - Interaksi dropdown pemilihan outlet / cabang",
+      "TC04 - Mengisi Header, Alamat Usaha, dan Footer serta memverifikasi Live Preview struk ter-update secara real-time",
+      "TC05 - Mengunggah logo usaha dan memverifikasi logo tampil di live preview serta opsi hapus logo",
+      "TC06 - Berhasil menyimpan pengaturan struk untuk cabang aktif via tombol Simpan",
+      "TC07 - Berhasil menyimpan pengaturan struk untuk semua cabang via tombol Simpan Semua Cabang"
+    ]
+  },
+  "tests/Pengaturan/transaksi.spec.js": {
+    "describe": "Fitur Transaksi (Pengaturan Transaksi)",
+    "tests": [
+      "TC01 - Menampilkan seluruh elemen utama halaman Pengaturan Transaksi",
+      "TC02 - Menampilkan dan berinteraksi dengan dropdown pemilih outlet",
+      "TC03 - Mengisi input Target Transaksi Harian Cabang",
+      "TC04 - Mengisi input Pengaturan Cash Drawer",
+      "TC05 - Mengatur opsi radio Pengaturan Pembulatan (Ya / Tidak)",
+      "TC06 - Mengatur toggle Otentikasi Pembatalan Transaksi",
+      "TC07 - Mengatur opsi radio Pengaturan Catatan Transaksi",
+      "TC08 - Berhasil menyimpan pengaturan transaksi via tombol Simpan",
+      "TC09 - Berhasil menyimpan pengaturan transaksi via tombol Simpan Semua Cabang"
+    ]
+  },
+  "tests/Promosi/display_promosi.spec.js": {
+    "describe": "Admin → Promotion → Display Promotion (Display Promosi) page",
+    "tests": [
+      "menampilkan halaman Display Promosi dengan breadcrumb, dropdown cabang, dan dropdown tipe file",
+      "menampilkan state tipe file atau informasi display promosi",
+      "dropdown Tipe File menyediakan opsi Gambar dan Video",
+      "memilih tipe file Gambar menampilkan area upload atau list display promosi",
+      "memilih tipe file Video menampilkan area upload video dan tombol aksi",
+      "tombol Batal dapat diklik dan menutup modal form upload",
+      "dropdown Cabang dapat dibuka dan dipilih dengan opsi cabang yang tersedia",
+      "tombol refresh cabang dapat diklik tanpa error",
+      "validasi tombol Upload nonaktif ketika belum ada file yang dipilih",
+      "berhasil menambahkan data display promosi (upload banner gambar) baru",
+      "menampilkan opsi aksi Edit dan Hapus pada item display promosi yang sudah ada"
+    ]
+  },
+  "tests/Promosi/harga_spesial.spec.js": {
+    "describe": "Admin → Promotion → Special Price (Harga Spesial) page",
+    "tests": [
+      "menampilkan halaman harga spesial dengan tabel, header, dan filter yang sesuai",
+      "navigasi ke form buat harga spesial dan memverifikasi seluruh komponen form",
+      "tombol batalkan pada form buat harga spesial mengembalikan ke halaman list promo",
+      "validasi form buat harga spesial: submit tanpa data wajib tidak keluar dari halaman form",
+      "membuka dan membatalkan modal tambah menu pada form buat harga spesial",
+      "tambah harga spesial baru berhasil dan tampil di tabel",
+      "filter harga spesial berdasarkan cabang",
+      "filter harga spesial berdasarkan status promo",
+      "navigasi ke halaman detail harga spesial via aksi tabel",
+      "navigasi ke form edit harga spesial via aksi tabel",
+      "batal menghapus harga spesial melalui modal konfirmasi",
+      "hapus harga spesial berhasil dengan konfirmasi modal"
+    ]
+  },
+  "tests/Promosi/kampanye_promosi.spec.js": {
+    "describe": "Admin → Promotion → Campaign Promotion (Kampanye Promosi) page",
+    "tests": [
+      "menampilkan halaman kampanye promosi dengan tabel, header, dan filter yang sesuai",
+      "navigasi ke form buat kampanye baru dan memverifikasi seluruh komponen form",
+      "tombol batalkan pada form buat kampanye baru mengembalikan ke halaman list kampanye",
+      "validasi form buat kampanye baru: submit tanpa melengkapi data wajib tidak keluar dari form",
+      "buka dan tutup dropdown metode pembayaran pada form kampanye promosi",
+      "tambah kampanye promosi baru berhasil dan muncul di tabel",
+      "filter kampanye promosi berdasarkan cabang",
+      "filter kampanye promosi berdasarkan tipe diskon",
+      "navigasi ke halaman detail kampanye promosi via aksi tabel",
+      "navigasi ke form edit kampanye promosi via aksi tabel",
+      "batal menghapus kampanye promosi melalui modal konfirmasi",
+      "hapus kampanye promosi berhasil dengan konfirmasi modal"
+    ]
+  },
+  "tests/Promosi/poin.spec.js": {
+    "describe": "Admin → Promotion → Loyalty Points (Poin) page",
+    "tests": [
+      "menampilkan halaman Poin dengan tab Poin Per Pembelian dan Poin Per Menu",
+      "memverifikasi struktur tabel dan header kolom pada tab Poin Per Pembelian",
+      "berpindah ke tab Poin Per Menu dan memverifikasi tampilan tab serta tombol aksi",
+      "navigasi ke form Tambah Poin Per Pembelian dan memverifikasi seluruh komponen form",
+      "tombol Batalkan pada form Tambah Poin Per Pembelian mengembalikan ke halaman Poin",
+      "validasi form Tambah Poin Per Pembelian saat submit form kosong",
+      "bisa mengisi seluruh field form Tambah Poin Per Pembelian",
+      "navigasi ke form Tambah Poin Per Menu dan memverifikasi komponen form",
+      "memverifikasi responsivitas tabel poin dan state baris data"
+    ]
+  },
+  "tests/Promosi/reward.spec.js": {
+    "describe": "Admin → Promotion → Reward page",
+    "tests": [
+      "navigasi ke /admin/promotion/reward otomatis mengarah ke sub-halaman Referral dengan breadcrumb dan tabs yang sesuai",
+      "memverifikasi struktur tabel dan header kolom pada tab Referral",
+      "memverifikasi kontrol Status Referral dan munculnya tombol Simpan Perubahan saat ada perubahan",
+      "memverifikasi tombol Tambah Reward dan Tambah Kampanye Promosi pada tab Referral",
+      "mengklik Tambah Reward menambahkan baris input baru ke tabel dengan komponen yang sesuai",
+      "bisa memilih tipe reward dan mengisi Qty pada baris tabel",
+      "dapat menghapus baris reward yang baru ditambahkan menggunakan tombol aksi hapus",
+      "berpindah ke tab Ulang Tahun dan memverifikasi tabel serta tombol aksi",
+      "berpindah ke tab Subscription dan memverifikasi tombol Tambah Paket",
+      "tombol Tambah Kampanye Promosi pada tab Reward mengarahkan ke form buat kampanye baru"
+    ]
+  }
+}

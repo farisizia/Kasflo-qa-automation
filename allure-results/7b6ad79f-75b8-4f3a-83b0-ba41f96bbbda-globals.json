@@ -1,0 +1,1 @@
+{"attachments":[],"errors":[{"message":"beforeEach hook failed: Test timeout of 60000ms exceeded while running \"beforeEach\" hook.","trace":"Test timeout of 60000ms exceeded while running \"beforeEach\" hook.\n    at /Users/farisizia/Kasflo Resto/tests/Kasflo-Resto/Bahan Baku/data_bahan_baku.spec.js:140:8","status":"broken","timestamp":1792747269402}]}

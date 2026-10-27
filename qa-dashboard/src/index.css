@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Clean Card helpers */
+.glass-panel {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.glass-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.glass-card:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Glow effects */
+.glow-emerald {
+  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+}
+.glow-rose {
+  box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.25);
+}
+.glow-indigo {
+  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
+}
+.glow-amber {
+  box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25);
+}
+
+/* ============================================================
+   Print & PDF Export Styling (A4 Landscape / Portrait)
+   ============================================================ */
+@page {
+  size: A4 landscape;
+  margin: 10mm;
+}
+
+body.print-portrait {
+  /* Dynamic hook for portrait */
+}
+@page :left {
+  margin: 10mm;
+}
+@page :right {
+  margin: 10mm;
+}
+
+@media print {
+  /* Sembunyikan elemen navigasi dan tombol interaktif yang tidak perlu dicetak */
+  header,
+  .no-print,
+  button:not(.print-include),
+  input,
+  select,
+  .modal-backdrop,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Pastikan semua latar belakang, border, dan chart tercetak penuh */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Paksa background kartu tetap terlihat terang dan kontras */
+  .dark {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Hindari pemotongan elemen di tengah halaman */
+  .rounded-2xl,
+  .rounded-xl,
+  table,
+  tr,
+  .glass-card,
+  .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Hilangkan sticky header offset */
+  .sticky {
+    position: static !important;
+  }
+}
+

@@ -1,0 +1,43 @@
+{
+  "name": "kasflo-resto",
+  "version": "1.0.0",
+  "description": "Playwright tests for Kasflo Resto backoffice",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "report:pdf": "node scripts/generate-pdf.js",
+    "test:report": "npx playwright test ; npx monocart show-report ./report/index.html",
+    "report:wifi": "node scripts/serve-wifi.js",
+    "test:wifi": "SERVE_WIFI=true npx playwright test",
+    "test:wifi:sample": "SERVE_WIFI=true npx playwright test tests/Kasflo-Resto/Autentikasi/login.spec.js",
+    "allure:generate": "npx allure generate allure-results --clean -o allure-report",
+    "allure:open": "npx allure open allure-report",
+    "test:allure": "npx playwright test ; npm run allure:generate && npm run allure:open",
+    "test:allure:sample": "npx playwright test tests/Kasflo-Resto/Autentikasi/login.spec.js ; npm run allure:generate && npm run allure:open",
+    "test:all": "npx playwright test",
+    "test:resto": "npx playwright test --project=\"Kasflo Resto\"",
+    "test:bisnis": "npx playwright test --project=\"Kasflo Bisnis\"",
+    "dashboard": "npm --prefix qa-dashboard run preview -- --port 8081 --host 0.0.0.0",
+    "dashboard:dev": "npm --prefix qa-dashboard run dev",
+    "dashboard:build": "npm --prefix qa-dashboard run build",
+    "dashboard:preview": "npm --prefix qa-dashboard run preview",
+    "dashboard:pdf": "node scripts/export-dashboard-pdf.js",
+    "export:excel": "node scripts/generate-testcases-excel.js",
+    "test:dashboard": "npx playwright test ; npm --prefix qa-dashboard run build && npm run dashboard"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.63.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.14.0",
+    "exceljs": "^4.4.0",
+    "monocart-reporter": "^2.15.1"
+  }
+}

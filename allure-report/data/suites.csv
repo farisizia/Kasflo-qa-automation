@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","1290","[TC-01] Menampilkan form login","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","479","[TC-02] Link Lupa kata sandi mengarah ke /forgot-password","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","765","[TC-05] Login gagal dengan kredensial yang salah","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","624","[TC-03] Link Daftar mengarah ke /register","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","674","[TC-06] Mengisi email dan password pada form login","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","1634","[TC-07] Login berhasil dengan kredensial valid","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""
+"","611","[TC-04] Validasi field kosong saat klik tombol Masuk","chromium","2026-10-22","passed","2026-10-22","Login Kasflo Resto","login.spec.js","",""

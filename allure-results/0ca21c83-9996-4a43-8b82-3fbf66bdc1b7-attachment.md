@@ -1,0 +1,530 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Manajemen User/manajemen_user.spec.js >> Manajemen User >> [TC-12] Menguji interaksi perubahan status aktif / nonaktif karyawan
+- Location: tests/Manajemen User/manajemen_user.spec.js:488:3
+
+# Error details
+
+```
+Error: expect(page).toHaveURL(expected) failed
+
+Expected pattern: /\/admin\/user-management\/user$/
+Received string:  "https://backoffice-dev.kasflo.id/admin/user-management/user/add"
+Timeout: 15000ms
+
+Call log:
+  - Expect "toHaveURL" with timeout 15000ms
+    33 × locator resolved to <html translate="no" data-mantine-color-scheme="light">…</html>
+       - unexpected value "https://backoffice-dev.kasflo.id/admin/user-management/user/add"
+
+```
+
+```yaml
+- navigation:
+  - link "Dashboard":
+    - /url: /admin/dashboard
+    - img
+    - paragraph: Dashboard
+  - link "Katalog":
+    - /url: /admin/catalog
+    - img
+    - paragraph: Katalog
+    - img
+  - link "Bahan Baku":
+    - /url: /admin/ingredients
+    - img
+    - paragraph: Bahan Baku
+    - img
+  - link "Promosi":
+    - /url: /admin/promotion
+    - img
+    - paragraph: Promosi
+    - img
+  - link "Pelanggan":
+    - /url: /admin/customer
+    - img
+    - paragraph: Pelanggan
+    - img
+  - link "Pembukuan":
+    - /url: /admin/cash-account
+    - img
+    - paragraph: Pembukuan
+    - img
+  - link "Laporan Usaha":
+    - /url: /admin/report
+    - img
+    - paragraph: Laporan Usaha
+    - img
+  - link "Manajemen User":
+    - /url: /admin/user-management
+    - img
+    - paragraph: Manajemen User
+    - img
+  - link "Pengaturan":
+    - /url: /admin/setting
+    - img
+    - paragraph: Pengaturan
+    - img
+  - link "Berlangganan":
+    - /url: /admin/subscription
+    - img
+    - paragraph: Berlangganan
+- main:
+  - img
+  - paragraph: Manajamen User
+  - button "Business":
+    - text: Business
+    - img
+  - button "Saldo QRIS":
+    - text: Saldo QRIS
+    - img
+  - button "Kasflo Automation OWNER":
+    - img
+    - paragraph: Kasflo Automation
+    - paragraph: OWNER
+    - img
+  - link:
+    - /url: /admin/dashboard
+    - img
+  - text: /
+  - link "Manajemen User":
+    - /url: /admin/user-management/user
+  - text: /
+  - paragraph: Tambah User
+  - paragraph: Error, Mohon Periksa Kembali Form Anda
+  - button "Batalkan"
+  - button "Simpan"
+  - heading "Data User" [level=5]
+  - text: Nama
+  - textbox "Nama":
+    - /placeholder: Masukkan Nama
+    - text: Karyawan QA 157132
+  - text: Email
+  - textbox "Email":
+    - /placeholder: Masukkan Email
+    - text: qa_staff_157132@kasflomail.com
+  - text: Username
+  - textbox "Username":
+    - /placeholder: Masukkan Username
+    - text: staff_157132
+  - text: Cabang
+  - textbox "Cabang":
+    - /placeholder: Pilih Cabang
+    - text: Kasflo Pusat QA
+  - button:
+    - img
+  - link:
+    - /url: /admin/branch-management/branch/add
+    - img
+  - text: Kata Sandi
+  - textbox "Kata Sandi":
+    - /placeholder: Masukkan Kata Sandi
+    - text: Password123!
+  - text: Konfirmasi Kata Sandi
+  - textbox "Konfirmasi Kata Sandi":
+    - /placeholder: Masukkan Konfirmasi Kata Sandi
+    - text: Password123!
+  - text: Role
+  - textbox "Role":
+    - /placeholder: Pilih Role
+    - text: Staff
+  - img
+  - text: Nomor WhatsApp
+  - textbox "Nomor WhatsApp" [invalid]:
+    - /placeholder: Masukkan Nomor WhatsApp
+  - paragraph: Wajib Diisi
+  - text: Status User
+  - switch "Aktif" [checked]
+  - text: Aktif
+  - heading "Keterangan" [level=5]
+  - table:
+    - rowgroup:
+      - row "Fitur yang Bisa Di Akses Owner Admin Staff":
+        - cell "Fitur yang Bisa Di Akses"
+        - cell "Owner"
+        - cell "Admin"
+        - cell "Staff"
+    - rowgroup:
+      - row "Platform POS Akses Penuh Akses Penuh Akses Penuh":
+        - cell "Platform POS"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+      - row "Dashboard Owner Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Dashboard Owner"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Dashboard Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Dashboard Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Pembukuan Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Pembukuan"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Pembukuan Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Pembukuan Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Manajemen Cabang Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Manajemen Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Manajemen Area & Meja Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Manajemen Area & Meja Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Manajemen User Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Manajemen User"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Katalog Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Katalog"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Katalog Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Katalog Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Metode Pembayaran Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Metode Pembayaran"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Promosi Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Promosi"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Promosi Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Promosi Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Laporan Usaha Akses Penuh Tidak Ada Akses Tidak Ada Akses":
+        - cell "Laporan Usaha"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+      - row "Laporan Usaha Cabang Akses Penuh Akses Penuh Tidak Ada Akses":
+        - cell "Laporan Usaha Cabang"
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Akses Penuh":
+          - img
+          - text: Akses Penuh
+        - cell "Tidak Ada Akses":
+          - img
+          - text: Tidak Ada Akses
+- link "Konsultasi Sekarang":
+  - /url: https://api.whatsapp.com/send/?phone=&type=phone_number&app_absent=0
+  - img
+  - text: Konsultasi Sekarang
+```
+
+# Test source
+
+```ts
+  12  |     } catch {
+  13  |       await page.waitForTimeout(500);
+  14  |       try {
+  15  |         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  16  |       } catch {
+  17  |         await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
+  18  |       }
+  19  |     }
+  20  | 
+  21  |     if (page.url().includes('/admin/')) {
+  22  |       return page;
+  23  |     }
+  24  | 
+  25  |     const emailInput = page.getByLabel(/Email atau Username/i);
+  26  |     await expect(emailInput).toBeVisible({ timeout: 20000 });
+  27  | 
+  28  |     await emailInput.fill('qakasflo@automation.com');
+  29  |     await page.getByLabel(/Kata Sandi/i).fill('password');
+  30  | 
+  31  |     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+  32  |     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
+  33  |     await loginBtn.click();
+  34  | 
+  35  |     try {
+  36  |       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 30000 });
+  37  |     } catch {
+  38  |       if (!page.url().includes('/admin/')) {
+  39  |         if (await loginBtn.isEnabled().catch(() => false)) {
+  40  |           await loginBtn.click({ timeout: 3000 }).catch(() => {});
+  41  |         }
+  42  |         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+  43  |       }
+  44  |     }
+  45  |     return page;
+  46  |   }
+  47  | 
+  48  |   // Helper to select an option in a Mantine Select dropdown
+  49  |   async function selectMantineOption(page, inputLocator, optionText) {
+  50  |     await inputLocator.click();
+  51  | 
+  52  |     if (optionText) {
+  53  |       const option = page.locator('[role="option"]:visible, .mantine-Select-option:visible')
+  54  |         .filter({ hasText: optionText }).first();
+  55  |       if (await option.isVisible({ timeout: 3000 }).catch(() => false)) {
+  56  |         await option.click();
+  57  |         return;
+  58  |       }
+  59  |     }
+  60  | 
+  61  |     const firstOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
+  62  |     if (await firstOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+  63  |       await firstOption.click();
+  64  |     } else {
+  65  |       await page.keyboard.press('Escape');
+  66  |     }
+  67  |   }
+  68  | 
+  69  |   // Helper membuat user staff baru untuk pengujian
+  70  |   async function createTestUser(page, role = 'Staff') {
+  71  |     const uid = Date.now().toString().slice(-6);
+  72  |     const testData = {
+  73  |       name: `Karyawan QA ${uid}`,
+  74  |       email: `qa_staff_${uid}@kasflomail.com`,
+  75  |       username: `staff_${uid}`,
+  76  |       password: 'Password123!',
+  77  |       role: role
+  78  |     };
+  79  | 
+  80  |     await page.goto('/admin/user-management/user/add', { waitUntil: 'domcontentloaded' });
+  81  |     await expect(page).toHaveURL(/\/admin\/user-management\/user\/add/);
+  82  | 
+  83  |     await page.getByPlaceholder('Masukkan Nama').fill(testData.name);
+  84  |     await page.getByPlaceholder('Masukkan Email').fill(testData.email);
+  85  |     await page.getByPlaceholder('Masukkan Username').fill(testData.username);
+  86  | 
+  87  |     // Cabang
+  88  |     const cabangInput = page.getByPlaceholder('Pilih Cabang');
+  89  |     await cabangInput.click();
+  90  |     const firstCabang = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
+  91  |     await expect(firstCabang).toBeVisible({ timeout: 5000 });
+  92  |     await firstCabang.click();
+  93  | 
+  94  |     // Password
+  95  |     await page.getByPlaceholder('Masukkan Kata Sandi').fill(testData.password);
+  96  |     await page.getByPlaceholder('Masukkan Konfirmasi Kata Sandi').fill(testData.password);
+  97  | 
+  98  |     // Role
+  99  |     const roleInput = page.getByPlaceholder('Pilih Role');
+  100 |     await roleInput.click();
+  101 |     const staffOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible')
+  102 |       .filter({ hasText: new RegExp(`^${role}$`, 'i') }).first();
+  103 |     if (await staffOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+  104 |       await staffOption.click();
+  105 |     } else {
+  106 |       await page.locator('[role="option"]:visible, .mantine-Select-option:visible').first().click();
+  107 |     }
+  108 | 
+  109 |     // Submit
+  110 |     const simpanBtn = page.getByRole('button', { name: /Simpan/i }).first();
+  111 |     await simpanBtn.click();
+> 112 |     await expect(page).toHaveURL(/\/admin\/user-management\/user$/, { timeout: 15000 });
+      |                        ^ Error: expect(page).toHaveURL(expected) failed
+  113 | 
+  114 |     return testData;
+  115 |   }
+  116 | 
+  117 |   // Helper menghapus user berdasarkan username
+  118 |   async function deleteTestUser(page, username) {
+  119 |     const searchInput = page.getByPlaceholder('Cari disini...').first();
+  120 |     await searchInput.clear();
+  121 |     await searchInput.fill(username);
+  122 |     await page.waitForTimeout(1000);
+  123 | 
+  124 |     const userRow = page.locator('table tbody tr').filter({ hasText: username }).first();
+  125 |     if (await userRow.isVisible({ timeout: 5000 }).catch(() => false)) {
+  126 |       const deleteBtn = userRow.locator('button:has(.tabler-icon-trash), button[color="red"], button:has(svg)').last();
+  127 |       await deleteBtn.click();
+  128 | 
+  129 |       const modal = page.getByRole('dialog', { name: /Hapus User/i }).or(page.locator('[role="dialog"]')).first();
+  130 |       await expect(modal).toBeVisible({ timeout: 5000 });
+  131 | 
+  132 |       const confirmInput = modal.getByPlaceholder(/Masukan Username Karyawan/i);
+  133 |       await confirmInput.fill(username);
+  134 | 
+  135 |       const confirmHapusBtn = modal.getByRole('button', { name: /^Hapus$/i });
+  136 |       await expect(confirmHapusBtn).toBeEnabled({ timeout: 5000 });
+  137 |       await confirmHapusBtn.click();
+  138 | 
+  139 |       await expect(modal).toBeHidden({ timeout: 10000 });
+  140 |       await page.waitForTimeout(1000);
+  141 |       await searchInput.clear();
+  142 |     }
+  143 |   }
+  144 | 
+  145 |   test.beforeEach(async ({ page }) => {
+  146 |     await test.step('Inisialisasi sesi login dan navigasi ke halaman pengujian', async () => {
+  147 |       // Step 1: Login
+  148 |       await loginBeforeTest(page);
+  149 | 
+  150 |       // Step 2: Navigate to Manajemen User page
+  151 |       await page.goto('/admin/user-management/user', { waitUntil: 'domcontentloaded' });
+  152 | 
+  153 |       // Step 3: Verify page loaded and wait for auth state to hydrate
+  154 |       await expect(page).toHaveURL(/\/admin\/user-management\/user/, { timeout: 15000 });
+  155 | 
+  156 |       // Step 4: Pastikan indikator loading dan pesan otorisasi sementara hilang
+  157 |       const unauthorizedMsg = page.getByText(/Anda tidak diberikan akses halaman ini/i);
+  158 |       await expect(unauthorizedMsg).toBeHidden({ timeout: 15000 }).catch(() => {});
+  159 |       await expect(page.locator('table, .mantine-Breadcrumbs-root').first()).toBeVisible({ timeout: 15000 });
+  160 |     
+  161 |     });
+  162 |   });
+  163 | 
+  164 |   // ==========================================
+  165 |   // SECTION 1: UI & TAMPILAN HALAMAN
+  166 |   // ==========================================
+  167 | 
+  168 |   test('[TC-01] Menampilkan halaman Manajemen User dengan breadcrumb dan judul halaman', async ({ page }) => {
+  169 |     await test.step('Verifikasi bahwa sistem berhasil menampilkan halaman Manajemen User dengan breadcrumb dan judul halaman', async () => {
+  170 |       // Breadcrumb verification
+  171 |       const breadcrumb = page.locator('.mantine-Breadcrumbs-root').first();
+  172 |       await expect(breadcrumb).toBeVisible({ timeout: 10000 });
+  173 |       await expect(breadcrumb.getByText(/Manajemen User/i)).toBeVisible();
+  174 | 
+  175 |       // Verify Title / Heading
+  176 |       await expect(page.locator(':visible').filter({ hasText: /^Manajemen User$/ }).first()).toBeVisible();
+  177 | 
+  178 |       // Verify Tambah User button is visible
+  179 |       const tambahBtn = page.getByRole('link', { name: /Tambah User/i }).or(
+  180 |         page.getByRole('button', { name: /Tambah User/i })
+  181 |       );
+  182 |       await expect(tambahBtn).toBeVisible({ timeout: 5000 });
+  183 |     
+  184 |     });
+  185 |   });
+  186 | 
+  187 |   test('[TC-02] Memverifikasi 3 kartu batas akun (Owner, Admin, Staff)', async ({ page }) => {
+  188 |     await test.step('Langkah Pengujian UAT: Memverifikasi 3 kartu batas akun (Owner, Admin, Staff)', async () => {
+  189 |       const roles = ['Owner', 'Admin', 'Staff'];
+  190 | 
+  191 |       for (const role of roles) {
+  192 |         const roleCard = page.locator('.mantine-Card-root, [class*="Card"], [class*="card"]')
+  193 |           .filter({ hasText: new RegExp(role, 'i') }).first();
+  194 |         await expect(roleCard).toBeVisible({ timeout: 5000 });
+  195 |       }
+  196 |     
+  197 |     });
+  198 |   });
+  199 | 
+  200 |   test('[TC-03] Memverifikasi input pencarian dan filter pada toolbar (Cari disini..., Filter Role, Filter Cabang)', async ({ page }) => {
+  201 |     await test.step('Lakukan pengujian memverifikasi input pencarian dan filter pada toolbar (Cari disini..., Filter Role, Filter Cabang) dan validasi hasil yang ditampilkan', async () => {
+  202 |       // Search input
+  203 |       const searchInput = page.getByPlaceholder('Cari disini...').first();
+  204 |       await expect(searchInput).toBeVisible({ timeout: 5000 });
+  205 |       await searchInput.fill('testuser');
+  206 |       await expect(searchInput).toHaveValue('testuser');
+  207 |       await searchInput.clear();
+  208 | 
+  209 |       // Filter Role
+  210 |       const roleInput = page.getByPlaceholder('Filter Role').first();
+  211 |       await expect(roleInput).toBeVisible({ timeout: 5000 });
+  212 |       await selectMantineOption(page, roleInput, 'Admin');
+```

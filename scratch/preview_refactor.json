@@ -1,0 +1,1622 @@
+{
+  "tests/login.spec.js": {
+    "oldDescribe": "Login",
+    "newDescribe": "Login",
+    "tests": [
+      {
+        "old": "[TC-01] Menampilkan form login",
+        "new": "[TC-01] Menampilkan form login"
+      },
+      {
+        "old": "[TC-02] Link Lupa kata sandi mengarah ke /forgot-password",
+        "new": "[TC-02] Link Lupa kata sandi mengarah ke /forgot-password"
+      },
+      {
+        "old": "[TC-03] Link Daftar mengarah ke /register",
+        "new": "[TC-03] Link Daftar mengarah ke /register"
+      },
+      {
+        "old": "[TC-04] Validasi field kosong saat klik tombol Masuk",
+        "new": "[TC-04] Validasi field kosong saat klik tombol Masuk"
+      },
+      {
+        "old": "[TC-05] Login gagal dengan kredensial yang salah",
+        "new": "[TC-05] Login gagal dengan kredensial yang salah"
+      },
+      {
+        "old": "[TC-06] Mengisi email dan password pada form login",
+        "new": "[TC-06] Mengisi email dan password pada form login"
+      },
+      {
+        "old": "[TC-07] Login berhasil dengan kredensial valid",
+        "new": "[TC-07] Login berhasil dengan kredensial valid"
+      }
+    ]
+  },
+  "tests/Bahan Baku/data_bahan_baku.spec.js": {
+    "oldDescribe": "Admin → Ingredients → Data Bahan Baku page",
+    "newDescribe": "Data Bahan Baku",
+    "tests": [
+      {
+        "old": "menampilkan halaman data bahan baku dengan tabel, header, filter, dan tab yang sesuai",
+        "new": "[TC-01] Menampilkan halaman data bahan baku dengan tabel, header, filter, dan tab yang sesuai"
+      },
+      {
+        "old": "navigasi ke halaman buat bahan baku mentah dan memverifikasi form elements",
+        "new": "[TC-02] Navigasi ke halaman buat bahan baku mentah dan memverifikasi form elements"
+      },
+      {
+        "old": "tombol batalkan pada form buat bahan baku mentah kembali ke list tanpa menyimpan",
+        "new": "[TC-03] Tombol batalkan pada form buat bahan baku mentah kembali ke list tanpa menyimpan"
+      },
+      {
+        "old": "validasi form buat bahan baku mentah: tombol simpan disabled jika input wajib belum diisi",
+        "new": "[TC-04] Validasi form buat bahan baku mentah: tombol simpan disabled jika input wajib belum diisi"
+      },
+      {
+        "old": "tambah bahan baku mentah baru berhasil dan muncul di tabel",
+        "new": "[TC-05] Tambah bahan baku mentah baru berhasil dan muncul di tabel"
+      },
+      {
+        "old": "cari/filter data bahan baku dengan search box",
+        "new": "[TC-06] Cari/filter data bahan baku dengan search box"
+      },
+      {
+        "old": "beralih ke tab bahan baku setengah jadi dan kembali ke bahan baku mentah",
+        "new": "[TC-07] Beralih ke tab bahan baku setengah jadi dan kembali ke bahan baku mentah"
+      },
+      {
+        "old": "navigasi ke halaman buat bahan baku setengah jadi dan memverifikasi form elements",
+        "new": "[TC-08] Navigasi ke halaman buat bahan baku setengah jadi dan memverifikasi form elements"
+      },
+      {
+        "old": "navigasi ke halaman edit bahan baku mentah via aksi tabel",
+        "new": "[TC-09] Navigasi ke halaman edit bahan baku mentah via aksi tabel"
+      },
+      {
+        "old": "edit bahan baku mentah dan simpan perubahan",
+        "new": "[TC-10] Edit bahan baku mentah dan simpan perubahan"
+      },
+      {
+        "old": "batal menghapus bahan baku mentah melalui modal konfirmasi",
+        "new": "[TC-11] Batal menghapus bahan baku mentah melalui modal konfirmasi"
+      },
+      {
+        "old": "hapus bahan baku mentah berhasil dengan konfirmasi modal",
+        "new": "[TC-12] Hapus bahan baku mentah berhasil dengan konfirmasi modal"
+      }
+    ]
+  },
+  "tests/Bahan Baku/kategori_bahan_baku.spec.js": {
+    "oldDescribe": "Admin → Ingredients → Ingredient Category page",
+    "newDescribe": "Kategori Bahan Baku",
+    "tests": [
+      {
+        "old": "menampilkan halaman kategori bahan baku dengan tabel dan header yang sesuai",
+        "new": "[TC-01] Menampilkan halaman kategori bahan baku dengan tabel dan header yang sesuai"
+      },
+      {
+        "old": "tambah kategori bahan baku baru berhasil via modal",
+        "new": "[TC-02] Tambah kategori bahan baku baru berhasil via modal"
+      },
+      {
+        "old": "validasi input nama kategori kosong pada modal tambah",
+        "new": "[TC-03] Validasi input nama kategori kosong pada modal tambah"
+      },
+      {
+        "old": "edit kategori bahan baku berhasil via modal edit",
+        "new": "[TC-04] Edit kategori bahan baku berhasil via modal edit"
+      },
+      {
+        "old": "hapus kategori bahan baku dengan ikon trash",
+        "new": "[TC-05] Hapus kategori bahan baku dengan ikon trash"
+      },
+      {
+        "old": "cari/filter kategori bahan baku dengan search box",
+        "new": "[TC-06] Cari/filter kategori bahan baku dengan search box"
+      },
+      {
+        "old": "membuka modal terapkan ke bahan baku dan memverifikasi komponennya",
+        "new": "[TC-07] Membuka modal terapkan ke bahan baku dan memverifikasi komponennya"
+      },
+      {
+        "old": "tombol batal pada modal tambah/edit menutup modal tanpa menyimpan perubahan",
+        "new": "[TC-08] Tombol batal pada modal tambah/edit menutup modal tanpa menyimpan perubahan"
+      }
+    ]
+  },
+  "tests/Bahan Baku/resep.spec.js": {
+    "oldDescribe": "Admin → Ingredients → Recipe page",
+    "newDescribe": "Resep Bahan Baku",
+    "tests": [
+      {
+        "old": "menampilkan halaman resep dengan tabel, header, filter, dan tab yang sesuai",
+        "new": "[TC-01] Menampilkan halaman resep dengan tabel, header, filter, dan tab yang sesuai"
+      },
+      {
+        "old": "navigasi ke halaman buat resep dan memverifikasi form elements",
+        "new": "[TC-02] Navigasi ke halaman buat resep dan memverifikasi form elements"
+      },
+      {
+        "old": "tombol batalkan pada form buat resep kembali ke list tanpa menyimpan",
+        "new": "[TC-03] Tombol batalkan pada form buat resep kembali ke list tanpa menyimpan"
+      },
+      {
+        "old": "validasi form buat resep: submit tanpa melengkapi data tidak keluar dari halaman add",
+        "new": "[TC-04] Validasi form buat resep: submit tanpa melengkapi data tidak keluar dari halaman add"
+      },
+      {
+        "old": "membuka modal tambah bahan baku dan membatalkannya",
+        "new": "[TC-05] Membuka modal tambah bahan baku dan membatalkannya"
+      },
+      {
+        "old": "tambah resep baru berhasil dan muncul di tabel",
+        "new": "[TC-06] Tambah resep baru berhasil dan muncul di tabel"
+      },
+      {
+        "old": "cari/filter resep dengan search box",
+        "new": "[TC-07] Cari/filter resep dengan search box"
+      },
+      {
+        "old": "beralih ke tab data resep setengah jadi dan kembali ke tab data resep",
+        "new": "[TC-08] Beralih ke tab data resep setengah jadi dan kembali ke tab data resep"
+      },
+      {
+        "old": "navigasi ke halaman edit resep via aksi tabel",
+        "new": "[TC-09] Navigasi ke halaman edit resep via aksi tabel"
+      },
+      {
+        "old": "edit resep dan simpan perubahan",
+        "new": "[TC-10] Edit resep dan simpan perubahan"
+      },
+      {
+        "old": "batal menghapus resep melalui modal konfirmasi",
+        "new": "[TC-11] Batal menghapus resep melalui modal konfirmasi"
+      },
+      {
+        "old": "hapus resep berhasil dengan konfirmasi modal",
+        "new": "[TC-12] Hapus resep berhasil dengan konfirmasi modal"
+      }
+    ]
+  },
+  "tests/Katalog/buku_menu.spec.js": {
+    "oldDescribe": "Admin → Catalog → Book Menu page",
+    "newDescribe": "Buku Menu",
+    "tests": [
+      {
+        "old": "menampilkan halaman buku menu dengan tabel",
+        "new": "[TC-01] Menampilkan halaman buku menu dengan tabel"
+      },
+      {
+        "old": "tambah buku menu baru berhasil",
+        "new": "[TC-02] Tambah buku menu baru berhasil"
+      },
+      {
+        "old": "edit buku menu dengan ikon edit",
+        "new": "[TC-03] Edit buku menu dengan ikon edit"
+      },
+      {
+        "old": "hapus buku menu dengan ikon trash",
+        "new": "[TC-04] Hapus buku menu dengan ikon trash"
+      },
+      {
+        "old": "cari/filter buku menu dengan search box",
+        "new": "[TC-05] Cari/filter buku menu dengan search box"
+      },
+      {
+        "old": "verifikasi status toggle buku menu memunculkan konfirmasi",
+        "new": "[TC-06] Verifikasi status toggle buku menu memunculkan konfirmasi"
+      },
+      {
+        "old": "lihat detail buku menu dengan ikon view",
+        "new": "[TC-07] Lihat detail buku menu dengan ikon view"
+      }
+    ]
+  },
+  "tests/Katalog/category.spec.js": {
+    "oldDescribe": "Admin → Catalog → Category page",
+    "newDescribe": "Kategori Menu",
+    "tests": [
+      {
+        "old": "menampilkan halaman kategori dengan tabel",
+        "new": "[TC-01] Menampilkan halaman kategori dengan tabel"
+      },
+      {
+        "old": "tambah kategori baru berhasil",
+        "new": "[TC-02] Tambah kategori baru berhasil"
+      },
+      {
+        "old": "edit kategori dengan ikon edit",
+        "new": "[TC-03] Edit kategori dengan ikon edit"
+      },
+      {
+        "old": "hapus kategori dengan ikon trash",
+        "new": "[TC-04] Hapus kategori dengan ikon trash"
+      },
+      {
+        "old": "cari/filter kategori dengan search box",
+        "new": "[TC-05] Cari/filter kategori dengan search box"
+      },
+      {
+        "old": "lihat detail/terapkan menu kategori",
+        "new": "[TC-06] Lihat detail/terapkan menu kategori"
+      },
+      {
+        "old": "verifikasi status toggle kategori memunculkan konfirmasi",
+        "new": "[TC-07] Verifikasi status toggle kategori memunculkan konfirmasi"
+      }
+    ]
+  },
+  "tests/Katalog/manajemen_stok.spec.js": {
+    "oldDescribe": "Admin → Catalog → Stock Management page",
+    "newDescribe": "Manajemen Stok",
+    "tests": [
+      {
+        "old": "menampilkan halaman manajemen stok dengan tabel dan header yang sesuai",
+        "new": "[TC-01] Menampilkan halaman manajemen stok dengan tabel dan header yang sesuai"
+      },
+      {
+        "old": "cari/filter data manajemen stok dengan search box",
+        "new": "[TC-02] Cari/filter data manajemen stok dengan search box"
+      },
+      {
+        "old": "navigasi ke halaman detail manajemen stok dan memverifikasi data menu stok",
+        "new": "[TC-03] Navigasi ke halaman detail manajemen stok dan memverifikasi data menu stok"
+      },
+      {
+        "old": "navigasi dari halaman detail ke form edit stok",
+        "new": "[TC-04] Navigasi dari halaman detail ke form edit stok"
+      },
+      {
+        "old": "navigasi ke halaman edit stok langsung dari daftar tabel",
+        "new": "[TC-05] Navigasi ke halaman edit stok langsung dari daftar tabel"
+      },
+      {
+        "old": "cari/filter menu pada halaman edit stok",
+        "new": "[TC-06] Cari/filter menu pada halaman edit stok"
+      },
+      {
+        "old": "filter menu berdasarkan kategori pada halaman edit stok",
+        "new": "[TC-07] Filter menu berdasarkan kategori pada halaman edit stok"
+      },
+      {
+        "old": "validasi kondisi saat stok tersedia: stok habis nonaktif dan stok unlimited nonaktif",
+        "new": "[TC-08] Validasi kondisi saat stok tersedia: stok habis nonaktif dan stok unlimited nonaktif"
+      },
+      {
+        "old": "validasi state disable input stok saat toggle stok unlimited diaktifkan dan enabled saat dinonaktifkan",
+        "new": "[TC-09] Validasi state disable input stok saat toggle stok unlimited diaktifkan dan enabled saat dinonaktifkan"
+      },
+      {
+        "old": "mengubah nilai stok dan menyimpan perubahan berhasil (ubah stok)",
+        "new": "[TC-10] Mengubah nilai stok dan menyimpan perubahan berhasil (ubah stok)"
+      },
+      {
+        "old": "mengubah nilai stok menu per kategori dan menyimpan perubahan berhasil (per kategori)",
+        "new": "[TC-11] Mengubah nilai stok menu per kategori dan menyimpan perubahan berhasil (per kategori)"
+      },
+      {
+        "old": "validasi perilaku stok pada menu paketan: input stok dan stok unlimited disabled",
+        "new": "[TC-12] Validasi perilaku stok pada menu paketan: input stok dan stok unlimited disabled"
+      },
+      {
+        "old": "tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list stok",
+        "new": "[TC-13] Tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list stok"
+      }
+    ]
+  },
+  "tests/Katalog/menu.spec.js": {
+    "oldDescribe": "Admin → Catalog → Menu page",
+    "newDescribe": "Manajemen Menu",
+    "tests": [
+      {
+        "old": "menampilkan halaman menu dengan tabel",
+        "new": "[TC-01] Menampilkan halaman menu dengan tabel"
+      },
+      {
+        "old": "tambah menu satuan berhasil",
+        "new": "[TC-02] Tambah menu satuan berhasil"
+      },
+      {
+        "old": "tambah menu paketan berhasil",
+        "new": "[TC-03] Tambah menu paketan berhasil"
+      },
+      {
+        "old": "edit menu dengan ikon edit",
+        "new": "[TC-04] Edit menu dengan ikon edit"
+      },
+      {
+        "old": "hapus menu dengan ikon trash",
+        "new": "[TC-05] Hapus menu dengan ikon trash"
+      },
+      {
+        "old": "cari/filter menu dengan search box",
+        "new": "[TC-06] Cari/filter menu dengan search box"
+      },
+      {
+        "old": "switch tab Menu Satuan ↔ Menu Paketan",
+        "new": "[TC-07] Switch tab Menu Satuan ↔ Menu Paketan"
+      },
+      {
+        "old": "verifikasi status toggle menu aktif/non-aktif",
+        "new": "[TC-08] Verifikasi status toggle menu aktif/non-aktif"
+      },
+      {
+        "old": "lihat detail menu dengan ikon view",
+        "new": "[TC-09] Lihat detail menu dengan ikon view"
+      }
+    ]
+  },
+  "tests/Katalog/menu_self_order.spec.js": {
+    "oldDescribe": "Admin → Catalog → Menu Self Order page",
+    "newDescribe": "Menu Self Order",
+    "tests": [
+      {
+        "old": "menampilkan halaman menu self order dengan tabel dan 4 tombol aksi",
+        "new": "[TC-01] Menampilkan halaman menu self order dengan tabel dan 4 tombol aksi"
+      },
+      {
+        "old": "cari/filter data menu self order dengan search box",
+        "new": "[TC-02] Cari/filter data menu self order dengan search box"
+      },
+      {
+        "old": "membuka modal kode qr self order dan memverifikasi kontennya",
+        "new": "[TC-03] Membuka modal kode qr self order dan memverifikasi kontennya"
+      },
+      {
+        "old": "navigasi ke halaman detail menu self order dan memverifikasi komponennya",
+        "new": "[TC-04] Navigasi ke halaman detail menu self order dan memverifikasi komponennya"
+      },
+      {
+        "old": "filter menu berdasarkan pencarian pada halaman detail",
+        "new": "[TC-05] Filter menu berdasarkan pencarian pada halaman detail"
+      },
+      {
+        "old": "navigasi ke halaman banner marketing dan memverifikasi tabel promosi",
+        "new": "[TC-06] Navigasi ke halaman banner marketing dan memverifikasi tabel promosi"
+      },
+      {
+        "old": "navigasi ke halaman edit menu self order langsung dari tabel list",
+        "new": "[TC-07] Navigasi ke halaman edit menu self order langsung dari tabel list"
+      },
+      {
+        "old": "mengubah titik koordinat dan kode outlet lalu menyimpan perubahan (edit self order)",
+        "new": "[TC-08] Mengubah titik koordinat dan kode outlet lalu menyimpan perubahan (edit self order)"
+      },
+      {
+        "old": "mengubah jam buka resto pada halaman edit",
+        "new": "[TC-09] Mengubah jam buka resto pada halaman edit"
+      },
+      {
+        "old": "cari/filter menu pada halaman edit menu self order",
+        "new": "[TC-10] Cari/filter menu pada halaman edit menu self order"
+      },
+      {
+        "old": "tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list menu self order",
+        "new": "[TC-11] Tombol batalkan pada halaman edit mengembalikan pengguna ke halaman list menu self order"
+      }
+    ]
+  },
+  "tests/Katalog/variant.spec.js": {
+    "oldDescribe": "Admin → Catalog → Variant page",
+    "newDescribe": "Varian Menu",
+    "tests": [
+      {
+        "old": "menampilkan halaman varian dengan tabel",
+        "new": "[TC-01] Menampilkan halaman varian dengan tabel"
+      },
+      {
+        "old": "tambah varian baru berhasil",
+        "new": "[TC-02] Tambah varian baru berhasil"
+      },
+      {
+        "old": "edit varian dengan ikon edit",
+        "new": "[TC-03] Edit varian dengan ikon edit"
+      },
+      {
+        "old": "hapus varian dengan ikon trash",
+        "new": "[TC-04] Hapus varian dengan ikon trash"
+      },
+      {
+        "old": "cari/filter varian dengan search box",
+        "new": "[TC-05] Cari/filter varian dengan search box"
+      },
+      {
+        "old": "verifikasi status toggle varian memunculkan konfirmasi",
+        "new": "[TC-06] Verifikasi status toggle varian memunculkan konfirmasi"
+      },
+      {
+        "old": "lihat detail varian dengan ikon view",
+        "new": "[TC-07] Lihat detail varian dengan ikon view"
+      }
+    ]
+  },
+  "tests/Laporan Usaha/detail_penjualan.spec.js": {
+    "oldDescribe": "Admin → Business Report → Sale Detail (Detail Penjualan) page",
+    "newDescribe": "Laporan Detail Penjualan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Detail Penjualan dengan breadcrumb, header, dan filter pencarian",
+        "new": "[TC-01] Menampilkan halaman Detail Penjualan dengan breadcrumb, header, dan filter pencarian"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+        "new": "[TC-02] Memverifikasi pemilih rentang tanggal (Pilih Tanggal)"
+      },
+      {
+        "old": "memverifikasi filter dropdown Cabang dan Mode Penjualan",
+        "new": "[TC-03] Memverifikasi filter dropdown Cabang dan Mode Penjualan"
+      },
+      {
+        "old": "memverifikasi filter dropdown Status dan Metode Pembayaran",
+        "new": "[TC-04] Memverifikasi filter dropdown Status dan Metode Pembayaran"
+      },
+      {
+        "old": "memverifikasi input pencarian transaksi (Cari Disini)",
+        "new": "[TC-05] Memverifikasi input pencarian transaksi (Cari Disini)"
+      },
+      {
+        "old": "menampilkan 6 kartu ringkasan metrik penjualan",
+        "new": "[TC-06] Menampilkan 6 kartu ringkasan metrik penjualan"
+      },
+      {
+        "old": "memverifikasi struktur tabel detail penjualan dan kolom-kolomnya",
+        "new": "[TC-07] Memverifikasi struktur tabel detail penjualan dan kolom-kolomnya"
+      },
+      {
+        "old": "menampilkan baris data transaksi atau indikator Belum Ada Data pada tabel",
+        "new": "[TC-08] Menampilkan baris data transaksi atau indikator Belum Ada Data pada tabel"
+      },
+      {
+        "old": "dapat mengklik tombol Tampilkan untuk memfilter data laporan",
+        "new": "[TC-09] Dapat mengklik tombol Tampilkan untuk memfilter data laporan"
+      },
+      {
+        "old": "memverifikasi tombol Unduh Laporan dan interaksi unduh",
+        "new": "[TC-10] Memverifikasi tombol Unduh Laporan dan interaksi unduh"
+      },
+      {
+        "old": "memverifikasi kontrol Rows per page dan pagination",
+        "new": "[TC-11] Memverifikasi kontrol Rows per page dan pagination"
+      }
+    ]
+  },
+  "tests/Laporan Usaha/laba_rugi.spec.js": {
+    "oldDescribe": "Admin → Business Report → Profit and Loss (Laba Rugi) page",
+    "newDescribe": "Laporan Laba Rugi",
+    "tests": [
+      {
+        "old": "menampilkan halaman Laporan Laba Rugi dengan filter utama dan tombol aksi",
+        "new": "[TC-01] Menampilkan halaman Laporan Laba Rugi dengan filter utama dan tombol aksi"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal pada laporan laba rugi",
+        "new": "[TC-02] Memverifikasi pemilih rentang tanggal pada laporan laba rugi"
+      },
+      {
+        "old": "memverifikasi filter dropdown Pilih Cabang",
+        "new": "[TC-03] Memverifikasi filter dropdown Pilih Cabang"
+      },
+      {
+        "old": "memverifikasi tampilan informasi periode laporan",
+        "new": "[TC-04] Memverifikasi tampilan informasi periode laporan"
+      },
+      {
+        "old": "memverifikasi struktur rincian laba rugi (Keterangan dan Jumlah)",
+        "new": "[TC-05] Memverifikasi struktur rincian laba rugi (Keterangan dan Jumlah)"
+      },
+      {
+        "old": "memverifikasi baris-baris komponen keuangan (Pendapatan, Kas, Pengeluaran, Laba Rugi)",
+        "new": "[TC-06] Memverifikasi baris-baris komponen keuangan (Pendapatan, Kas, Pengeluaran, Laba Rugi)"
+      },
+      {
+        "old": "mengklik tombol Tampilkan untuk memuat ulang data laba rugi",
+        "new": "[TC-07] Mengklik tombol Tampilkan untuk memuat ulang data laba rugi"
+      },
+      {
+        "old": "memverifikasi tombol Unduh Laporan dan interaksi ekspor data",
+        "new": "[TC-08] Memverifikasi tombol Unduh Laporan dan interaksi ekspor data"
+      }
+    ]
+  },
+  "tests/Laporan Usaha/produk.spec.js": {
+    "oldDescribe": "Admin → Business Report → Product Report (Laporan Produk) page",
+    "newDescribe": "Laporan Produk",
+    "tests": [
+      {
+        "old": "menampilkan halaman Laporan Produk dengan breadcrumb, title, dan filter",
+        "new": "[TC-01] Menampilkan halaman Laporan Produk dengan breadcrumb, title, dan filter"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+        "new": "[TC-02] Memverifikasi pemilih rentang tanggal (Pilih Tanggal)"
+      },
+      {
+        "old": "memverifikasi filter dropdown Pilih Cabang",
+        "new": "[TC-03] Memverifikasi filter dropdown Pilih Cabang"
+      },
+      {
+        "old": "memverifikasi filter dropdown Pilih Mode Penjualan",
+        "new": "[TC-04] Memverifikasi filter dropdown Pilih Mode Penjualan"
+      },
+      {
+        "old": "memverifikasi filter dropdown Pilih Via",
+        "new": "[TC-05] Memverifikasi filter dropdown Pilih Via"
+      },
+      {
+        "old": "memverifikasi struktur tabel laporan produk dan kolom-kolomnya",
+        "new": "[TC-06] Memverifikasi struktur tabel laporan produk dan kolom-kolomnya"
+      },
+      {
+        "old": "menampilkan baris data produk atau pesan Belum Ada Data",
+        "new": "[TC-07] Menampilkan baris data produk atau pesan Belum Ada Data"
+      },
+      {
+        "old": "mengklik tombol Tampilkan untuk memperbarui data laporan",
+        "new": "[TC-08] Mengklik tombol Tampilkan untuk memperbarui data laporan"
+      },
+      {
+        "old": "memverifikasi tombol Unduh Laporan dan aksi unduh",
+        "new": "[TC-09] Memverifikasi tombol Unduh Laporan dan aksi unduh"
+      },
+      {
+        "old": "memverifikasi kontrol Rows per page dan pagination",
+        "new": "[TC-10] Memverifikasi kontrol Rows per page dan pagination"
+      }
+    ]
+  },
+  "tests/Laporan Usaha/promosi.spec.js": {
+    "oldDescribe": "Admin → Business Report → Promotion Report (Laporan Promosi) page",
+    "newDescribe": "Laporan Promosi",
+    "tests": [
+      {
+        "old": "menampilkan halaman Laporan Promosi dengan breadcrumb, title, dan filter",
+        "new": "[TC-01] Menampilkan halaman Laporan Promosi dengan breadcrumb, title, dan filter"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+        "new": "[TC-02] Memverifikasi pemilih rentang tanggal (Pilih Tanggal)"
+      },
+      {
+        "old": "memverifikasi input pencarian (Cari disini...)",
+        "new": "[TC-03] Memverifikasi input pencarian (Cari disini...)"
+      },
+      {
+        "old": "memverifikasi filter dropdown Pilih Cabang",
+        "new": "[TC-04] Memverifikasi filter dropdown Pilih Cabang"
+      },
+      {
+        "old": "memverifikasi struktur tabel laporan promosi dan kolom-kolomnya",
+        "new": "[TC-05] Memverifikasi struktur tabel laporan promosi dan kolom-kolomnya"
+      },
+      {
+        "old": "menampilkan data promosi atau pesan Belum Ada Data pada tabel",
+        "new": "[TC-06] Menampilkan data promosi atau pesan Belum Ada Data pada tabel"
+      },
+      {
+        "old": "mengklik tombol Tampilkan untuk memuat ulang laporan promosi",
+        "new": "[TC-07] Mengklik tombol Tampilkan untuk memuat ulang laporan promosi"
+      },
+      {
+        "old": "memverifikasi kontrol Rows per page dan pagination",
+        "new": "[TC-08] Memverifikasi kontrol Rows per page dan pagination"
+      }
+    ]
+  },
+  "tests/Laporan Usaha/rangkuman_penjualan.spec.js": {
+    "oldDescribe": "Admin → Business Report → Sales Summary (Rangkuman Penjualan) page",
+    "newDescribe": "Laporan Rangkuman Penjualan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Rangkuman Penjualan dengan breadcrumb dan filter utama",
+        "new": "[TC-01] Menampilkan halaman Rangkuman Penjualan dengan breadcrumb dan filter utama"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal (Pilih Tanggal)",
+        "new": "[TC-02] Memverifikasi pemilih rentang tanggal (Pilih Tanggal)"
+      },
+      {
+        "old": "berpindah ke mode filter Bulanan dan memverifikasi perubahan tampilan",
+        "new": "[TC-03] Berpindah ke mode filter Bulanan dan memverifikasi perubahan tampilan"
+      },
+      {
+        "old": "memverifikasi kartu metrik Penjualan Per Waktu",
+        "new": "[TC-04] Memverifikasi kartu metrik Penjualan Per Waktu"
+      },
+      {
+        "old": "memverifikasi kartu ringkasan Total Penjualan beserta sub-metriknya",
+        "new": "[TC-05] Memverifikasi kartu ringkasan Total Penjualan beserta sub-metriknya"
+      },
+      {
+        "old": "dapat memilih opsi cabang pada filter Semua Cabang",
+        "new": "[TC-06] Dapat memilih opsi cabang pada filter Semua Cabang"
+      },
+      {
+        "old": "memverifikasi responsivitas container data Rangkuman Penjualan",
+        "new": "[TC-07] Memverifikasi responsivitas container data Rangkuman Penjualan"
+      }
+    ]
+  },
+  "tests/Manajemen User/absensi.spec.js": {
+    "oldDescribe": "Admin → User Management → Absensi page",
+    "newDescribe": "Absensi Karyawan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Absensi dengan breadcrumb dan judul halaman",
+        "new": "[TC-01] Menampilkan halaman Absensi dengan breadcrumb dan judul halaman"
+      },
+      {
+        "old": "memverifikasi filter Pilih Cabang pada toolbar",
+        "new": "[TC-02] Memverifikasi filter Pilih Cabang pada toolbar"
+      },
+      {
+        "old": "memverifikasi pemilih rentang tanggal (Pilih Tanggal) pada toolbar",
+        "new": "[TC-03] Memverifikasi pemilih rentang tanggal (Pilih Tanggal) pada toolbar"
+      },
+      {
+        "old": "memverifikasi tombol Refresh untuk memuat ulang data absensi",
+        "new": "[TC-04] Memverifikasi tombol Refresh untuk memuat ulang data absensi"
+      },
+      {
+        "old": "memverifikasi struktur tabel data absensi dan kolom-kolomnya",
+        "new": "[TC-05] Memverifikasi struktur tabel data absensi dan kolom-kolomnya"
+      },
+      {
+        "old": "menampilkan data log absensi atau pesan fallback tabel kosong",
+        "new": "[TC-06] Menampilkan data log absensi atau pesan fallback tabel kosong"
+      },
+      {
+        "old": "memverifikasi pemfilteran data absensi berdasarkan pemilihan Cabang",
+        "new": "[TC-07] Memverifikasi pemfilteran data absensi berdasarkan pemilihan Cabang"
+      },
+      {
+        "old": "memverifikasi interaksi kalender popover pada input Pilih Tanggal",
+        "new": "[TC-08] Memverifikasi interaksi kalender popover pada input Pilih Tanggal"
+      },
+      {
+        "old": "memverifikasi responsivitas container tabel absensi pada tampilan desktop",
+        "new": "[TC-09] Memverifikasi responsivitas container tabel absensi pada tampilan desktop"
+      }
+    ]
+  },
+  "tests/Manajemen User/manajemen_user.spec.js": {
+    "oldDescribe": "Admin → User Management → Manajemen User page",
+    "newDescribe": "Manajemen User",
+    "tests": [
+      {
+        "old": "menampilkan halaman Manajemen User dengan breadcrumb dan judul halaman",
+        "new": "[TC-01] Menampilkan halaman Manajemen User dengan breadcrumb dan judul halaman"
+      },
+      {
+        "old": "memverifikasi 3 kartu batas akun (Owner, Admin, Staff)",
+        "new": "[TC-02] Memverifikasi 3 kartu batas akun (Owner, Admin, Staff)"
+      },
+      {
+        "old": "memverifikasi input pencarian dan filter pada toolbar (Cari disini..., Filter Role, Filter Cabang)",
+        "new": "[TC-03] Memverifikasi input pencarian dan filter pada toolbar (Cari disini..., Filter Role, Filter Cabang)"
+      },
+      {
+        "old": "memverifikasi struktur tabel manajemen user dan kolom-kolomnya",
+        "new": "[TC-04] Memverifikasi struktur tabel manajemen user dan kolom-kolomnya"
+      },
+      {
+        "old": "menampilkan baris data user atau indikator pada tabel",
+        "new": "[TC-05] Menampilkan baris data user atau indikator pada tabel"
+      },
+      {
+        "old": "memverifikasi tombol Tambah User dan navigasi ke halaman form tambah user",
+        "new": "[TC-06] Memverifikasi tombol Tambah User dan navigasi ke halaman form tambah user"
+      },
+      {
+        "old": "memverifikasi form Tambah User beserta field-field input dan tabel keterangan",
+        "new": "[TC-07] Memverifikasi form Tambah User beserta field-field input dan tabel keterangan"
+      },
+      {
+        "old": "memverifikasi validasi form Tambah User ketika field wajib kosong",
+        "new": "[TC-08] Memverifikasi validasi form Tambah User ketika field wajib kosong"
+      },
+      {
+        "old": "memverifikasi validasi format email dan ketidakcocokan kata sandi",
+        "new": "[TC-09] Memverifikasi validasi format email dan ketidakcocokan kata sandi"
+      },
+      {
+        "old": "memverifikasi tombol Batal pada halaman form kembali ke halaman manajemen user",
+        "new": "[TC-10] Memverifikasi tombol Batal pada halaman form kembali ke halaman manajemen user"
+      },
+      {
+        "old": "[CRUD] Alur lengkap Create, Read, Update, dan Delete User Karyawan",
+        "new": "[TC-11] [CRUD] Alur lengkap Create, Read, Update, dan Delete User Karyawan"
+      },
+      {
+        "old": "[CRUD - Status] menguji interaksi perubahan status aktif / nonaktif karyawan",
+        "new": "[TC-12] Menguji interaksi perubahan status aktif / nonaktif karyawan"
+      },
+      {
+        "old": "[CRUD - Delete Validation] modal konfirmasi hapus menjaga tombol Hapus tetap nonaktif jika username salah ketik",
+        "new": "[TC-13] Modal konfirmasi hapus menjaga tombol Hapus tetap nonaktif jika username salah ketik"
+      }
+    ]
+  },
+  "tests/Pembukuan/data_pembukuan.spec.js": {
+    "oldDescribe": "Admin → Cash Account → Cash Account Data (Data Pembukuan) page",
+    "newDescribe": "Data Pembukuan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Data Pembukuan dengan breadcrumb, tabel, dan tombol tambah",
+        "new": "[TC-01] Menampilkan halaman Data Pembukuan dengan breadcrumb, tabel, dan tombol tambah"
+      },
+      {
+        "old": "navigasi ke form Tambah Data Pembukuan dan memverifikasi seluruh komponen form",
+        "new": "[TC-02] Navigasi ke form Tambah Data Pembukuan dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "tombol Batalkan pada form Tambah Data Pembukuan mengembalikan ke halaman Data Pembukuan",
+        "new": "[TC-03] Tombol Batalkan pada form Tambah Data Pembukuan mengembalikan ke halaman Data Pembukuan"
+      },
+      {
+        "old": "validasi field wajib form Tambah Data Pembukuan saat submit form kosong",
+        "new": "[TC-04] Validasi field wajib form Tambah Data Pembukuan saat submit form kosong"
+      },
+      {
+        "old": "bisa mengisi field pada form Tambah Data Pembukuan",
+        "new": "[TC-05] Bisa mengisi field pada form Tambah Data Pembukuan"
+      },
+      {
+        "old": "bisa mengunggah file lampiran gambar pada form dan menghapusnya kembali",
+        "new": "[TC-06] Bisa mengunggah file lampiran gambar pada form dan menghapusnya kembali"
+      },
+      {
+        "old": "berhasil menambahkan data pembukuan baru via form",
+        "new": "[TC-07] Berhasil menambahkan data pembukuan baru via form"
+      },
+      {
+        "old": "mengklik tombol aksi pada baris data membuka modal Detail Data Pembukuan",
+        "new": "[TC-08] Mengklik tombol aksi pada baris data membuka modal Detail Data Pembukuan"
+      },
+      {
+        "old": "memverifikasi responsivitas tabel data pembukuan dan state baris data",
+        "new": "[TC-09] Memverifikasi responsivitas tabel data pembukuan dan state baris data"
+      }
+    ]
+  },
+  "tests/Pembukuan/kategori_pembukuan.spec.js": {
+    "oldDescribe": "Admin → Cash Account → Cash Account Category (Kategori Pembukuan) page",
+    "newDescribe": "Kategori Pembukuan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Kategori Pembukuan dengan breadcrumb, tabel, tombol tambah, dan filter bar",
+        "new": "[TC-01] Menampilkan halaman Kategori Pembukuan dengan breadcrumb, tabel, tombol tambah, dan filter bar"
+      },
+      {
+        "old": "membuka modal Tambah Kategori Pembukuan dan memverifikasi seluruh komponen form",
+        "new": "[TC-02] Membuka modal Tambah Kategori Pembukuan dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "validasi form Tambah Kategori Pembukuan saat submit field kosong",
+        "new": "[TC-03] Validasi form Tambah Kategori Pembukuan saat submit field kosong"
+      },
+      {
+        "old": "validasi panjang karakter nama kategori jika kurang dari 2 karakter",
+        "new": "[TC-04] Validasi panjang karakter nama kategori jika kurang dari 2 karakter"
+      },
+      {
+        "old": "tombol Batal pada modal Tambah Kategori Pembukuan menutup modal dan mereset form",
+        "new": "[TC-05] Tombol Batal pada modal Tambah Kategori Pembukuan menutup modal dan mereset form"
+      },
+      {
+        "old": "berhasil menambahkan kategori pembukuan baru tipe Pendapatan via modal",
+        "new": "[TC-06] Berhasil menambahkan kategori pembukuan baru tipe Pendapatan via modal"
+      },
+      {
+        "old": "berhasil menambahkan kategori pembukuan baru tipe Pengeluaran via modal",
+        "new": "[TC-07] Berhasil menambahkan kategori pembukuan baru tipe Pengeluaran via modal"
+      },
+      {
+        "old": "interaksi filter bar (pencarian, filter tipe, dan tombol refresh)",
+        "new": "[TC-08] Interaksi filter bar (pencarian, filter tipe, dan tombol refresh)"
+      },
+      {
+        "old": "mengklik aksi detail pada baris data mengarahkan ke halaman Detail Kategori Pembukuan",
+        "new": "[TC-09] Mengklik aksi detail pada baris data mengarahkan ke halaman Detail Kategori Pembukuan"
+      },
+      {
+        "old": "membuka modal konfirmasi hapus kategori pembukuan, memeriksa teks konfirmasi, input verifikasi, dan membatalkannya via tombol Batal",
+        "new": "[TC-10] Membuka modal konfirmasi hapus kategori pembukuan, memeriksa teks konfirmasi, input verifikasi, dan membatalkannya via tombol Batal"
+      },
+      {
+        "old": "menutup modal konfirmasi hapus kategori pembukuan via tombol silang (close button X)",
+        "new": "[TC-11] Menutup modal konfirmasi hapus kategori pembukuan via tombol silang (close button X)"
+      },
+      {
+        "old": "validasi input konfirmasi nama kategori pada modal hapus (tombol Hapus disabled jika teks salah atau kosong)",
+        "new": "[TC-12] Validasi input konfirmasi nama kategori pada modal hapus (tombol Hapus disabled jika teks salah atau kosong)"
+      },
+      {
+        "old": "berhasil menghapus kategori pembukuan via modal konfirmasi hapus setelah mengetik nama kategori yang tepat",
+        "new": "[TC-13] Berhasil menghapus kategori pembukuan via modal konfirmasi hapus setelah mengetik nama kategori yang tepat"
+      },
+      {
+        "old": "memverifikasi responsivitas tabel kategori pembukuan dan baris data",
+        "new": "[TC-14] Memverifikasi responsivitas tabel kategori pembukuan dan baris data"
+      }
+    ]
+  },
+  "tests/Pembukuan/laporan_pembukuan.spec.js": {
+    "oldDescribe": "Admin → Cash Account → Cash Account Report (Laporan Pembukuan) page",
+    "newDescribe": "Laporan Pembukuan",
+    "tests": [
+      {
+        "old": "menampilkan halaman Laporan Pembukuan dengan breadcrumb, judul, dan pemilih tipe laporan",
+        "new": "[TC-01] Menampilkan halaman Laporan Pembukuan dengan breadcrumb, judul, dan pemilih tipe laporan"
+      },
+      {
+        "old": "memverifikasi komponen filter pada halaman (Pilih Periode, Pilih Cabang, dan tombol Cari)",
+        "new": "[TC-02] Memverifikasi komponen filter pada halaman (Pilih Periode, Pilih Cabang, dan tombol Cari)"
+      },
+      {
+        "old": "menampilkan tampilan default Laporan Arus Kas dengan heading, info periode, header Keterangan & Jumlah, dan tombol Unduh Laporan",
+        "new": "[TC-03] Menampilkan tampilan default Laporan Arus Kas dengan heading, info periode, header Keterangan & Jumlah, dan tombol Unduh Laporan"
+      },
+      {
+        "old": "tombol Unduh Laporan pada Laporan Arus Kas dapat diklik",
+        "new": "[TC-04] Tombol Unduh Laporan pada Laporan Arus Kas dapat diklik"
+      },
+      {
+        "old": "berpindah ke tipe Laporan Transaksi dan memverifikasi perubahan tampilan",
+        "new": "[TC-05] Berpindah ke tipe Laporan Transaksi dan memverifikasi perubahan tampilan"
+      },
+      {
+        "old": "memverifikasi 4 kartu ringkasan pada Laporan Transaksi (Total Awal, Total Pendapatan, Total Pengeluaran, Total Akhir)",
+        "new": "[TC-06] Memverifikasi 4 kartu ringkasan pada Laporan Transaksi (Total Awal, Total Pendapatan, Total Pengeluaran, Total Akhir)"
+      },
+      {
+        "old": "memverifikasi struktur tabel Laporan Transaksi dan header kolom",
+        "new": "[TC-07] Memverifikasi struktur tabel Laporan Transaksi dan header kolom"
+      },
+      {
+        "old": "tombol Unduh Laporan pada Laporan Transaksi dapat diklik",
+        "new": "[TC-08] Tombol Unduh Laporan pada Laporan Transaksi dapat diklik"
+      },
+      {
+        "old": "dapat memilih cabang pada dropdown dan melakukan pencarian dengan tombol Cari",
+        "new": "[TC-09] Dapat memilih cabang pada dropdown dan melakukan pencarian dengan tombol Cari"
+      },
+      {
+        "old": "dapat membuka kalender Pilih Periode untuk rentang tanggal",
+        "new": "[TC-10] Dapat membuka kalender Pilih Periode untuk rentang tanggal"
+      },
+      {
+        "old": "memverifikasi responsivitas tampilan data dan state laporan pembukuan",
+        "new": "[TC-11] Memverifikasi responsivitas tampilan data dan state laporan pembukuan"
+      }
+    ]
+  },
+  "tests/Pengaturan/atur_rekening.spec.js": {
+    "oldDescribe": "Fitur Atur Rekening (Pengaturan Bank Account)",
+    "newDescribe": "Atur Rekening",
+    "tests": [
+      {
+        "old": "TC01 - Menampilkan seluruh elemen utama halaman Atur Rekening",
+        "new": "[TC-01] Menampilkan seluruh elemen utama halaman Atur Rekening"
+      },
+      {
+        "old": "TC02 - Menampilkan tabel daftar rekening bank dan status data kosong",
+        "new": "[TC-02] Menampilkan tabel daftar rekening bank dan status data kosong"
+      },
+      {
+        "old": "TC03 - Memverifikasi tombol Tarik Dana dalam status disabled saat belum ada rekening",
+        "new": "[TC-03] Memverifikasi tombol Tarik Dana dalam status disabled saat belum ada rekening"
+      },
+      {
+        "old": "TC04 - Membuka dan menutup Modal Tambah Rekening",
+        "new": "[TC-04] Membuka dan menutup Modal Tambah Rekening"
+      },
+      {
+        "old": "TC05 - Memvalidasi pesan error saat menyimpan form Tambah Rekening kosong",
+        "new": "[TC-05] Memvalidasi pesan error saat menyimpan form Tambah Rekening kosong"
+      },
+      {
+        "old": "TC06 - Interaksi memilih bank dan mengisi Nomor Rekening pada Modal Tambah Rekening",
+        "new": "[TC-06] Interaksi memilih bank dan mengisi Nomor Rekening pada Modal Tambah Rekening"
+      },
+      {
+        "old": "TC07 - Membuka dan menutup Modal Ganti PIN",
+        "new": "[TC-07] Membuka dan menutup Modal Ganti PIN"
+      },
+      {
+        "old": "TC08 - Memvalidasi tombol Simpan dalam status disabled saat field PIN kosong",
+        "new": "[TC-08] Memvalidasi tombol Simpan dalam status disabled saat field PIN kosong"
+      }
+    ]
+  },
+  "tests/Pengaturan/data_cabang.spec.js": {
+    "oldDescribe": "Admin → Setting → Branch Data (Data Cabang) page",
+    "newDescribe": "Data Cabang",
+    "tests": [
+      {
+        "old": "menampilkan halaman Data Cabang dengan header, breadcrumb, card jumlah cabang, tombol Buat Cabang, filter bar, dan tabel",
+        "new": "[TC-01] Menampilkan halaman Data Cabang dengan header, breadcrumb, card jumlah cabang, tombol Buat Cabang, filter bar, dan tabel"
+      },
+      {
+        "old": "interaksi input pencarian cabang memfilter data di tabel",
+        "new": "[TC-02] Interaksi input pencarian cabang memfilter data di tabel"
+      },
+      {
+        "old": "dropdown filter status cabang menyediakan opsi Semua Status, Aktif, dan Nonaktif",
+        "new": "[TC-03] Dropdown filter status cabang menyediakan opsi Semua Status, Aktif, dan Nonaktif"
+      },
+      {
+        "old": "navigasi ke form Buat Cabang via tombol Buat Cabang dan memverifikasi komponen form",
+        "new": "[TC-04] Navigasi ke form Buat Cabang via tombol Buat Cabang dan memverifikasi komponen form"
+      },
+      {
+        "old": "validasi form Buat Cabang saat submit tanpa mengisi field wajib",
+        "new": "[TC-05] Validasi form Buat Cabang saat submit tanpa mengisi field wajib"
+      },
+      {
+        "old": "[CRUD - Tambah Cabang - Validasi Format] memvalidasi aturan format input (nama minimal 3 karakter, whatsapp angka, email valid)",
+        "new": "[TC-06] Memvalidasi aturan format input (nama minimal 3 karakter, whatsapp angka, email valid)"
+      },
+      {
+        "old": "[CRUD - Tambah Cabang] alur pengisian lengkap form Buat Cabang dan submit berhasil ke backend",
+        "new": "[TC-07] Alur pengisian lengkap form Buat Cabang dan submit berhasil ke backend"
+      },
+      {
+        "old": "tombol Batalkan pada form Buat Cabang mengembalikan ke halaman list Data Cabang",
+        "new": "[TC-08] Tombol Batalkan pada form Buat Cabang mengembalikan ke halaman list Data Cabang"
+      },
+      {
+        "old": "interaksi dropdown bertingkat lokasi: memilih Provinsi mengaktifkan input Kota",
+        "new": "[TC-09] Interaksi dropdown bertingkat lokasi: memilih Provinsi mengaktifkan input Kota"
+      },
+      {
+        "old": "navigasi ke halaman Detail Cabang via aksi baris tabel",
+        "new": "[TC-10] Navigasi ke halaman Detail Cabang via aksi baris tabel"
+      },
+      {
+        "old": "[CRUD - Edit Cabang - Halaman Detail] navigasi edit cabang dari tombol Edit pada halaman Detail Cabang",
+        "new": "[TC-11] Navigasi edit cabang dari tombol Edit pada halaman Detail Cabang"
+      },
+      {
+        "old": "navigasi ke halaman Edit Cabang via aksi baris tabel",
+        "new": "[TC-12] Navigasi ke halaman Edit Cabang via aksi baris tabel"
+      },
+      {
+        "old": "[CRUD - Edit Cabang] alur lengkap edit data cabang dari tabel, mengubah informasi dan simpan perubahan",
+        "new": "[TC-13] Alur lengkap edit data cabang dari tabel, mengubah informasi dan simpan perubahan"
+      },
+      {
+        "old": "[CRUD - Edit Cabang - Validasi] validasi form edit saat field wajib dikosongkan",
+        "new": "[TC-14] Validasi form edit saat field wajib dikosongkan"
+      },
+      {
+        "old": "membuka modal konfirmasi Hapus Cabang pada tabel dan membatalkannya",
+        "new": "[TC-15] Membuka modal konfirmasi Hapus Cabang pada tabel dan membatalkannya"
+      },
+      {
+        "old": "[CRUD - Hapus Cabang - Validasi Modal] memvalidasi keharusan mengetik nama cabang yang tepat dan password sebelum hapus",
+        "new": "[TC-16] Memvalidasi keharusan mengetik nama cabang yang tepat dan password sebelum hapus"
+      },
+      {
+        "old": "[CRUD - Hapus Cabang] alur lengkap konfirmasi hapus cabang via modal dengan nama cabang dan password",
+        "new": "[TC-17] Alur lengkap konfirmasi hapus cabang via modal dengan nama cabang dan password"
+      },
+      {
+        "old": "[CRUD - Hapus Cabang - Halaman Detail] memicu modal konfirmasi hapus cabang dari tombol Hapus di halaman Detail",
+        "new": "[TC-18] Memicu modal konfirmasi hapus cabang dari tombol Hapus di halaman Detail"
+      },
+      {
+        "old": "memverifikasi kontrol pagination dan dropdown Rows per page",
+        "new": "[TC-19] Memverifikasi kontrol pagination dan dropdown Rows per page"
+      },
+      {
+        "old": "memverifikasi responsivitas tabel Data Cabang dan status toggle switch",
+        "new": "[TC-20] Memverifikasi responsivitas tabel Data Cabang dan status toggle switch"
+      }
+    ]
+  },
+  "tests/Pengaturan/metode_pembayaran.spec.js": {
+    "oldDescribe": "Admin → Setting → Payment Method (Metode Pembayaran) page",
+    "newDescribe": "Metode Pembayaran",
+    "tests": [
+      {
+        "old": "menampilkan halaman Metode Pembayaran dengan breadcrumb, judul, limit kuota, dan tombol tambah",
+        "new": "[TC-01] Menampilkan halaman Metode Pembayaran dengan breadcrumb, judul, limit kuota, dan tombol tambah"
+      },
+      {
+        "old": "memverifikasi struktur tabel metode pembayaran dan kolom-kolomnya",
+        "new": "[TC-02] Memverifikasi struktur tabel metode pembayaran dan kolom-kolomnya"
+      },
+      {
+        "old": "dapat membuka dropdown Filter Status dan memilih opsi status",
+        "new": "[TC-03] Dapat membuka dropdown Filter Status dan memilih opsi status"
+      },
+      {
+        "old": "membuka modal Tambah Metode Pembayaran dan memverifikasi seluruh komponen form",
+        "new": "[TC-04] Membuka modal Tambah Metode Pembayaran dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "memverifikasi pilihan tipe metode pembayaran pada dropdown modal",
+        "new": "[TC-05] Memverifikasi pilihan tipe metode pembayaran pada dropdown modal"
+      },
+      {
+        "old": "validasi form Tambah Metode Pembayaran saat submit field wajib kosong",
+        "new": "[TC-06] Validasi form Tambah Metode Pembayaran saat submit field wajib kosong"
+      },
+      {
+        "old": "berhasil menambahkan metode pembayaran baru via modal",
+        "new": "[TC-07] Berhasil menambahkan metode pembayaran baru via modal"
+      },
+      {
+        "old": "membuka modal pengaturan cabang pada baris metode pembayaran dan membatalkannya",
+        "new": "[TC-08] Membuka modal pengaturan cabang pada baris metode pembayaran dan membatalkannya"
+      },
+      {
+        "old": "memverifikasi tombol hapus disabled untuk metode pembayaran bawaan (Cash & QRIS)",
+        "new": "[TC-09] Memverifikasi tombol hapus disabled untuk metode pembayaran bawaan (Cash & QRIS)"
+      },
+      {
+        "old": "memverifikasi responsivitas tabel metode pembayaran dan status aktif",
+        "new": "[TC-10] Memverifikasi responsivitas tabel metode pembayaran dan status aktif"
+      }
+    ]
+  },
+  "tests/Pengaturan/pajak_biaya_lainnya.spec.js": {
+    "oldDescribe": "Admin → Setting → Tax & Other Charges (Pajak & Biaya Lainnya) page",
+    "newDescribe": "Pajak & Biaya Lainnya",
+    "tests": [
+      {
+        "old": "menampilkan halaman Pajak dan Biaya Lainnya dengan breadcrumb, judul, dan tombol aksi",
+        "new": "[TC-01] Menampilkan halaman Pajak dan Biaya Lainnya dengan breadcrumb, judul, dan tombol aksi"
+      },
+      {
+        "old": "memverifikasi komponen form Pajak & Service Charge beserta opsi perhitungannya",
+        "new": "[TC-02] Memverifikasi komponen form Pajak & Service Charge beserta opsi perhitungannya"
+      },
+      {
+        "old": "memverifikasi struktur tabel Pengaturan Biaya Tambahan dan tombol Tambah",
+        "new": "[TC-03] Memverifikasi struktur tabel Pengaturan Biaya Tambahan dan tombol Tambah"
+      },
+      {
+        "old": "dapat memilih outlet pada dropdown cabang",
+        "new": "[TC-04] Dapat memilih outlet pada dropdown cabang"
+      },
+      {
+        "old": "dapat mengubah metode perhitungan pajak antara Sebelum Diskon dan Sesudah Diskon",
+        "new": "[TC-05] Dapat mengubah metode perhitungan pajak antara Sebelum Diskon dan Sesudah Diskon"
+      },
+      {
+        "old": "dapat mengisi nilai Pajak %, Service Charge %, dan Charge Takeaway",
+        "new": "[TC-06] Dapat mengisi nilai Pajak %, Service Charge %, dan Charge Takeaway"
+      },
+      {
+        "old": "dapat mengaktifkan dan menonaktifkan toggle switch Dikenakan Pajak",
+        "new": "[TC-07] Dapat mengaktifkan dan menonaktifkan toggle switch Dikenakan Pajak"
+      },
+      {
+        "old": "menambah baris baru biaya tambahan via tombol Tambah dan mengisi data",
+        "new": "[TC-08] Menambah baris baru biaya tambahan via tombol Tambah dan mengisi data"
+      },
+      {
+        "old": "dapat mengubah status switch Aktif pada baris biaya tambahan",
+        "new": "[TC-09] Dapat mengubah status switch Aktif pada baris biaya tambahan"
+      },
+      {
+        "old": "menghapus baris biaya tambahan via tombol ikon hapus",
+        "new": "[TC-10] Menghapus baris biaya tambahan via tombol ikon hapus"
+      },
+      {
+        "old": "berhasil menyimpan pengaturan untuk cabang saat ini via tombol Simpan",
+        "new": "[TC-11] Berhasil menyimpan pengaturan untuk cabang saat ini via tombol Simpan"
+      },
+      {
+        "old": "berhasil menyimpan pengaturan untuk semua cabang via tombol Simpan Semua Cabang",
+        "new": "[TC-12] Berhasil menyimpan pengaturan untuk semua cabang via tombol Simpan Semua Cabang"
+      }
+    ]
+  },
+  "tests/Pengaturan/pengaturan_area.spec.js": {
+    "oldDescribe": "Admin → Setting → Area Management (Pengaturan Area) page",
+    "newDescribe": "Pengaturan Area",
+    "tests": [
+      {
+        "old": "memverifikasi judul halaman, breadcrumb, dan limit penggunaan Area",
+        "new": "[TC-01] Memverifikasi judul halaman, breadcrumb, dan limit penggunaan Area"
+      },
+      {
+        "old": "memverifikasi komponen toolbar (filter Cabang, input pencarian) dan struktur tabel",
+        "new": "[TC-02] Memverifikasi komponen toolbar (filter Cabang, input pencarian) dan struktur tabel"
+      },
+      {
+        "old": "memverifikasi baris data area termuat dan menampilkan informasi dengan lengkap",
+        "new": "[TC-03] Memverifikasi baris data area termuat dan menampilkan informasi dengan lengkap"
+      },
+      {
+        "old": "pencarian area berdasarkan kata kunci menampilkan baris yang sesuai",
+        "new": "[TC-04] Pencarian area berdasarkan kata kunci menampilkan baris yang sesuai"
+      },
+      {
+        "old": "pencarian dengan kata kunci acak menampilkan keterangan tidak ada data",
+        "new": "[TC-05] Pencarian dengan kata kunci acak menampilkan keterangan tidak ada data"
+      },
+      {
+        "old": "filter dropdown Cabang memfilter data area berdasarkan cabang yang dipilih",
+        "new": "[TC-06] Filter dropdown Cabang memfilter data area berdasarkan cabang yang dipilih"
+      },
+      {
+        "old": "membuka modal Tambah Area dan memverifikasi komponen input serta tombol Batal",
+        "new": "[TC-07] Membuka modal Tambah Area dan memverifikasi komponen input serta tombol Batal"
+      },
+      {
+        "old": "validasi form Tambah Area saat submit tanpa mengisi field wajib",
+        "new": "[TC-08] Validasi form Tambah Area saat submit tanpa mengisi field wajib"
+      },
+      {
+        "old": "[CRUD - Tambah Area - Validasi Format] memvalidasi batasan panjang karakter Nama Area",
+        "new": "[TC-09] Memvalidasi batasan panjang karakter Nama Area"
+      },
+      {
+        "old": "[CRUD - Tambah Area] alur lengkap berhasil menambah area baru",
+        "new": "[TC-10] Alur lengkap berhasil menambah area baru"
+      },
+      {
+        "old": "membuka modal Edit Area dan memverifikasi field Cabang disabled serta tidak ada input jumlah meja",
+        "new": "[TC-11] Membuka modal Edit Area dan memverifikasi field Cabang disabled serta tidak ada input jumlah meja"
+      },
+      {
+        "old": "[CRUD - Edit Area - Validasi] memvalidasi nama area tidak boleh kosong atau kurang dari 3 karakter saat edit",
+        "new": "[TC-12] Memvalidasi nama area tidak boleh kosong atau kurang dari 3 karakter saat edit"
+      },
+      {
+        "old": "[CRUD - Edit Area] alur lengkap berhasil memperbarui nama area",
+        "new": "[TC-13] Alur lengkap berhasil memperbarui nama area"
+      },
+      {
+        "old": "interaksi toggle switch status Area pada baris tabel",
+        "new": "[TC-14] Interaksi toggle switch status Area pada baris tabel"
+      },
+      {
+        "old": "membuka modal konfirmasi Hapus Area pada tabel dan membatalkannya",
+        "new": "[TC-15] Membuka modal konfirmasi Hapus Area pada tabel dan membatalkannya"
+      },
+      {
+        "old": "[CRUD - Hapus Area] alur lengkap konfirmasi hapus area via modal dengan notifikasi sukses",
+        "new": "[TC-16] Alur lengkap konfirmasi hapus area via modal dengan notifikasi sukses"
+      },
+      {
+        "old": "tampilan responsif pada ukuran mobile viewport",
+        "new": "[TC-17] Tampilan responsif pada ukuran mobile viewport"
+      }
+    ]
+  },
+  "tests/Pengaturan/pengaturan_meja.spec.js": {
+    "oldDescribe": "Admin → Setting → Table Management (Pengaturan Meja) page",
+    "newDescribe": "Pengaturan Meja",
+    "tests": [
+      {
+        "old": "memverifikasi judul dokumen, breadcrumb, dan limit penggunaan Meja",
+        "new": "[TC-01] Memverifikasi judul dokumen, breadcrumb, dan limit penggunaan Meja"
+      },
+      {
+        "old": "memverifikasi komponen filter cabang pada header Pengaturan Meja",
+        "new": "[TC-02] Memverifikasi komponen filter cabang pada header Pengaturan Meja"
+      },
+      {
+        "old": "memverifikasi kartu meja menampilkan informasi lengkap (nomor meja, pax, area, cabang, minimal bill, status)",
+        "new": "[TC-03] Memverifikasi kartu meja menampilkan informasi lengkap (nomor meja, pax, area, cabang, minimal bill, status)"
+      },
+      {
+        "old": "memilih filter cabang dan memverifikasi dropdown filter area muncul secara kondisional",
+        "new": "[TC-04] Memilih filter cabang dan memverifikasi dropdown filter area muncul secara kondisional"
+      },
+      {
+        "old": "membersihkan filter cabang mengembalikan tampilan semula",
+        "new": "[TC-05] Membersihkan filter cabang mengembalikan tampilan semula"
+      },
+      {
+        "old": "membuka modal Tambah Meja dan memverifikasi komponen form serta tombol Batal",
+        "new": "[TC-06] Membuka modal Tambah Meja dan memverifikasi komponen form serta tombol Batal"
+      },
+      {
+        "old": "validasi form Tambah Meja saat submit tanpa mengisi field wajib",
+        "new": "[TC-07] Validasi form Tambah Meja saat submit tanpa mengisi field wajib"
+      },
+      {
+        "old": "validasi dinamis input Area pada modal Tambah Meja setelah Cabang dipilih",
+        "new": "[TC-08] Validasi dinamis input Area pada modal Tambah Meja setelah Cabang dipilih"
+      },
+      {
+        "old": "[CRUD - Tambah Meja] alur lengkap berhasil menambah meja baru",
+        "new": "[TC-09] Alur lengkap berhasil menambah meja baru"
+      },
+      {
+        "old": "hover pada kartu meja menampilkan aksi Edit, Hapus, dan Status",
+        "new": "[TC-10] Hover pada kartu meja menampilkan aksi Edit, Hapus, dan Status"
+      },
+      {
+        "old": "membuka modal Edit Meja dan memverifikasi field Cabang serta Area disabled",
+        "new": "[TC-11] Membuka modal Edit Meja dan memverifikasi field Cabang serta Area disabled"
+      },
+      {
+        "old": "[CRUD - Edit Meja - Validasi] memvalidasi nomor meja tidak boleh kosong saat edit",
+        "new": "[TC-12] Memvalidasi nomor meja tidak boleh kosong saat edit"
+      },
+      {
+        "old": "[CRUD - Edit Meja] alur lengkap berhasil memperbarui data meja",
+        "new": "[TC-13] Alur lengkap berhasil memperbarui data meja"
+      },
+      {
+        "old": "interaksi toggle status meja (Nonaktifkan / Aktifkan) pada overlay kartu meja",
+        "new": "[TC-14] Interaksi toggle status meja (Nonaktifkan / Aktifkan) pada overlay kartu meja"
+      },
+      {
+        "old": "membuka modal konfirmasi Hapus Meja dan membatalkannya",
+        "new": "[TC-15] Membuka modal konfirmasi Hapus Meja dan membatalkannya"
+      },
+      {
+        "old": "[CRUD - Hapus Meja] alur lengkap konfirmasi hapus meja via modal dengan notifikasi sukses",
+        "new": "[TC-16] Alur lengkap konfirmasi hapus meja via modal dengan notifikasi sukses"
+      },
+      {
+        "old": "tampilan responsif pada ukuran mobile viewport",
+        "new": "[TC-17] Tampilan responsif pada ukuran mobile viewport"
+      }
+    ]
+  },
+  "tests/Pengaturan/shift.spec.js": {
+    "oldDescribe": "Admin → Pengaturan → Shift",
+    "newDescribe": "Pengaturan Shift",
+    "tests": [
+      {
+        "old": "TC01 - Menampilkan halaman Pengaturan Shift dengan header, breadcrumb, absensi, dan tabel shift",
+        "new": "[TC-01] Menampilkan halaman Pengaturan Shift dengan header, breadcrumb, absensi, dan tabel shift"
+      },
+      {
+        "old": "TC02 - Mengaktifkan dan menonaktifkan toggle switch Wajib Absen pada Pengaturan Absensi",
+        "new": "[TC-02] Mengaktifkan dan menonaktifkan toggle switch Wajib Absen pada Pengaturan Absensi"
+      },
+      {
+        "old": "TC03 - Menambah baris baru shift via tombol Tambah Shift",
+        "new": "[TC-03] Menambah baris baru shift via tombol Tambah Shift"
+      },
+      {
+        "old": "TC04 - Mengisi nama shift serta memilih Jam Mulai dan Jam Berakhir",
+        "new": "[TC-04] Mengisi nama shift serta memilih Jam Mulai dan Jam Berakhir"
+      },
+      {
+        "old": "TC05 - Menghapus baris shift via tombol ikon hapus (tempat sampah merah)",
+        "new": "[TC-05] Menghapus baris shift via tombol ikon hapus (tempat sampah merah)"
+      },
+      {
+        "old": "TC06 - Berhasil menyimpan pengaturan shift untuk cabang aktif via tombol Simpan",
+        "new": "[TC-06] Berhasil menyimpan pengaturan shift untuk cabang aktif via tombol Simpan"
+      },
+      {
+        "old": "TC07 - Berhasil menyimpan pengaturan shift untuk semua cabang via tombol Simpan Semua Cabang",
+        "new": "[TC-07] Berhasil menyimpan pengaturan shift untuk semua cabang via tombol Simpan Semua Cabang"
+      }
+    ]
+  },
+  "tests/Pengaturan/struk.spec.js": {
+    "oldDescribe": "Admin → Pengaturan → Struk (Receipt)",
+    "newDescribe": "Pengaturan Struk",
+    "tests": [
+      {
+        "old": "TC01 - Menampilkan halaman Pengaturan Struk dengan header, breadcrumb, dan tombol aksi",
+        "new": "[TC-01] Menampilkan halaman Pengaturan Struk dengan header, breadcrumb, dan tombol aksi"
+      },
+      {
+        "old": "TC02 - Memverifikasi seluruh komponen form input pada pengaturan struk",
+        "new": "[TC-02] Memverifikasi seluruh komponen form input pada pengaturan struk"
+      },
+      {
+        "old": "TC03 - Interaksi dropdown pemilihan outlet / cabang",
+        "new": "[TC-03] Interaksi dropdown pemilihan outlet / cabang"
+      },
+      {
+        "old": "TC04 - Mengisi Header, Alamat Usaha, dan Footer serta memverifikasi Live Preview struk ter-update secara real-time",
+        "new": "[TC-04] Mengisi Header, Alamat Usaha, dan Footer serta memverifikasi Live Preview struk ter-update secara real-time"
+      },
+      {
+        "old": "TC05 - Mengunggah logo usaha dan memverifikasi logo tampil di live preview serta opsi hapus logo",
+        "new": "[TC-05] Mengunggah logo usaha dan memverifikasi logo tampil di live preview serta opsi hapus logo"
+      },
+      {
+        "old": "TC06 - Berhasil menyimpan pengaturan struk untuk cabang aktif via tombol Simpan",
+        "new": "[TC-06] Berhasil menyimpan pengaturan struk untuk cabang aktif via tombol Simpan"
+      },
+      {
+        "old": "TC07 - Berhasil menyimpan pengaturan struk untuk semua cabang via tombol Simpan Semua Cabang",
+        "new": "[TC-07] Berhasil menyimpan pengaturan struk untuk semua cabang via tombol Simpan Semua Cabang"
+      }
+    ]
+  },
+  "tests/Pengaturan/transaksi.spec.js": {
+    "oldDescribe": "Fitur Transaksi (Pengaturan Transaksi)",
+    "newDescribe": "Pengaturan Transaksi",
+    "tests": [
+      {
+        "old": "TC01 - Menampilkan seluruh elemen utama halaman Pengaturan Transaksi",
+        "new": "[TC-01] Menampilkan seluruh elemen utama halaman Pengaturan Transaksi"
+      },
+      {
+        "old": "TC02 - Menampilkan dan berinteraksi dengan dropdown pemilih outlet",
+        "new": "[TC-02] Menampilkan dan berinteraksi dengan dropdown pemilih outlet"
+      },
+      {
+        "old": "TC03 - Mengisi input Target Transaksi Harian Cabang",
+        "new": "[TC-03] Mengisi input Target Transaksi Harian Cabang"
+      },
+      {
+        "old": "TC04 - Mengisi input Pengaturan Cash Drawer",
+        "new": "[TC-04] Mengisi input Pengaturan Cash Drawer"
+      },
+      {
+        "old": "TC05 - Mengatur opsi radio Pengaturan Pembulatan (Ya / Tidak)",
+        "new": "[TC-05] Mengatur opsi radio Pengaturan Pembulatan (Ya / Tidak)"
+      },
+      {
+        "old": "TC06 - Mengatur toggle Otentikasi Pembatalan Transaksi",
+        "new": "[TC-06] Mengatur toggle Otentikasi Pembatalan Transaksi"
+      },
+      {
+        "old": "TC07 - Mengatur opsi radio Pengaturan Catatan Transaksi",
+        "new": "[TC-07] Mengatur opsi radio Pengaturan Catatan Transaksi"
+      },
+      {
+        "old": "TC08 - Berhasil menyimpan pengaturan transaksi via tombol Simpan",
+        "new": "[TC-08] Berhasil menyimpan pengaturan transaksi via tombol Simpan"
+      },
+      {
+        "old": "TC09 - Berhasil menyimpan pengaturan transaksi via tombol Simpan Semua Cabang",
+        "new": "[TC-09] Berhasil menyimpan pengaturan transaksi via tombol Simpan Semua Cabang"
+      }
+    ]
+  },
+  "tests/Promosi/display_promosi.spec.js": {
+    "oldDescribe": "Admin → Promotion → Display Promotion (Display Promosi) page",
+    "newDescribe": "Display Promosi",
+    "tests": [
+      {
+        "old": "menampilkan halaman Display Promosi dengan breadcrumb, dropdown cabang, dan dropdown tipe file",
+        "new": "[TC-01] Menampilkan halaman Display Promosi dengan breadcrumb, dropdown cabang, dan dropdown tipe file"
+      },
+      {
+        "old": "menampilkan state tipe file atau informasi display promosi",
+        "new": "[TC-02] Menampilkan state tipe file atau informasi display promosi"
+      },
+      {
+        "old": "dropdown Tipe File menyediakan opsi Gambar dan Video",
+        "new": "[TC-03] Dropdown Tipe File menyediakan opsi Gambar dan Video"
+      },
+      {
+        "old": "memilih tipe file Gambar menampilkan area upload atau list display promosi",
+        "new": "[TC-04] Memilih tipe file Gambar menampilkan area upload atau list display promosi"
+      },
+      {
+        "old": "memilih tipe file Video menampilkan area upload video dan tombol aksi",
+        "new": "[TC-05] Memilih tipe file Video menampilkan area upload video dan tombol aksi"
+      },
+      {
+        "old": "tombol Batal dapat diklik dan menutup modal form upload",
+        "new": "[TC-06] Tombol Batal dapat diklik dan menutup modal form upload"
+      },
+      {
+        "old": "dropdown Cabang dapat dibuka dan dipilih dengan opsi cabang yang tersedia",
+        "new": "[TC-07] Dropdown Cabang dapat dibuka dan dipilih dengan opsi cabang yang tersedia"
+      },
+      {
+        "old": "tombol refresh cabang dapat diklik tanpa error",
+        "new": "[TC-08] Tombol refresh cabang dapat diklik tanpa error"
+      },
+      {
+        "old": "validasi tombol Upload nonaktif ketika belum ada file yang dipilih",
+        "new": "[TC-09] Validasi tombol Upload nonaktif ketika belum ada file yang dipilih"
+      },
+      {
+        "old": "berhasil menambahkan data display promosi (upload banner gambar) baru",
+        "new": "[TC-10] Berhasil menambahkan data display promosi (upload banner gambar) baru"
+      },
+      {
+        "old": "menampilkan opsi aksi Edit dan Hapus pada item display promosi yang sudah ada",
+        "new": "[TC-11] Menampilkan opsi aksi Edit dan Hapus pada item display promosi yang sudah ada"
+      }
+    ]
+  },
+  "tests/Promosi/harga_spesial.spec.js": {
+    "oldDescribe": "Admin → Promotion → Special Price (Harga Spesial) page",
+    "newDescribe": "Harga Spesial",
+    "tests": [
+      {
+        "old": "menampilkan halaman harga spesial dengan tabel, header, dan filter yang sesuai",
+        "new": "[TC-01] Menampilkan halaman harga spesial dengan tabel, header, dan filter yang sesuai"
+      },
+      {
+        "old": "navigasi ke form buat harga spesial dan memverifikasi seluruh komponen form",
+        "new": "[TC-02] Navigasi ke form buat harga spesial dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "tombol batalkan pada form buat harga spesial mengembalikan ke halaman list promo",
+        "new": "[TC-03] Tombol batalkan pada form buat harga spesial mengembalikan ke halaman list promo"
+      },
+      {
+        "old": "validasi form buat harga spesial: submit tanpa data wajib tidak keluar dari halaman form",
+        "new": "[TC-04] Validasi form buat harga spesial: submit tanpa data wajib tidak keluar dari halaman form"
+      },
+      {
+        "old": "membuka dan membatalkan modal tambah menu pada form buat harga spesial",
+        "new": "[TC-05] Membuka dan membatalkan modal tambah menu pada form buat harga spesial"
+      },
+      {
+        "old": "tambah harga spesial baru berhasil dan tampil di tabel",
+        "new": "[TC-06] Tambah harga spesial baru berhasil dan tampil di tabel"
+      },
+      {
+        "old": "filter harga spesial berdasarkan cabang",
+        "new": "[TC-07] Filter harga spesial berdasarkan cabang"
+      },
+      {
+        "old": "filter harga spesial berdasarkan status promo",
+        "new": "[TC-08] Filter harga spesial berdasarkan status promo"
+      },
+      {
+        "old": "navigasi ke halaman detail harga spesial via aksi tabel",
+        "new": "[TC-09] Navigasi ke halaman detail harga spesial via aksi tabel"
+      },
+      {
+        "old": "navigasi ke form edit harga spesial via aksi tabel",
+        "new": "[TC-10] Navigasi ke form edit harga spesial via aksi tabel"
+      },
+      {
+        "old": "batal menghapus harga spesial melalui modal konfirmasi",
+        "new": "[TC-11] Batal menghapus harga spesial melalui modal konfirmasi"
+      },
+      {
+        "old": "hapus harga spesial berhasil dengan konfirmasi modal",
+        "new": "[TC-12] Hapus harga spesial berhasil dengan konfirmasi modal"
+      }
+    ]
+  },
+  "tests/Promosi/kampanye_promosi.spec.js": {
+    "oldDescribe": "Admin → Promotion → Campaign Promotion (Kampanye Promosi) page",
+    "newDescribe": "Kampanye Promosi",
+    "tests": [
+      {
+        "old": "menampilkan halaman kampanye promosi dengan tabel, header, dan filter yang sesuai",
+        "new": "[TC-01] Menampilkan halaman kampanye promosi dengan tabel, header, dan filter yang sesuai"
+      },
+      {
+        "old": "navigasi ke form buat kampanye baru dan memverifikasi seluruh komponen form",
+        "new": "[TC-02] Navigasi ke form buat kampanye baru dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "tombol batalkan pada form buat kampanye baru mengembalikan ke halaman list kampanye",
+        "new": "[TC-03] Tombol batalkan pada form buat kampanye baru mengembalikan ke halaman list kampanye"
+      },
+      {
+        "old": "validasi form buat kampanye baru: submit tanpa melengkapi data wajib tidak keluar dari form",
+        "new": "[TC-04] Validasi form buat kampanye baru: submit tanpa melengkapi data wajib tidak keluar dari form"
+      },
+      {
+        "old": "buka dan tutup dropdown metode pembayaran pada form kampanye promosi",
+        "new": "[TC-05] Buka dan tutup dropdown metode pembayaran pada form kampanye promosi"
+      },
+      {
+        "old": "tambah kampanye promosi baru berhasil dan muncul di tabel",
+        "new": "[TC-06] Tambah kampanye promosi baru berhasil dan muncul di tabel"
+      },
+      {
+        "old": "filter kampanye promosi berdasarkan cabang",
+        "new": "[TC-07] Filter kampanye promosi berdasarkan cabang"
+      },
+      {
+        "old": "filter kampanye promosi berdasarkan tipe diskon",
+        "new": "[TC-08] Filter kampanye promosi berdasarkan tipe diskon"
+      },
+      {
+        "old": "navigasi ke halaman detail kampanye promosi via aksi tabel",
+        "new": "[TC-09] Navigasi ke halaman detail kampanye promosi via aksi tabel"
+      },
+      {
+        "old": "navigasi ke form edit kampanye promosi via aksi tabel",
+        "new": "[TC-10] Navigasi ke form edit kampanye promosi via aksi tabel"
+      },
+      {
+        "old": "batal menghapus kampanye promosi melalui modal konfirmasi",
+        "new": "[TC-11] Batal menghapus kampanye promosi melalui modal konfirmasi"
+      },
+      {
+        "old": "hapus kampanye promosi berhasil dengan konfirmasi modal",
+        "new": "[TC-12] Hapus kampanye promosi berhasil dengan konfirmasi modal"
+      }
+    ]
+  },
+  "tests/Promosi/poin.spec.js": {
+    "oldDescribe": "Admin → Promotion → Loyalty Points (Poin) page",
+    "newDescribe": "Poin Loyalitas",
+    "tests": [
+      {
+        "old": "menampilkan halaman Poin dengan tab Poin Per Pembelian dan Poin Per Menu",
+        "new": "[TC-01] Menampilkan halaman Poin dengan tab Poin Per Pembelian dan Poin Per Menu"
+      },
+      {
+        "old": "memverifikasi struktur tabel dan header kolom pada tab Poin Per Pembelian",
+        "new": "[TC-02] Memverifikasi struktur tabel dan header kolom pada tab Poin Per Pembelian"
+      },
+      {
+        "old": "berpindah ke tab Poin Per Menu dan memverifikasi tampilan tab serta tombol aksi",
+        "new": "[TC-03] Berpindah ke tab Poin Per Menu dan memverifikasi tampilan tab serta tombol aksi"
+      },
+      {
+        "old": "navigasi ke form Tambah Poin Per Pembelian dan memverifikasi seluruh komponen form",
+        "new": "[TC-04] Navigasi ke form Tambah Poin Per Pembelian dan memverifikasi seluruh komponen form"
+      },
+      {
+        "old": "tombol Batalkan pada form Tambah Poin Per Pembelian mengembalikan ke halaman Poin",
+        "new": "[TC-05] Tombol Batalkan pada form Tambah Poin Per Pembelian mengembalikan ke halaman Poin"
+      },
+      {
+        "old": "validasi form Tambah Poin Per Pembelian saat submit form kosong",
+        "new": "[TC-06] Validasi form Tambah Poin Per Pembelian saat submit form kosong"
+      },
+      {
+        "old": "bisa mengisi seluruh field form Tambah Poin Per Pembelian",
+        "new": "[TC-07] Bisa mengisi seluruh field form Tambah Poin Per Pembelian"
+      },
+      {
+        "old": "navigasi ke form Tambah Poin Per Menu dan memverifikasi komponen form",
+        "new": "[TC-08] Navigasi ke form Tambah Poin Per Menu dan memverifikasi komponen form"
+      },
+      {
+        "old": "memverifikasi responsivitas tabel poin dan state baris data",
+        "new": "[TC-09] Memverifikasi responsivitas tabel poin dan state baris data"
+      }
+    ]
+  },
+  "tests/Promosi/reward.spec.js": {
+    "oldDescribe": "Admin → Promotion → Reward page",
+    "newDescribe": "Reward & Referral",
+    "tests": [
+      {
+        "old": "navigasi ke /admin/promotion/reward otomatis mengarah ke sub-halaman Referral dengan breadcrumb dan tabs yang sesuai",
+        "new": "[TC-01] Navigasi ke /admin/promotion/reward otomatis mengarah ke sub-halaman Referral dengan breadcrumb dan tabs yang sesuai"
+      },
+      {
+        "old": "memverifikasi struktur tabel dan header kolom pada tab Referral",
+        "new": "[TC-02] Memverifikasi struktur tabel dan header kolom pada tab Referral"
+      },
+      {
+        "old": "memverifikasi kontrol Status Referral dan munculnya tombol Simpan Perubahan saat ada perubahan",
+        "new": "[TC-03] Memverifikasi kontrol Status Referral dan munculnya tombol Simpan Perubahan saat ada perubahan"
+      },
+      {
+        "old": "memverifikasi tombol Tambah Reward dan Tambah Kampanye Promosi pada tab Referral",
+        "new": "[TC-04] Memverifikasi tombol Tambah Reward dan Tambah Kampanye Promosi pada tab Referral"
+      },
+      {
+        "old": "mengklik Tambah Reward menambahkan baris input baru ke tabel dengan komponen yang sesuai",
+        "new": "[TC-05] Mengklik Tambah Reward menambahkan baris input baru ke tabel dengan komponen yang sesuai"
+      },
+      {
+        "old": "bisa memilih tipe reward dan mengisi Qty pada baris tabel",
+        "new": "[TC-06] Bisa memilih tipe reward dan mengisi Qty pada baris tabel"
+      },
+      {
+        "old": "dapat menghapus baris reward yang baru ditambahkan menggunakan tombol aksi hapus",
+        "new": "[TC-07] Dapat menghapus baris reward yang baru ditambahkan menggunakan tombol aksi hapus"
+      },
+      {
+        "old": "berpindah ke tab Ulang Tahun dan memverifikasi tabel serta tombol aksi",
+        "new": "[TC-08] Berpindah ke tab Ulang Tahun dan memverifikasi tabel serta tombol aksi"
+      },
+      {
+        "old": "berpindah ke tab Subscription dan memverifikasi tombol Tambah Paket",
+        "new": "[TC-09] Berpindah ke tab Subscription dan memverifikasi tombol Tambah Paket"
+      },
+      {
+        "old": "tombol Tambah Kampanye Promosi pada tab Reward mengarahkan ke form buat kampanye baru",
+        "new": "[TC-10] Tombol Tambah Kampanye Promosi pada tab Reward mengarahkan ke form buat kampanye baru"
+      }
+    ]
+  }
+}

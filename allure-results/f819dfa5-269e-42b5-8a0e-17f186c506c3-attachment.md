@@ -1,0 +1,154 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Kasflo-Resto/Katalog/menu_self_order.spec.js >> Menu Self Order >> [TC-01] Menampilkan halaman menu self order dengan tabel dan 4 tombol aksi
+- Location: tests/Kasflo-Resto/Katalog/menu_self_order.spec.js:153:3
+
+# Error details
+
+```
+Error: page.goto: net::ERR_INTERNET_DISCONNECTED at https://backoffice-dev.kasflo.id/
+Call log:
+  - navigating to "https://backoffice-dev.kasflo.id/", waiting until "domcontentloaded"
+
+```
+
+# Test source
+
+```ts
+  1   | const { test, expect } = require('@playwright/test');
+  2   | 
+  3   | test.describe('Menu Self Order', () => {
+  4   |   // Helper selector for actual data rows (excluding empty placeholder row)
+  5   |   function getDataRows(page) {
+  6   |     return page.locator('table:visible tbody tr:not(:has-text("Belum Ada Data")):not(:has-text("No results found"))');
+  7   |   }
+  8   | 
+  9   |   // Helper to safely get the first data row or null if table is empty
+  10  |   async function getTargetRow(page) {
+  11  |     const targetCell = page.locator('table:visible tbody tr td:first-child').filter({ hasNotText: /Belum Ada Data|No results found/i }).first();
+  12  |     if (await targetCell.count() === 0 || !(await targetCell.isVisible({ timeout: 5000 }).catch(() => false))) {
+  13  |       return null;
+  14  |     }
+  15  |     const text = (await targetCell.innerText()).trim();
+  16  |     if (!text) return null;
+  17  |     return page.locator('table:visible tbody tr').filter({ hasText: text }).first();
+  18  |   }
+  19  | 
+  20  |   // Shared resilient login helper
+  21  |   async function loginBeforeTest(page) {
+  22  |     if (page.url().includes('/admin/')) {
+  23  |       return page;
+  24  |     }
+  25  | 
+  26  |     try {
+  27  |       await page.goto('/', { waitUntil: 'commit', timeout: 25000 });
+  28  |     } catch {
+> 29  |       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 25000 });
+      |                  ^ Error: page.goto: net::ERR_INTERNET_DISCONNECTED at https://backoffice-dev.kasflo.id/
+  30  |     }
+  31  | 
+  32  |     if (page.url().includes('/admin/')) {
+  33  |       return page;
+  34  |     }
+  35  | 
+  36  |     const emailInput = page.getByLabel(/Email atau Username/i);
+  37  |     await expect(emailInput).toBeVisible({ timeout: 20000 });
+  38  | 
+  39  |     await emailInput.fill('qakasflo@automation.com');
+  40  |     await page.getByLabel(/Kata Sandi/i).fill('password');
+  41  | 
+  42  |     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+  43  |     await expect(loginBtn).toBeEnabled({ timeout: 5000 });
+  44  |     await page.waitForTimeout(500);
+  45  |     await loginBtn.click();
+  46  | 
+  47  |     try {
+  48  |       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+  49  |     } catch {
+  50  |       if (!page.url().includes('/admin/')) {
+  51  |         await page.waitForTimeout(1500);
+  52  |         if (await loginBtn.isVisible().catch(() => false)) {
+  53  |           await loginBtn.click({ timeout: 5000 }).catch(() => {});
+  54  |         }
+  55  |         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+  56  |       }
+  57  |     }
+  58  |     return page;
+  59  |   }
+  60  | 
+  61  |   // Helper to ensure at least one Self Order entry exists (generated via Book Menu + Branch)
+  62  |   async function ensureSelfOrderExists(page) {
+  63  |     await expect(page.locator('table:visible tbody tr').first()).toBeVisible({ timeout: 15000 });
+  64  |     await page.waitForTimeout(1000);
+  65  | 
+  66  |     const dataRows = getDataRows(page);
+  67  |     const count = await dataRows.count();
+  68  |     if (count === 0) {
+  69  |       await page.goto('/admin/catalog/book-menu', { waitUntil: 'domcontentloaded' });
+  70  |       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
+  71  | 
+  72  |       const targetRow = page.locator('table:visible tbody tr').filter({ hasText: 'Buku Menu Utama' }).first();
+  73  |       if (await targetRow.isVisible({ timeout: 5000 }).catch(() => false)) {
+  74  |         const editBtn = targetRow.locator('a[href*="/edit"]').first();
+  75  |         if (await editBtn.isVisible().catch(() => false)) {
+  76  |           await editBtn.click();
+  77  |         } else {
+  78  |           await targetRow.locator('button, a').nth(1).click();
+  79  |         }
+  80  | 
+  81  |         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/edit/, { timeout: 15000 });
+  82  |         await page.waitForTimeout(1000);
+  83  | 
+  84  |         const hasQAPill = await page.locator('.mantine-MultiSelect-pill, .mantine-Pill-root')
+  85  |           .filter({ hasText: /Kasflo Pusat QA/i }).first().isVisible().catch(() => false);
+  86  | 
+  87  |         if (!hasQAPill) {
+  88  |           const cabangContainer = page.locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first();
+  89  |           if (await cabangContainer.isVisible({ timeout: 5000 }).catch(() => false)) {
+  90  |             await cabangContainer.click();
+  91  |             await page.waitForTimeout(500);
+  92  | 
+  93  |             const branchOption = page.locator('[role="option"]:visible, [data-combobox-option]:visible, .mantine-MultiSelect-option:visible')
+  94  |               .filter({ hasText: /Kasflo Pusat QA/i }).first();
+  95  |             if (await branchOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+  96  |               await branchOption.click();
+  97  |             } else {
+  98  |               const anyOption = page.locator('[role="option"]:visible').first();
+  99  |               if (await anyOption.isVisible().catch(() => false)) {
+  100 |                 await anyOption.click();
+  101 |               }
+  102 |             }
+  103 |             await page.getByText(/Edit Buku Menu/i).first().click({ force: true }).catch(() => {});
+  104 |           }
+  105 |         }
+  106 | 
+  107 |         await page.evaluate(() => window.scrollTo(0, 0));
+  108 |         const updateBtn = page.getByRole('button', { name: 'Update' });
+  109 |         await expect(updateBtn).toBeVisible({ timeout: 5000 });
+  110 |         await updateBtn.click();
+  111 |         await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 15000 });
+  112 |       } else {
+  113 |         await page.goto('/admin/catalog/book-menu/add', { waitUntil: 'domcontentloaded' });
+  114 |         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+  115 |         const bmName = 'Init BM SelfOrder ' + Date.now();
+  116 |         await page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first().fill(bmName);
+  117 | 
+  118 |         const branchInput = page.locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first();
+  119 |         if (await branchInput.isVisible({ timeout: 5000 }).catch(() => false)) {
+  120 |           await branchInput.click();
+  121 |           await page.locator('[role="option"]:visible').first().click();
+  122 |         }
+  123 | 
+  124 |         const checkbox = page.locator('table tbody tr input[type="checkbox"]').first();
+  125 |         if (await checkbox.isVisible().catch(() => false)) {
+  126 |           await checkbox.check();
+  127 |         }
+  128 | 
+  129 |         await page.getByRole('button', { name: 'Simpan' }).click();
+```

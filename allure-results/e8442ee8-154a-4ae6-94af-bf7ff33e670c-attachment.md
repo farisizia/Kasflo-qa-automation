@@ -1,0 +1,567 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: Katalog/menu_self_order.spec.js >> Menu Self Order >> [TC-03] Membuka modal kode qr self order dan memverifikasi kontennya
+- Location: tests/Katalog/menu_self_order.spec.js:219:3
+
+# Error details
+
+```
+TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first()
+    - locator resolved to <div data-disabled="true" data-variant="default" class="m_8fb7ebe7 mantine-Input-input mantine-MultiSelect-input">…</div>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+  - element was detached from the DOM, retrying
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f3e2]:
+  - generic [ref=f3e3]:
+    - navigation [ref=f3e4]:
+      - generic [ref=f3e5]:
+        - link [ref=f3e6] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - paragraph [ref=f3e14]: Dashboard
+        - link [ref=f3e15] [cursor=pointer]:
+          - /url: /admin/catalog
+          - paragraph [ref=f3e23]: Katalog
+        - link [ref=f3e27] [cursor=pointer]:
+          - /url: /admin/ingredients
+          - paragraph [ref=f3e35]: Bahan Baku
+        - link [ref=f3e39] [cursor=pointer]:
+          - /url: /admin/promotion
+          - paragraph [ref=f3e47]: Promosi
+        - link [ref=f3e51] [cursor=pointer]:
+          - /url: /admin/customer
+          - paragraph [ref=f3e60]: Pelanggan
+        - link [ref=f3e64] [cursor=pointer]:
+          - /url: /admin/cash-account
+          - paragraph [ref=f3e72]: Pembukuan
+        - link [ref=f3e76] [cursor=pointer]:
+          - /url: /admin/report
+          - paragraph [ref=f3e84]: Laporan Usaha
+        - link [ref=f3e88] [cursor=pointer]:
+          - /url: /admin/user-management
+          - paragraph [ref=f3e96]: Manajemen User
+        - link [ref=f3e100] [cursor=pointer]:
+          - /url: /admin/setting
+          - paragraph [ref=f3e107]: Pengaturan
+        - link [ref=f3e111] [cursor=pointer]:
+          - /url: /admin/subscription
+          - paragraph [ref=f3e118]: Berlangganan
+    - main [ref=f3e119]:
+      - generic [ref=f3e120]:
+        - generic [ref=f3e122]:
+          - paragraph [ref=f3e127]: Buku Menu
+          - generic [ref=f3e128]:
+            - button "Business" [ref=f3e130] [cursor=pointer]
+            - button "Saldo QRIS" [ref=f3e138] [cursor=pointer]
+            - button [ref=f3e144] [cursor=pointer]:
+              - generic [ref=f3e151]:
+                - paragraph [ref=f3e152]: Kasflo Automation
+                - paragraph [ref=f3e153]: OWNER
+        - generic [ref=f3e156]:
+          - generic [ref=f3e157]:
+            - generic [ref=f3e159]:
+              - link [ref=f3e160] [cursor=pointer]:
+                - /url: /admin/dashboard
+              - generic [ref=f3e164]: /
+              - link "Buku Menu" [ref=f3e165] [cursor=pointer]:
+                - /url: /admin/catalog/book-menu
+              - generic [ref=f3e166]: /
+              - paragraph [ref=f3e167]: Tambah Buku Menu
+            - generic [ref=f3e168]:
+              - button "Batalkan" [ref=f3e169] [cursor=pointer]
+              - button "Simpan" [ref=f3e172] [cursor=pointer]
+          - generic [ref=f3e175]:
+            - heading "Tambah Buku Menu" [level=5] [ref=f3e176]
+            - generic [ref=f3e178]:
+              - generic [ref=f3e179]: Nama Buku Menu *
+              - textbox "Nama Buku Menu" [active] [ref=f3e181]:
+                - /placeholder: Masukkan Nama Buku Menu
+                - text: Init BM SelfOrder 1792661835306
+            - generic [ref=f3e182]:
+              - generic [ref=f3e183]: Status Buku Menu
+              - generic [ref=f3e185]:
+                - switch "Aktif" [checked]
+                - generic [ref=f3e189]: Aktif
+        - generic [ref=f3e192]:
+          - heading "Daftar Menu" [level=5] [ref=f3e194]
+          - generic [ref=f3e196]:
+            - generic [ref=f3e198]:
+              - generic [ref=f3e199]:
+                - textbox "Cari Menu..." [ref=f3e201]
+                - generic [ref=f3e203]:
+                  - textbox "Filter Kategori" [ref=f3e204] [cursor=pointer]
+                  - generic [ref=f3e206]:
+                    - button [ref=f3e207] [cursor=pointer]
+                    - button [ref=f3e212] [cursor=pointer]
+                - textbox "Filter Status" [ref=f3e219] [cursor=pointer]: Filter Semua Status
+              - generic [ref=f3e221]:
+                - button "Show/Hide columns" [ref=f3e222] [cursor=pointer]
+                - button "Toggle full screen" [ref=f3e225] [cursor=pointer]
+            - table [ref=f3e233]:
+              - rowgroup [ref=f3e234]:
+                - row [ref=f3e235]:
+                  - columnheader "Nama Menu Sort by Nama Menu ascending Move Column Actions" [ref=f3e236]:
+                    - generic [ref=f3e237]:
+                      - generic [ref=f3e238] [cursor=pointer]:
+                        - generic [ref=f3e239]: Nama Menu
+                        - button "Sort by Nama Menu ascending" [ref=f3e240]
+                      - generic [ref=f3e245]:
+                        - button "Move" [ref=f3e246]
+                        - button "Column Actions" [ref=f3e255] [cursor=pointer]
+                  - columnheader "Harga Sort by Harga descending Move Column Actions" [ref=f3e261]:
+                    - generic [ref=f3e262]:
+                      - generic [ref=f3e263] [cursor=pointer]:
+                        - generic [ref=f3e264]: Harga
+                        - button "Sort by Harga descending" [ref=f3e265]
+                      - generic [ref=f3e270]:
+                        - button "Move" [ref=f3e271]
+                        - button "Column Actions" [ref=f3e280] [cursor=pointer]
+                  - columnheader "Kategori Sort by Kategori descending Move Column Actions" [ref=f3e286]:
+                    - generic [ref=f3e287]:
+                      - generic [ref=f3e288] [cursor=pointer]:
+                        - generic [ref=f3e289]: Kategori
+                        - button "Sort by Kategori descending" [ref=f3e290]
+                      - generic [ref=f3e295]:
+                        - button "Move" [ref=f3e296]
+                        - button "Column Actions" [ref=f3e305] [cursor=pointer]
+                  - columnheader "Status Move Column Actions" [ref=f3e311]:
+                    - generic [ref=f3e312]:
+                      - generic [ref=f3e313]: Status
+                      - generic [ref=f3e315]:
+                        - button "Move" [ref=f3e316]
+                        - button "Column Actions" [ref=f3e325] [cursor=pointer]
+              - rowgroup [ref=f3e331]:
+                - row [ref=f3e332]:
+                  - cell "Paket Hemat 1792658590393" [ref=f3e333]
+                  - cell "Rp 0" [ref=f3e334]:
+                    - generic [ref=f3e336]:
+                      - generic [ref=f3e337]: Rp
+                      - textbox [ref=f3e338]: "0"
+                      - generic [ref=f3e340]:
+                        - button [aria-hidden] [ref=f3e341] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e344]
+                  - cell [ref=f3e347]
+                  - cell "Nonaktif" [ref=f3e348]:
+                    - generic [ref=f3e351]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e355]: Nonaktif
+                - row [ref=f3e357]:
+                  - cell "Paket Hemat 1792643985491" [ref=f3e358]
+                  - cell "Rp 0" [ref=f3e359]:
+                    - generic [ref=f3e361]:
+                      - generic [ref=f3e362]: Rp
+                      - textbox [ref=f3e363]: "0"
+                      - generic [ref=f3e365]:
+                        - button [aria-hidden] [ref=f3e366] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e369]
+                  - cell [ref=f3e372]
+                  - cell "Nonaktif" [ref=f3e373]:
+                    - generic [ref=f3e376]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e380]: Nonaktif
+                - row [ref=f3e382]:
+                  - cell "Paket Hemat 1792643363984" [ref=f3e383]
+                  - cell "Rp 0" [ref=f3e384]:
+                    - generic [ref=f3e386]:
+                      - generic [ref=f3e387]: Rp
+                      - textbox [ref=f3e388]: "0"
+                      - generic [ref=f3e390]:
+                        - button [aria-hidden] [ref=f3e391] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e394]
+                  - cell [ref=f3e397]
+                  - cell "Nonaktif" [ref=f3e398]:
+                    - generic [ref=f3e401]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e405]: Nonaktif
+                - row [ref=f3e407]:
+                  - cell "Paket Hemat 1792642707603" [ref=f3e408]
+                  - cell "Rp 0" [ref=f3e409]:
+                    - generic [ref=f3e411]:
+                      - generic [ref=f3e412]: Rp
+                      - textbox [ref=f3e413]: "0"
+                      - generic [ref=f3e415]:
+                        - button [aria-hidden] [ref=f3e416] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e419]
+                  - cell [ref=f3e422]
+                  - cell "Nonaktif" [ref=f3e423]:
+                    - generic [ref=f3e426]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e430]: Nonaktif
+                - row [ref=f3e432]:
+                  - cell "Paket Hemat 1792642619666" [ref=f3e433]
+                  - cell "Rp 0" [ref=f3e434]:
+                    - generic [ref=f3e436]:
+                      - generic [ref=f3e437]: Rp
+                      - textbox [ref=f3e438]: "0"
+                      - generic [ref=f3e440]:
+                        - button [aria-hidden] [ref=f3e441] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e444]
+                  - cell [ref=f3e447]
+                  - cell "Nonaktif" [ref=f3e448]:
+                    - generic [ref=f3e451]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e455]: Nonaktif
+                - row [ref=f3e457]:
+                  - cell "Paket Hemat 1792642385071" [ref=f3e458]
+                  - cell "Rp 0" [ref=f3e459]:
+                    - generic [ref=f3e461]:
+                      - generic [ref=f3e462]: Rp
+                      - textbox [ref=f3e463]: "0"
+                      - generic [ref=f3e465]:
+                        - button [aria-hidden] [ref=f3e466] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e469]
+                  - cell [ref=f3e472]
+                  - cell "Nonaktif" [ref=f3e473]:
+                    - generic [ref=f3e476]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e480]: Nonaktif
+                - row [ref=f3e482]:
+                  - cell "Paket Hemat 1792641219687" [ref=f3e483]
+                  - cell "Rp 0" [ref=f3e484]:
+                    - generic [ref=f3e486]:
+                      - generic [ref=f3e487]: Rp
+                      - textbox [ref=f3e488]: "0"
+                      - generic [ref=f3e490]:
+                        - button [aria-hidden] [ref=f3e491] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e494]
+                  - cell [ref=f3e497]
+                  - cell "Nonaktif" [ref=f3e498]:
+                    - generic [ref=f3e501]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e505]: Nonaktif
+                - row [ref=f3e507]:
+                  - cell "Paket Hemat 1792640015389" [ref=f3e508]
+                  - cell "Rp 0" [ref=f3e509]:
+                    - generic [ref=f3e511]:
+                      - generic [ref=f3e512]: Rp
+                      - textbox [ref=f3e513]: "0"
+                      - generic [ref=f3e515]:
+                        - button [aria-hidden] [ref=f3e516] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e519]
+                  - cell [ref=f3e522]
+                  - cell "Nonaktif" [ref=f3e523]:
+                    - generic [ref=f3e526]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e530]: Nonaktif
+                - row [ref=f3e532]:
+                  - cell "Paket Hemat 1792637349984" [ref=f3e533]
+                  - cell "Rp 0" [ref=f3e534]:
+                    - generic [ref=f3e536]:
+                      - generic [ref=f3e537]: Rp
+                      - textbox [ref=f3e538]: "0"
+                      - generic [ref=f3e540]:
+                        - button [aria-hidden] [ref=f3e541] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e544]
+                  - cell [ref=f3e547]
+                  - cell "Nonaktif" [ref=f3e548]:
+                    - generic [ref=f3e551]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e555]: Nonaktif
+                - row [ref=f3e557]:
+                  - cell "Paket Hemat 1792576745448" [ref=f3e558]
+                  - cell "Rp 0" [ref=f3e559]:
+                    - generic [ref=f3e561]:
+                      - generic [ref=f3e562]: Rp
+                      - textbox [ref=f3e563]: "0"
+                      - generic [ref=f3e565]:
+                        - button [aria-hidden] [ref=f3e566] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e569]
+                  - cell [ref=f3e572]
+                  - cell "Nonaktif" [ref=f3e573]:
+                    - generic [ref=f3e576]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e580]: Nonaktif
+                - row [ref=f3e582]:
+                  - cell "Paket Hemat 1792558893912" [ref=f3e583]
+                  - cell "Rp 0" [ref=f3e584]:
+                    - generic [ref=f3e586]:
+                      - generic [ref=f3e587]: Rp
+                      - textbox [ref=f3e588]: "0"
+                      - generic [ref=f3e590]:
+                        - button [aria-hidden] [ref=f3e591] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e594]
+                  - cell [ref=f3e597]
+                  - cell "Nonaktif" [ref=f3e598]:
+                    - generic [ref=f3e601]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e605]: Nonaktif
+                - row [ref=f3e607]:
+                  - cell "Paket Hemat 1790845986134" [ref=f3e608]
+                  - cell "Rp 0" [ref=f3e609]:
+                    - generic [ref=f3e611]:
+                      - generic [ref=f3e612]: Rp
+                      - textbox [ref=f3e613]: "0"
+                      - generic [ref=f3e615]:
+                        - button [aria-hidden] [ref=f3e616] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e619]
+                  - cell [ref=f3e622]
+                  - cell "Nonaktif" [ref=f3e623]:
+                    - generic [ref=f3e626]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e630]: Nonaktif
+                - row [ref=f3e632]:
+                  - cell "Paket Hemat 1790242092888" [ref=f3e633]
+                  - cell "Rp 0" [ref=f3e634]:
+                    - generic [ref=f3e636]:
+                      - generic [ref=f3e637]: Rp
+                      - textbox [ref=f3e638]: "0"
+                      - generic [ref=f3e640]:
+                        - button [aria-hidden] [ref=f3e641] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e644]
+                  - cell [ref=f3e647]
+                  - cell "Nonaktif" [ref=f3e648]:
+                    - generic [ref=f3e651]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e655]: Nonaktif
+                - row [ref=f3e657]:
+                  - cell "Paket Hemat 1790241813499" [ref=f3e658]
+                  - cell "Rp 0" [ref=f3e659]:
+                    - generic [ref=f3e661]:
+                      - generic [ref=f3e662]: Rp
+                      - textbox [ref=f3e663]: "0"
+                      - generic [ref=f3e665]:
+                        - button [aria-hidden] [ref=f3e666] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e669]
+                  - cell [ref=f3e672]
+                  - cell "Nonaktif" [ref=f3e673]:
+                    - generic [ref=f3e676]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e680]: Nonaktif
+                - row [ref=f3e682]:
+                  - cell "Paket Hemat 1790237149540" [ref=f3e683]
+                  - cell "Rp 0" [ref=f3e684]:
+                    - generic [ref=f3e686]:
+                      - generic [ref=f3e687]: Rp
+                      - textbox [ref=f3e688]: "0"
+                      - generic [ref=f3e690]:
+                        - button [aria-hidden] [ref=f3e691] [cursor=pointer]
+                        - button [disabled] [aria-hidden] [ref=f3e694]
+                  - cell [ref=f3e697]
+                  - cell "Nonaktif" [ref=f3e698]:
+                    - generic [ref=f3e701]:
+                      - switch "Nonaktif"
+                      - generic [ref=f3e705]: Nonaktif
+              - rowgroup
+  - link "Konsultasi Sekarang" [ref=f3e710] [cursor=pointer]:
+    - /url: https://api.whatsapp.com/send/?phone=&type=phone_number&app_absent=0
+```
+
+# Test source
+
+```ts
+  20  |   // Shared resilient login helper
+  21  |   async function loginBeforeTest(page) {
+  22  |     if (page.url().includes('/admin/')) {
+  23  |       return page;
+  24  |     }
+  25  | 
+  26  |     try {
+  27  |       await page.goto('/', { waitUntil: 'commit', timeout: 25000 });
+  28  |     } catch {
+  29  |       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 25000 });
+  30  |     }
+  31  | 
+  32  |     if (page.url().includes('/admin/')) {
+  33  |       return page;
+  34  |     }
+  35  | 
+  36  |     const emailInput = page.getByLabel(/Email atau Username/i);
+  37  |     await expect(emailInput).toBeVisible({ timeout: 20000 });
+  38  | 
+  39  |     await emailInput.fill('qakasflo@automation.com');
+  40  |     await page.getByLabel(/Kata Sandi/i).fill('password');
+  41  | 
+  42  |     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+  43  |     await expect(loginBtn).toBeEnabled({ timeout: 5000 });
+  44  |     await page.waitForTimeout(500);
+  45  |     await loginBtn.click();
+  46  | 
+  47  |     try {
+  48  |       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+  49  |     } catch {
+  50  |       if (!page.url().includes('/admin/')) {
+  51  |         await page.waitForTimeout(1500);
+  52  |         if (await loginBtn.isVisible().catch(() => false)) {
+  53  |           await loginBtn.click({ timeout: 5000 }).catch(() => {});
+  54  |         }
+  55  |         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+  56  |       }
+  57  |     }
+  58  |     return page;
+  59  |   }
+  60  | 
+  61  |   // Helper to ensure at least one Self Order entry exists (generated via Book Menu + Branch)
+  62  |   async function ensureSelfOrderExists(page) {
+  63  |     await expect(page.locator('table:visible tbody tr').first()).toBeVisible({ timeout: 15000 });
+  64  |     await page.waitForTimeout(1000);
+  65  | 
+  66  |     const dataRows = getDataRows(page);
+  67  |     const count = await dataRows.count();
+  68  |     if (count === 0) {
+  69  |       await page.goto('/admin/catalog/book-menu', { waitUntil: 'domcontentloaded' });
+  70  |       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
+  71  | 
+  72  |       const targetRow = page.locator('table:visible tbody tr').filter({ hasText: 'Buku Menu Utama' }).first();
+  73  |       if (await targetRow.isVisible({ timeout: 5000 }).catch(() => false)) {
+  74  |         const editBtn = targetRow.locator('a[href*="/edit"]').first();
+  75  |         if (await editBtn.isVisible().catch(() => false)) {
+  76  |           await editBtn.click();
+  77  |         } else {
+  78  |           await targetRow.locator('button, a').nth(1).click();
+  79  |         }
+  80  | 
+  81  |         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/edit/, { timeout: 15000 });
+  82  |         await page.waitForTimeout(1000);
+  83  | 
+  84  |         const hasQAPill = await page.locator('.mantine-MultiSelect-pill, .mantine-Pill-root')
+  85  |           .filter({ hasText: /Kasflo Pusat QA/i }).first().isVisible().catch(() => false);
+  86  | 
+  87  |         if (!hasQAPill) {
+  88  |           const cabangContainer = page.locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first();
+  89  |           if (await cabangContainer.isVisible({ timeout: 5000 }).catch(() => false)) {
+  90  |             await cabangContainer.click();
+  91  |             await page.waitForTimeout(500);
+  92  | 
+  93  |             const branchOption = page.locator('[role="option"]:visible, [data-combobox-option]:visible, .mantine-MultiSelect-option:visible')
+  94  |               .filter({ hasText: /Kasflo Pusat QA/i }).first();
+  95  |             if (await branchOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+  96  |               await branchOption.click();
+  97  |             } else {
+  98  |               const anyOption = page.locator('[role="option"]:visible').first();
+  99  |               if (await anyOption.isVisible().catch(() => false)) {
+  100 |                 await anyOption.click();
+  101 |               }
+  102 |             }
+  103 |             await page.getByText(/Edit Buku Menu/i).first().click({ force: true }).catch(() => {});
+  104 |           }
+  105 |         }
+  106 | 
+  107 |         await page.evaluate(() => window.scrollTo(0, 0));
+  108 |         const updateBtn = page.getByRole('button', { name: 'Update' });
+  109 |         await expect(updateBtn).toBeVisible({ timeout: 5000 });
+  110 |         await updateBtn.click();
+  111 |         await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 15000 });
+  112 |       } else {
+  113 |         await page.goto('/admin/catalog/book-menu/add', { waitUntil: 'domcontentloaded' });
+  114 |         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+  115 |         const bmName = 'Init BM SelfOrder ' + Date.now();
+  116 |         await page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first().fill(bmName);
+  117 | 
+  118 |         const branchInput = page.locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first();
+  119 |         if (await branchInput.isVisible({ timeout: 5000 }).catch(() => false)) {
+> 120 |           await branchInput.click();
+      |                             ^ TimeoutError: locator.click: Timeout 15000ms exceeded.
+  121 |           await page.locator('[role="option"]:visible').first().click();
+  122 |         }
+  123 | 
+  124 |         const checkbox = page.locator('table tbody tr input[type="checkbox"]').first();
+  125 |         if (await checkbox.isVisible().catch(() => false)) {
+  126 |           await checkbox.check();
+  127 |         }
+  128 | 
+  129 |         await page.getByRole('button', { name: 'Simpan' }).click();
+  130 |         await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 20000 });
+  131 |       }
+  132 | 
+  133 |       await page.goto('/admin/catalog/self-order-menu', { waitUntil: 'domcontentloaded' });
+  134 |       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
+  135 |     }
+  136 |   }
+  137 | 
+  138 |   test.beforeEach(async ({ page }) => {
+  139 |     await test.step('Inisialisasi sesi login dan navigasi ke halaman pengujian', async () => {
+  140 |       // Step 1: Login
+  141 |       await loginBeforeTest(page);
+  142 | 
+  143 |       // Step 2: Navigate to Menu Self Order page
+  144 |       await page.goto('/admin/catalog/self-order-menu', { waitUntil: 'domcontentloaded' });
+  145 | 
+  146 |       // Step 3: Verify page loaded
+  147 |       await expect(page).toHaveURL(/\/admin\/catalog\/self-order-menu/);
+  148 |       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
+  149 |     
+  150 |     });
+  151 |   });
+  152 | 
+  153 |   test('[TC-01] Menampilkan halaman menu self order dengan tabel dan 4 tombol aksi', async ({ page }) => {
+  154 |     await test.step('Verifikasi bahwa sistem berhasil menampilkan halaman menu self order dengan tabel dan 4 tombol aksi', async () => {
+  155 |       // Verify page title / breadcrumb
+  156 |       await expect(page.getByText('Menu Self Order').first()).toBeVisible();
+  157 | 
+  158 |       // Check table visibility
+  159 |       const table = page.locator('table:visible').first();
+  160 |       await expect(table).toBeVisible();
+  161 | 
+  162 |       // Verify table headers
+  163 |       const thead = page.locator('thead:visible').first();
+  164 |       await expect(thead.getByText('Cabang', { exact: true }).first()).toBeVisible();
+  165 |       await expect(thead.getByText('Buku Menu', { exact: true }).first()).toBeVisible();
+  166 |       await expect(thead.getByText('Action', { exact: true }).first()).toBeVisible();
+  167 | 
+  168 |       // Verify all 4 action elements in data row
+  169 |       await ensureSelfOrderExists(page);
+  170 |       const targetRow = await getTargetRow(page);
+  171 |       if (!targetRow) {
+  172 |         await expect(page.locator('table:visible tbody').getByText(/Belum Ada Data|No results found/i).first()).toBeVisible({ timeout: 10000 });
+  173 |         return;
+  174 |       }
+  175 | 
+  176 |       // 1. Detail button
+  177 |       await expect(targetRow.locator('a[href*="/detail/"]').first()).toBeVisible({ timeout: 10000 });
+  178 |       // 2. QR Code modal button
+  179 |       await expect(targetRow.locator('button').first()).toBeVisible({ timeout: 10000 });
+  180 |       // 3. Banner marketing button
+  181 |       await expect(targetRow.locator('a[href*="/banner-marketing/"]').first()).toBeVisible({ timeout: 10000 });
+  182 |       // 4. Edit button
+  183 |       await expect(targetRow.locator('a[href*="/edit/"]').first()).toBeVisible({ timeout: 10000 });
+  184 |     
+  185 |     });
+  186 |   });
+  187 | 
+  188 |   test('[TC-02] Cari/filter data menu self order dengan search box', async ({ page }) => {
+  189 |     await test.step('Lakukan pengujian cari/filter data menu self order dengan search box dan validasi hasil yang ditampilkan', async () => {
+  190 |       await ensureSelfOrderExists(page);
+  191 | 
+  192 |       const targetCell = page.locator('table:visible tbody tr td:first-child').filter({ hasNotText: /Belum Ada Data|No results found/i }).first();
+  193 |       await expect(targetCell).not.toBeEmpty({ timeout: 10000 });
+  194 |       const cabangName = (await targetRow.locator('td:first-child').innerText()).trim();
+  195 |       expect(cabangName.length).toBeGreaterThan(0);
+  196 | 
+  197 |       const searchInput = page.locator('input[placeholder="Cari disini..."]:visible').first();
+  198 |       await expect(searchInput).toBeVisible({ timeout: 10000 });
+  199 | 
+  200 |       // 1. Search with matching branch name
+  201 |       await searchInput.fill(cabangName);
+  202 |       await page.waitForTimeout(1000);
+  203 |       const matchedRow = page.locator('table:visible tbody tr').filter({ hasText: cabangName });
+  204 |       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
+  205 | 
+  206 |       // 2. Search with non-existent keyword
+  207 |       await searchInput.fill('XYZTermNotExist999');
+  208 |       await page.waitForTimeout(1000);
+  209 |       await expect(page.locator('table:visible tbody').getByText(/Belum Ada Data|No results found/i).first()).toBeVisible({ timeout: 10000 });
+  210 | 
+  211 |       // 3. Clear search and verify original row is visible again
+  212 |       await searchInput.clear();
+  213 |       await page.waitForTimeout(1000);
+  214 |       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
+  215 |     
+  216 |     });
+  217 |   });
+  218 | 
+  219 |   test('[TC-03] Membuka modal kode qr self order dan memverifikasi kontennya', async ({ page }) => {
+  220 |     await test.step('Buka dan periksa rincian: Membuka modal kode qr self order dan memverifikasi kontennya', async () => {
+```
