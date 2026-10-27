@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && ln -sfn \"../../test-results\" dist/test-results",
+    "build": "rm -rf public/test-results && vite build && rm -rf dist/test-results && cp -RL ../test-results dist/test-results",
     "preview": "vite preview --port 8081 --host 0.0.0.0"
   },
   "dependencies": {
