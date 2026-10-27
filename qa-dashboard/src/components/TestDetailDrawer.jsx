@@ -474,17 +474,32 @@ export default function TestDetailDrawer({ test, onClose, onPrev, onNext, hasPre
                             >
                               <div className="px-4 py-2 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between text-xs dark:bg-slate-900/60 dark:border-slate-800/80">
                                 <span className="font-semibold text-slate-900 dark:text-slate-200 truncate">{att.fileName}</span>
-                                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-950/60 dark:text-emerald-400">
-                                  VIDEO
-                                </span>
+                                <div className="flex items-center space-x-2 shrink-0">
+                                  <a 
+                                    href={url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-[11px] text-indigo-600 dark:text-brand-400 hover:underline flex items-center gap-1 font-medium"
+                                    title="Buka rekaman di tab baru atau unduh"
+                                  >
+                                    <ExternalLink className="w-3 h-3" />
+                                    <span>Buka di Tab Baru</span>
+                                  </a>
+                                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-950/60 dark:text-emerald-400">
+                                    VIDEO
+                                  </span>
+                                </div>
                               </div>
                               <div className="p-2 bg-black flex items-center justify-center">
                                 <video 
                                   controls 
+                                  preload="metadata"
+                                  playsInline
                                   className="w-full max-h-72 rounded-lg bg-black" 
-                                  src={url}
                                 >
-                                  Browser Anda tidak mendukung tag video.
+                                  <source src={url} type="video/webm" />
+                                  <source src={url} type="video/mp4" />
+                                  Browser Anda tidak mendukung tag video. <a href={url} target="_blank" rel="noopener noreferrer" className="underline text-indigo-400 ml-1">Klik di sini untuk mengunduh / memutar.</a>
                                 </video>
                               </div>
                             </div>
