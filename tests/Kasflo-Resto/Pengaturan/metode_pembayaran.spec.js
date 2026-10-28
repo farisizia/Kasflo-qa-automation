@@ -48,6 +48,51 @@ test.describe('Metode Pembayaran', () => {
     return page.locator('table:visible tbody tr:not(:has-text("Belum Ada Data")):not(:has-text("No results found"))');
   }
 
+  // Helper selector untuk baris metode pembayaran kustom (bukan bawaan sistem Cash / QRIS)
+  function getCustomPaymentRows(page) {
+    return page.locator('table:visible tbody tr')
+      .filter({ hasNotText: 'Cash' })
+      .filter({ hasNotText: 'QRIS System' })
+      .filter({ hasNotText: 'Belum Ada Data' })
+      .filter({ hasNotText: 'No results found' });
+  }
+
+  // Helper untuk memastikan ada minimal satu metode pembayaran kustom
+  async function ensureCustomPaymentMethod(page) {
+    const customRows = getCustomPaymentRows(page);
+    const count = await customRows.count();
+    if (count === 0) {
+      const tambahBtn = page.getByRole('button', { name: /Tambah Metode Pembayaran/i }).first();
+      await tambahBtn.click();
+
+      const modal = page.locator('[role="dialog"]:visible, .mantine-Modal-content:visible').first();
+      await expect(modal).toBeVisible({ timeout: 5000 });
+
+      const uniqueName = 'E-Wallet QA ' + Math.floor(Math.random() * 9000 + 1000);
+      const nameInput = modal.getByPlaceholder('Masukkan Nama Metode Pembayaran').first();
+      await nameInput.fill(uniqueName);
+
+      const tipeInput = modal.getByPlaceholder('Pilih Tipe Metode Pembayaran').first();
+      await tipeInput.click();
+      const option = page.locator('[role="option"]:visible, .mantine-Select-option:visible').filter({ hasText: /^E-Wallet$/i }).first();
+      await expect(option).toBeVisible({ timeout: 5000 });
+      await option.click();
+
+      const simpanBtn = modal.getByRole('button', { name: 'Simpan', exact: true }).first();
+      await Promise.all([
+        page.waitForResponse(
+          res => res.url().includes('payment-method') && (res.request().method() === 'POST' || res.request().method() === 'PUT') && (res.status() === 200 || res.status() === 201),
+          { timeout: 20000 }
+        ).catch(() => null),
+        simpanBtn.click(),
+      ]);
+
+      await expect(modal).not.toBeVisible({ timeout: 10000 });
+      await expect(customRows.first()).toBeVisible({ timeout: 10000 });
+    }
+    return customRows;
+  }
+
   test.beforeEach(async ({ page }) => {
     await test.step('Inisialisasi sesi login dan navigasi ke halaman pengujian', async () => {
       // Intercept subscription endpoint agar batas metode pembayaran mencukupi
@@ -343,4 +388,93 @@ test.describe('Metode Pembayaran', () => {
     
     });
   });
+
+  // ==========================================
+  // 6. HAPUS METODE PEMBAYARAN (DELETE)
+  // ==========================================
+
+  test('[TC-11] Membuka modal konfirmasi hapus metode pembayaran dan membatalkannya', async ({ page }) => {
+    await test.step('Buka dan periksa rincian: Membuka modal konfirmasi hapus metode pembayaran dan membatalkannya', async () => {
+      // 1. Pastikan minimal ada 1 baris metode pembayaran kustom
+      const customRows = await ensureCustomPaymentMethod(page);
+      await expect(customRows.first()).toBeVisible({ timeout: 10000 });
+
+      const targetRow = customRows.first();
+      const methodName = (await targetRow.locator('td').first().innerText()).trim();
+
+      // 2. Klik tombol hapus (tombol terakhir pada baris aksi)
+      const deleteBtn = targetRow.locator('button').last();
+      await expect(deleteBtn).toBeEnabled({ timeout: 5000 });
+      await deleteBtn.click();
+
+      // 3. Verifikasi modal konfirmasi hapus muncul dengan judul dan teks konfirmasi
+      const deleteModal = page.locator('[role="dialog"]:visible, .mantine-Modal-content:visible')
+        .filter({ hasText: /Hapus Metode Pembayaran/i }).first();
+      await expect(deleteModal).toBeVisible({ timeout: 5000 });
+      await expect(deleteModal.getByText(/Apakah anda yakin akan menghapus data Metode Pembayaran ini\?/i)).toBeVisible();
+
+      // 4. Verifikasi tombol Batal dan Hapus pada modal konfirmasi
+      const batalBtn = deleteModal.getByRole('button', { name: /Batal/i }).first();
+      const hapusBtn = deleteModal.getByRole('button', { name: /^Hapus$/i }).first();
+      await expect(batalBtn).toBeVisible({ timeout: 5000 });
+      await expect(hapusBtn).toBeVisible({ timeout: 5000 });
+
+      // 5. Batalkan penghapusan
+      await batalBtn.click();
+
+      // Modal harus tertutup dan metode pembayaran tetap ada dalam tabel
+      await expect(deleteModal).not.toBeVisible({ timeout: 5000 });
+      await expect(page.locator('table:visible tbody tr').filter({ hasText: methodName }).first()).toBeVisible({ timeout: 5000 });
+    });
+  });
+
+  test('[TC-12] Berhasil menghapus metode pembayaran kustom via modal konfirmasi', async ({ page }) => {
+    await test.step('Langkah Pengujian UAT: Berhasil menghapus metode pembayaran kustom via modal konfirmasi', async () => {
+      // 1. Pastikan minimal ada 1 baris metode pembayaran kustom yang dapat dihapus
+      const customRows = await ensureCustomPaymentMethod(page);
+      await expect(customRows.first()).toBeVisible({ timeout: 10000 });
+
+      const targetRow = customRows.first();
+      const methodName = (await targetRow.locator('td').first().innerText()).trim();
+
+      // 2. Klik tombol hapus pada baris data
+      const deleteBtn = targetRow.locator('button').last();
+      await expect(deleteBtn).toBeEnabled({ timeout: 5000 });
+      await deleteBtn.click();
+
+      // 3. Verifikasi modal konfirmasi terbuka
+      const deleteModal = page.locator('[role="dialog"]:visible, .mantine-Modal-content:visible')
+        .filter({ hasText: /Hapus Metode Pembayaran/i }).first();
+      await expect(deleteModal).toBeVisible({ timeout: 5000 });
+      await expect(deleteModal.getByText(/Apakah anda yakin akan menghapus data Metode Pembayaran ini\?/i)).toBeVisible();
+
+      // 4. Klik tombol konfirmasi Hapus dan tunggu response DELETE API
+      const confirmHapusBtn = deleteModal.getByRole('button', { name: /^Hapus$/i }).first();
+      const [response] = await Promise.all([
+        page.waitForResponse(
+          res => res.url().includes('payment-method') && (res.request().method() === 'DELETE' || res.status() === 200 || res.status() === 204),
+          { timeout: 15000 }
+        ).catch(() => null),
+        confirmHapusBtn.click(),
+      ]);
+
+      if (response) {
+        expect([200, 204]).toContain(response.status());
+      }
+
+      // 5. Verifikasi modal konfirmasi tertutup
+      await expect(deleteModal).not.toBeVisible({ timeout: 10000 });
+
+      // 6. Verifikasi toast notifikasi sukses muncul
+      const successToast = page.locator('.mantine-Notification-root:visible, [role="status"]:visible')
+        .filter({ hasText: /Metode Pembayaran Berhasil Dihapus/i }).first();
+      await expect(successToast).toBeVisible({ timeout: 10000 });
+
+      // 7. Verifikasi metode pembayaran yang dihapus tidak lagi muncul pada tabel
+      await expect(page.locator('table:visible tbody tr').filter({ hasText: methodName })).not.toBeVisible({ timeout: 10000 });
+    });
+  });
 });
+
+
+

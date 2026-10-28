@@ -1,4 +1,4 @@
-node_modules/
+xnode_modules/
 firebase-debug.log*
 
 # Ignore heavy test artifacts (traces and video recordings)
@@ -9,3 +9,8 @@ test-results/**/*.webm
 
 # Ensure test screenshots are not blocked
 !test-results/**/*.png
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules

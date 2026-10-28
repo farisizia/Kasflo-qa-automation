@@ -1,0 +1,8 @@
+Metode pembayaran yang akan diuji: GoPay QA 9629
+Delete modal text:
+ Hapus Metode Pembayaran
+
+Apakah anda yakin akan menghapus data Metode Pembayaran ini?
+
+Batal
+Hapus

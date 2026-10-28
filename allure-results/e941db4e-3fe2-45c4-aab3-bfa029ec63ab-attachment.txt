@@ -1,0 +1,3 @@
+Metode pembayaran yang akan dihapus: GoPay QA 9629
+Delete response status: 200 https://api-dev.kasflo.id/backoffice/v1/utility/payment-methods/12144
+Toast notification text: Metode Pembayaran Berhasil Dihapus
