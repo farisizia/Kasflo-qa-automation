@@ -6,21 +6,54 @@ test.describe('Kategori Bahan Baku', () => {
     return page.locator('table tbody tr:not(:has-text("Belum Ada Data")):not(:has-text("No results found"))');
   }
 
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Shared resilient login helper
   async function loginBeforeTest(page) {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    const emailInput = page.getByLabel(/Email atau Username/i);
-    await expect(emailInput).toBeVisible({ timeout: 15000 });
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
 
+    try {
+      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch {
+      await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
+    }
+
+    await waitForPageReady(page);
+
+    if (page.url().includes('/admin/')) {
+      return page;
+    }
+
+    const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
-    await expect(loginBtn).toBeEnabled({ timeout: 5000 });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
+    await expect(loginBtn).toBeEnabled({ timeout: 10000 });
+    await page.waitForTimeout(500);
     await loginBtn.click();
 
     try {
-      await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 30000 });
+      await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
         if (await loginBtn.isEnabled().catch(() => false)) {
@@ -29,15 +62,18 @@ test.describe('Kategori Bahan Baku', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
-  // Helper to ensure at least one ingredient category exists
-  async function ensureIngredientCategoryExists(page) {
-    const emptyState = page.locator('table tbody tr', { hasText: /Belum Ada Data|No results found/i });
-    const hasEmpty = await emptyState.isVisible().catch(() => false);
-    if (hasEmpty) {
+  // Helper to ensure at least minCount ingredient categories exist
+  async function ensureIngredientCategoryExists(page, minCount = 1) {
+    await waitForPageReady(page);
+    const dataRows = getDataRows(page);
+    if (await dataRows.count() < minCount) {
       const addBtn = page.getByRole('button', { name: /Buat Kategori Bahan Baku/i });
+      await expect(addBtn).toBeVisible({ timeout: 10000 });
+      await expect(addBtn).toBeEnabled({ timeout: 10000 });
       await addBtn.click();
 
       const modal = page.locator('[role="dialog"], .mantine-Modal-content');
@@ -45,11 +81,16 @@ test.describe('Kategori Bahan Baku', () => {
 
       const nameInput = modal.getByPlaceholder('Masukkan Nama Kategori');
       const catName = 'Init Kat Bahan ' + Date.now();
+      await expect(nameInput).toBeVisible();
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(catName);
 
       const simpanBtn = modal.getByRole('button', { name: 'Simpan', exact: true });
+      await expect(simpanBtn).toBeVisible();
+      await expect(simpanBtn).toBeEnabled();
       await simpanBtn.click();
       await expect(modal).not.toBeVisible({ timeout: 15000 });
+      await waitForPageReady(page);
     }
   }
 
@@ -60,11 +101,11 @@ test.describe('Kategori Bahan Baku', () => {
 
       // Step 2: Navigate to Ingredient Category page
       await page.goto('/admin/ingredients/category', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify page loaded
       await expect(page).toHaveURL(/\/admin\/ingredients\/category/);
       await expect(page.locator('table')).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -179,13 +220,16 @@ test.describe('Kategori Bahan Baku', () => {
       await expect(modal.getByText('Edit Kategori').first()).toBeVisible({ timeout: 5000 });
 
       // Update category name
-      const updatedName = 'Updated Kat ' + Math.floor(Math.random() * 1000);
+      const updatedName = 'Updated Kat ' + Date.now();
       const nameInput = modal.getByPlaceholder('Masukkan Nama Kategori');
       await expect(nameInput).toBeVisible({ timeout: 5000 });
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(updatedName);
 
       // Click Simpan and wait for PUT/PATCH response
       const simpanBtn = modal.getByRole('button', { name: 'Simpan', exact: true });
+      await expect(simpanBtn).toBeVisible();
+      await expect(simpanBtn).toBeEnabled();
       const [response] = await Promise.all([
         page.waitForResponse(res => res.url().includes('/ingredients/categories') && (res.request().method() === 'PUT' || res.request().method() === 'PATCH') && res.status() === 200, { timeout: 20000 }),
         simpanBtn.click(),
@@ -194,15 +238,15 @@ test.describe('Kategori Bahan Baku', () => {
 
       // Verify modal closed and updated text appears in table
       await expect(modal).not.toBeVisible({ timeout: 10000 });
+      await waitForPageReady(page);
       const updatedCell = page.locator('table tbody tr td:first-child').filter({ hasText: updatedName });
       await expect(updatedCell.first()).toBeVisible({ timeout: 10000 });
-    
     });
   });
 
   test('[TC-05] Hapus kategori bahan baku dengan ikon trash', async ({ page }) => {
     await test.step('Lakukan proses hapus kategori bahan baku dengan ikon trash dan konfirmasi penghapusan data', async () => {
-      await ensureIngredientCategoryExists(page);
+      await ensureIngredientCategoryExists(page, 2);
 
       // Get the first valid category row
       const targetCell = page.locator('table tbody tr td:first-child').filter({ hasNotText: /Belum Ada Data|No results found/i }).first();
@@ -215,6 +259,7 @@ test.describe('Kategori Bahan Baku', () => {
       // Action 2 (trash button is the last button in row)
       const deleteBtn = targetRow.locator('button').last();
       await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await expect(deleteBtn).toBeEnabled({ timeout: 10000 });
       await deleteBtn.click();
 
       // Verify confirmation modal appears
@@ -225,6 +270,7 @@ test.describe('Kategori Bahan Baku', () => {
       // Click confirm delete and await DELETE response
       const confirmBtn = modal.getByRole('button', { name: /Hapus|Ya/i }).first();
       await expect(confirmBtn).toBeVisible();
+      await expect(confirmBtn).toBeEnabled();
 
       const [response] = await Promise.all([
         page.waitForResponse(res => res.url().includes('/ingredients/categories') && res.request().method() === 'DELETE' && res.status() === 200, { timeout: 20000 }),

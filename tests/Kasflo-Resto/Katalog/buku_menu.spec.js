@@ -6,19 +6,54 @@ test.describe('Buku Menu', () => {
     return page.locator('table tbody tr:not(:has-text("No results found"))');
   }
 
-  // Shared login helper
-  async function loginBeforeTest(page) {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page.getByLabel(/Email atau Username/i)).toBeVisible({ timeout: 15000 });
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
 
-    await page.getByLabel(/Email atau Username/i).fill('qakasflo@automation.com');
+  // Shared resilient login helper
+  async function loginBeforeTest(page) {
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    try {
+      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch {
+      await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
+    }
+
+    await waitForPageReady(page);
+
+    if (page.url().includes('/admin/')) {
+      return page;
+    }
+
+    const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
+    await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
+    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
+    await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
-    // Wait for client-side navigation to admin area
-    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
+    await waitForPageReady(page);
     return page;
   }
 
@@ -26,13 +61,16 @@ test.describe('Buku Menu', () => {
   async function createBookMenu(page, bookMenuName) {
     const addBtn = page.getByRole('link', { name: 'Tambah Buku Menu' }).or(page.getByRole('button', { name: 'Tambah Buku Menu' })).first();
     await expect(addBtn).toBeVisible({ timeout: 15000 });
+    await expect(addBtn).toBeEnabled({ timeout: 10000 });
     await addBtn.click();
 
     await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+    await waitForPageReady(page);
 
     // 1. Nama Buku Menu
     const nameInput = page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first();
     await expect(nameInput).toBeVisible({ timeout: 10000 });
+    await expect(nameInput).toBeEnabled();
     await nameInput.fill(bookMenuName);
 
     // 2. Pilih Cabang jika ada (optional)
@@ -57,15 +95,18 @@ test.describe('Buku Menu', () => {
     // 4. Klik Simpan
     const saveBtn = page.getByRole('button', { name: 'Simpan' });
     await expect(saveBtn).toBeVisible();
+    await expect(saveBtn).toBeEnabled();
     await saveBtn.click();
 
     await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 20000 });
+    await waitForPageReady(page);
   }
 
-  // Ensure at least 1 book menu exists
-  async function ensureBookMenuExists(page) {
+  // Ensure at least minCount book menus exist
+  async function ensureBookMenuExists(page, minCount = 1) {
+    await waitForPageReady(page);
     const dataRows = getDataRows(page);
-    if (await dataRows.count() === 0) {
+    if (await dataRows.count() < minCount) {
       await createBookMenu(page, 'Buku Menu ' + Date.now());
     }
   }
@@ -77,11 +118,11 @@ test.describe('Buku Menu', () => {
 
       // Step 2: Navigate to book-menu page
       await page.goto('/admin/catalog/book-menu', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify book-menu page loaded
       await expect(page).toHaveURL(/\/admin\/catalog\/book-menu/);
       await expect(page.locator('table')).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -131,28 +172,31 @@ test.describe('Buku Menu', () => {
 
       // Wait for edit page to load
       await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/edit\/.*/, { timeout: 15000 });
+      await waitForPageReady(page);
 
       // Modify name
-      const updatedName = 'Updated BM ' + Math.floor(Math.random() * 1000);
+      const updatedName = 'Updated BM ' + Date.now();
       const nameInput = page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first();
       await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(updatedName);
 
       // Save changes (support both 'Update' and 'Simpan')
       const saveBtn = page.getByRole('button', { name: 'Update' }).or(page.getByRole('button', { name: 'Simpan' }));
       await expect(saveBtn).toBeVisible();
+      await expect(saveBtn).toBeEnabled();
       await saveBtn.click();
 
       // Verify returning to book menu list page
       await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 20000 });
+      await waitForPageReady(page);
       await expect(page.getByText(/Berhasil|Success/i).or(page.locator('table').getByText(updatedName)).first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
   test('[TC-04] Hapus buku menu dengan ikon trash', async ({ page }) => {
     await test.step('Lakukan proses hapus buku menu dengan ikon trash dan konfirmasi penghapusan data', async () => {
-      await ensureBookMenuExists(page);
+      await ensureBookMenuExists(page, 2);
 
       // Tunggu baris pertama yang memiliki teks nama buku menu
       const targetCell = page.locator('table tbody tr td:first-child').filter({ hasNotText: 'No results found' }).first();
@@ -165,6 +209,7 @@ test.describe('Buku Menu', () => {
       // Klik tombol trash pada baris buku menu tersebut
       const deleteBtn = targetRow.locator('td').last().locator('button').last();
       await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await expect(deleteBtn).toBeEnabled({ timeout: 10000 });
       await deleteBtn.click();
 
       // Modal dialog konfirmasi harus muncul
@@ -174,6 +219,7 @@ test.describe('Buku Menu', () => {
 
       const confirmBtn = modal.getByRole('button', { name: 'Hapus' });
       await expect(confirmBtn).toBeVisible({ timeout: 5000 });
+      await expect(confirmBtn).toBeEnabled({ timeout: 5000 });
 
       // Tunggu request DELETE ke backend selesai dengan response 200 OK
       const [response] = await Promise.all([

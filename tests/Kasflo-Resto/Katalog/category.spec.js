@@ -6,35 +6,89 @@ test.describe('Kategori Menu', () => {
     return page.locator('table tbody tr:not(:has-text("No results found"))');
   }
 
-  // Shared login helper
-  async function loginBeforeTest(page) {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page.getByLabel(/Email atau Username/i)).toBeVisible({ timeout: 15000 });
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
 
-    await page.getByLabel(/Email atau Username/i).fill('qakasflo@automation.com');
+  // Shared resilient login helper
+  async function loginBeforeTest(page) {
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    try {
+      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch {
+      await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
+    }
+
+    await waitForPageReady(page);
+
+    if (page.url().includes('/admin/')) {
+      return page;
+    }
+
+    const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
+    await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
+    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
+    await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
-    // Wait for client-side navigation to admin area
-    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
+    await waitForPageReady(page);
     return page;
   }
 
+  async function createCategory(page, categoryName) {
+    const addBtn = page.getByRole('link', { name: 'Tambah Kategori' }).or(page.getByRole('button', { name: 'Tambah Kategori' })).first();
+    await expect(addBtn).toBeVisible({ timeout: 15000 });
+    await expect(addBtn).toBeEnabled({ timeout: 10000 });
+    await addBtn.click();
+    await expect(page).toHaveURL(/.*\/admin\/catalog\/category\/add/, { timeout: 15000 });
+    await waitForPageReady(page);
+
+    const nameInput = page.getByPlaceholder('Masukkan Nama Kategori').or(page.getByLabel(/Nama/i)).first();
+    await expect(nameInput).toBeVisible({ timeout: 10000 });
+    await expect(nameInput).toBeEnabled();
+    await nameInput.fill(categoryName);
+
+    const codeInput = page.getByPlaceholder('Masukkan Kode').or(page.getByLabel(/Kode/i)).first();
+    await expect(codeInput).toBeVisible({ timeout: 10000 });
+    await expect(codeInput).toBeEnabled();
+    await codeInput.fill('ic' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10));
+
+    const saveBtn = page.getByRole('button', { name: 'Simpan' });
+    await expect(saveBtn).toBeVisible();
+    await expect(saveBtn).toBeEnabled();
+    await saveBtn.click();
+    await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 20000 });
+    await waitForPageReady(page);
+  }
+
   // Helper to ensure at least one category exists in the table
-  async function ensureCategoryExists(page) {
-    const emptyState = page.locator('table tbody tr', { hasText: 'No results found' });
-    const hasEmpty = await emptyState.isVisible().catch(() => false);
-    if (hasEmpty) {
-      const addBtn = page.getByRole('link', { name: 'Tambah Kategori' }).or(page.getByRole('button', { name: 'Tambah Kategori' })).first();
-      await addBtn.click();
-      await expect(page).toHaveURL(/.*\/admin\/catalog\/category\/add/, { timeout: 15000 });
-      const categoryName = 'Init Cat ' + Date.now();
-      await page.getByPlaceholder('Masukkan Nama Kategori').or(page.getByLabel(/Nama/i)).first().fill(categoryName);
-      await page.getByPlaceholder('Masukkan Kode').or(page.getByLabel(/Kode/i)).first().fill('ic' + Math.floor(Math.random() * 1000));
-      await page.getByRole('button', { name: 'Simpan' }).click();
-      await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 15000 });
+  async function ensureCategoryExists(page, minCount = 1) {
+    await waitForPageReady(page);
+    const dataRows = getDataRows(page);
+    if (await dataRows.count() < minCount) {
+      await createCategory(page, 'Init Cat ' + Date.now());
     }
   }
 
@@ -45,11 +99,11 @@ test.describe('Kategori Menu', () => {
 
       // Step 2: Navigate to category page using relative path
       await page.goto('/admin/catalog/category', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify category page loaded
       await expect(page).toHaveURL(/\/admin\/catalog\/category/);
       await expect(page.locator('table')).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -77,30 +131,35 @@ test.describe('Kategori Menu', () => {
     await test.step('Lakukan proses tambah kategori baru berhasil dan pastikan data tersimpan', async () => {
       const addBtn = page.getByRole('link', { name: 'Tambah Kategori' }).or(page.getByRole('button', { name: 'Tambah Kategori' })).first();
       await expect(addBtn).toBeVisible({ timeout: 15000 });
+      await expect(addBtn).toBeEnabled({ timeout: 10000 });
       await addBtn.click();
 
       // Wait for form page to load
       await expect(page).toHaveURL(/.*\/admin\/catalog\/category\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
 
       // Fill form fields
       const categoryName = 'Test Cat ' + Date.now();
       const nameInput = page.getByPlaceholder('Masukkan Nama Kategori').or(page.getByLabel(/Nama/i)).first();
       await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(categoryName);
 
       const codeInput = page.getByPlaceholder('Masukkan Kode').or(page.getByLabel(/Kode/i)).first();
       await expect(codeInput).toBeVisible({ timeout: 10000 });
-      await codeInput.fill('tc' + Math.floor(Math.random() * 1000));
+      await expect(codeInput).toBeEnabled();
+      await codeInput.fill('tc' + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10));
 
       // Click Simpan button
       const saveBtn = page.getByRole('button', { name: 'Simpan' });
       await expect(saveBtn).toBeVisible();
+      await expect(saveBtn).toBeEnabled();
       await saveBtn.click();
 
       // Verify returning to category list page and new item is visible
-      await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 15000 });
+      await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 20000 });
+      await waitForPageReady(page);
       await expect(page.locator('table').getByText(categoryName).first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -119,28 +178,31 @@ test.describe('Kategori Menu', () => {
 
       // Wait for edit page to load
       await expect(page).toHaveURL(/.*\/admin\/catalog\/category\/edit\/.*/, { timeout: 15000 });
+      await waitForPageReady(page);
 
       // Find name input and modify
-      const updatedName = 'Updated Cat ' + Math.floor(Math.random() * 1000);
+      const updatedName = 'Updated Cat ' + Date.now();
       const nameInput = page.getByPlaceholder('Masukkan Nama Kategori').or(page.getByLabel(/Nama/i)).first();
       await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(updatedName);
 
       // Save changes
       const saveBtn = page.getByRole('button', { name: 'Simpan' });
       await expect(saveBtn).toBeVisible();
+      await expect(saveBtn).toBeEnabled();
       await saveBtn.click();
 
       // Verify returning to category list page
-      await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 15000 });
+      await expect(page).toHaveURL(/\/admin\/catalog\/category$/, { timeout: 20000 });
+      await waitForPageReady(page);
       await expect(page.getByText(/Berhasil|Success/i).or(page.locator('table').getByText(updatedName)).first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
   test('[TC-04] Hapus kategori dengan ikon trash', async ({ page }) => {
     await test.step('Lakukan proses hapus kategori dengan ikon trash dan konfirmasi penghapusan data', async () => {
-      await ensureCategoryExists(page);
+      await ensureCategoryExists(page, 2);
 
       // Tunggu baris pertama yang memiliki teks nama kategori
       const targetCell = page.locator('table tbody tr td:first-child').filter({ hasNotText: 'No results found' }).first();
@@ -153,6 +215,7 @@ test.describe('Kategori Menu', () => {
       // Click trash button (last button in action cell)
       const deleteBtn = targetRow.locator('td').last().locator('button').last();
       await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await expect(deleteBtn).toBeEnabled({ timeout: 10000 });
       await deleteBtn.click();
 
       // Confirm deletion in modal
@@ -160,6 +223,7 @@ test.describe('Kategori Menu', () => {
       await expect(modal).toBeVisible({ timeout: 5000 });
       const confirmBtn = modal.getByRole('button', { name: 'Hapus' });
       await expect(confirmBtn).toBeVisible({ timeout: 5000 });
+      await expect(confirmBtn).toBeEnabled({ timeout: 5000 });
 
       // Tunggu request DELETE ke backend selesai dengan status 200 OK
       const [response] = await Promise.all([

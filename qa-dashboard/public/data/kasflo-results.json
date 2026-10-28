@@ -1,18 +1,18 @@
 {
-  "lastUpdated": "2026-10-28T08:02:44.790Z",
+  "lastUpdated": "2026-10-28T09:25:53.253Z",
   "apps": {
     "Kasflo Resto": {
       "name": "Kasflo Resto",
       "appKey": "resto",
       "accentColor": "#10b981",
-      "lastRun": "2026-10-28T08:02:44.790Z",
+      "lastRun": "2026-10-28T09:25:53.253Z",
       "stats": {
         "startTime": "2026-10-26T02:35:04.018Z",
-        "duration": 1079129,
+        "duration": 1057548,
         "total": 356,
-        "expected": 355,
+        "expected": 356,
         "unexpected": 0,
-        "flaky": 1,
+        "flaky": 0,
         "skipped": 0
       },
       "suites": [
@@ -4270,7 +4270,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-48732a3c12e321e30016",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 118,
+                  "line": 170,
                   "column": 3,
                   "tests": [
                     {
@@ -4283,25 +4283,25 @@
                         {
                           "workerIndex": 0,
                           "status": "passed",
-                          "duration": 1760,
+                          "duration": 1809,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:48:51.129Z",
+                          "startTime": "2026-10-28T09:25:29.415Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1552,
+                              "duration": 1779,
                               "error": null
                             },
                             {
                               "title": "Verifikasi bahwa sistem berhasil menampilkan halaman menu dengan tabel",
-                              "duration": 150,
+                              "duration": 47,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 63,
+                              "duration": 86,
                               "error": null
                             }
                           ],
@@ -4309,7 +4309,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-01__Menampilkan_halaman_menu_dengan_tabel_1793174564889_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-01__Menampilkan_halaman_menu_dengan_tabel_1793179553259_test-finished-1.png"
                             }
                           ]
                         }
@@ -4323,7 +4323,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-7ccec81b49cb28479ed5",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 138,
+                  "line": 190,
                   "column": 3,
                   "tests": [
                     {
@@ -4336,25 +4336,25 @@
                         {
                           "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2381,
+                          "duration": 2547,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:48:52.896Z",
+                          "startTime": "2026-10-28T09:25:31.337Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1517,
+                              "duration": 1644,
                               "error": null
                             },
                             {
                               "title": "Lakukan proses tambah menu satuan berhasil dan pastikan data tersimpan",
-                              "duration": 796,
+                              "duration": 821,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 74,
+                              "duration": 86,
                               "error": null
                             }
                           ],
@@ -4362,7 +4362,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-02__Tambah_menu_satuan_berhasil_1793174564890_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-02__Tambah_menu_satuan_berhasil_1793179553260_test-finished-1.png"
                             }
                           ]
                         }
@@ -4376,7 +4376,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-49c51210a9673d991d21",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 149,
+                  "line": 201,
                   "column": 3,
                   "tests": [
                     {
@@ -4384,94 +4384,30 @@
                       "expectedStatus": "passed",
                       "projectId": "Kasflo Resto",
                       "projectName": "Kasflo Resto",
-                      "status": "flaky",
+                      "status": "expected",
                       "results": [
                         {
                           "workerIndex": 0,
-                          "status": "failed",
-                          "duration": 22761,
-                          "retry": 0,
-                          "startTime": "2026-10-28T07:48:55.283Z",
-                          "error": {
-                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/admin\\/catalog\\/menu$/\u001b[39m\nReceived string:  \u001b[31m\"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    42 × locator resolved to <html translate=\"no\" data-mantine-color-scheme=\"light\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[22m\n",
-                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/admin\\/catalog\\/menu$/\u001b[39m\nReceived string:  \u001b[31m\"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    42 × locator resolved to <html translate=\"no\" data-mantine-color-scheme=\"light\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[22m\n\n    at /Users/farisizia/Kasflo-qa-automation/tests/Kasflo-Resto/Katalog/menu.spec.js:205:26\n    at /Users/farisizia/Kasflo-qa-automation/tests/Kasflo-Resto/Katalog/menu.spec.js:150:5",
-                            "value": ""
-                          },
-                          "errors": [
-                            {
-                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/admin\\/catalog\\/menu$/\u001b[39m\nReceived string:  \u001b[31m\"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    42 × locator resolved to <html translate=\"no\" data-mantine-color-scheme=\"light\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[22m\n",
-                              "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/admin\\/catalog\\/menu$/\u001b[39m\nReceived string:  \u001b[31m\"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    42 × locator resolved to <html translate=\"no\" data-mantine-color-scheme=\"light\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[22m\n\n    at /Users/farisizia/Kasflo-qa-automation/tests/Kasflo-Resto/Katalog/menu.spec.js:205:26\n    at /Users/farisizia/Kasflo-qa-automation/tests/Kasflo-Resto/Katalog/menu.spec.js:150:5"
-                            }
-                          ],
-                          "steps": [
-                            {
-                              "title": "Before Hooks",
-                              "duration": 1464,
-                              "error": null
-                            },
-                            {
-                              "title": "Lakukan proses tambah menu paketan berhasil dan pastikan data tersimpan",
-                              "duration": 20766,
-                              "error": {
-                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/admin\\/catalog\\/menu$/\u001b[39m\nReceived string:  \u001b[31m\"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    42 × locator resolved to <html translate=\"no\" data-mantine-color-scheme=\"light\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"https://backoffice-dev.kasflo.id/admin/catalog/menu/package/add\"\u001b[22m\n"
-                              }
-                            },
-                            {
-                              "title": "After Hooks",
-                              "duration": 535,
-                              "error": null
-                            },
-                            {
-                              "title": "Worker Cleanup",
-                              "duration": 30,
-                              "error": null
-                            }
-                          ],
-                          "attachments": [
-                            {
-                              "name": "screenshot",
-                              "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793174564891_test-failed-1.png"
-                            },
-                            {
-                              "name": "video",
-                              "contentType": "video/webm",
-                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793174564892_video.webm"
-                            },
-                            {
-                              "name": "error-context",
-                              "contentType": "text/markdown",
-                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793174564894_error-context.md"
-                            },
-                            {
-                              "name": "trace",
-                              "contentType": "application/zip",
-                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793174564895_trace.zip"
-                            }
-                          ]
-                        },
-                        {
-                          "workerIndex": 1,
                           "status": "passed",
-                          "duration": 2888,
-                          "retry": 1,
-                          "startTime": "2026-10-28T07:49:19.349Z",
+                          "duration": 2803,
+                          "retry": 0,
+                          "startTime": "2026-10-28T09:25:33.894Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1947,
+                              "duration": 1452,
                               "error": null
                             },
                             {
                               "title": "Lakukan proses tambah menu paketan berhasil dan pastikan data tersimpan",
-                              "duration": 1044,
+                              "duration": 1275,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 97,
+                              "duration": 80,
                               "error": null
                             }
                           ],
@@ -4479,7 +4415,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793174564907_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-03__Tambah_menu_paketan_berhasil_1793179553261_test-finished-1.png"
                             }
                           ]
                         }
@@ -4493,7 +4429,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-c134c5b8d2b974035342",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 215,
+                  "line": 280,
                   "column": 3,
                   "tests": [
                     {
@@ -4504,27 +4440,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2683,
+                          "duration": 2268,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:22.447Z",
+                          "startTime": "2026-10-28T09:25:36.703Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1931,
+                              "duration": 1586,
                               "error": null
                             },
                             {
                               "title": "Lakukan pengujian edit menu dengan ikon edit dan verifikasi pembaruan data",
-                              "duration": 687,
+                              "duration": 583,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 69,
+                              "duration": 103,
                               "error": null
                             }
                           ],
@@ -4532,7 +4468,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-04__Edit_menu_dengan_ikon_edit_1793174564908_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-04__Edit_menu_dengan_ikon_edit_1793179553262_test-finished-1.png"
                             }
                           ]
                         }
@@ -4546,7 +4482,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-197ab9fd2d7b655b8116",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 246,
+                  "line": 313,
                   "column": 3,
                   "tests": [
                     {
@@ -4557,27 +4493,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2524,
+                          "duration": 2651,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:25.136Z",
+                          "startTime": "2026-10-28T09:25:38.976Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1704,
+                              "duration": 1745,
                               "error": null
                             },
                             {
                               "title": "Lakukan proses hapus menu dengan ikon trash dan konfirmasi penghapusan data",
-                              "duration": 746,
+                              "duration": 787,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 79,
+                              "duration": 125,
                               "error": null
                             }
                           ],
@@ -4585,7 +4521,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-05__Hapus_menu_dengan_ikon_trash_1793174564909_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-05__Hapus_menu_dengan_ikon_trash_1793179553264_test-finished-1.png"
                             }
                           ]
                         }
@@ -4599,7 +4535,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-39e9e6a1896a910cae04",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 296,
+                  "line": 365,
                   "column": 3,
                   "tests": [
                     {
@@ -4610,27 +4546,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2830,
+                          "duration": 3189,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:27.666Z",
+                          "startTime": "2026-10-28T09:25:41.636Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1477,
+                              "duration": 1966,
                               "error": null
                             },
                             {
                               "title": "Lakukan pengujian cari/filter menu dengan search box dan validasi hasil yang ditampilkan",
-                              "duration": 1267,
+                              "duration": 1140,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 91,
+                              "duration": 90,
                               "error": null
                             }
                           ],
@@ -4638,7 +4574,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-06__Cari_filter_menu_dengan_search_box_1793174564912_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-06__Cari_filter_menu_dengan_search_box_1793179553265_test-finished-1.png"
                             }
                           ]
                         }
@@ -4652,7 +4588,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-5d64ce8e1ed584ab26c0",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 324,
+                  "line": 393,
                   "column": 3,
                   "tests": [
                     {
@@ -4663,27 +4599,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 1916,
+                          "duration": 2347,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:30.505Z",
+                          "startTime": "2026-10-28T09:25:44.834Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1568,
+                              "duration": 2027,
                               "error": null
                             },
                             {
                               "title": "Langkah Pengujian UAT: Switch tab Menu Satuan ↔ Menu Paketan",
-                              "duration": 289,
+                              "duration": 242,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 65,
+                              "duration": 83,
                               "error": null
                             }
                           ],
@@ -4691,7 +4627,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-07__Switch_tab_Menu_Satuan___Menu_Paketan_1793174564913_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-07__Switch_tab_Menu_Satuan___Menu_Paketan_1793179553266_test-finished-1.png"
                             }
                           ]
                         }
@@ -4705,7 +4641,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-22eec0575b778855760e",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 344,
+                  "line": 413,
                   "column": 3,
                   "tests": [
                     {
@@ -4716,27 +4652,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2259,
+                          "duration": 2690,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:32.428Z",
+                          "startTime": "2026-10-28T09:25:47.188Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1468,
+                              "duration": 1917,
                               "error": null
                             },
                             {
                               "title": "Verifikasi status toggle menu aktif/non-aktif",
-                              "duration": 724,
+                              "duration": 708,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 69,
+                              "duration": 70,
                               "error": null
                             }
                           ],
@@ -4744,7 +4680,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-08__Verifikasi_status_toggle_menu_aktif_non-aktif_1793174564914_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-08__Verifikasi_status_toggle_menu_aktif_non-aktif_1793179553267_test-finished-1.png"
                             }
                           ]
                         }
@@ -4758,7 +4694,7 @@
                   "tags": [],
                   "id": "293542a34d8e1cf45b4d-8f8a96477ca21640bd0e",
                   "file": "tests/Kasflo-Resto/Katalog/menu.spec.js",
-                  "line": 370,
+                  "line": 440,
                   "column": 3,
                   "tests": [
                     {
@@ -4769,27 +4705,27 @@
                       "status": "expected",
                       "results": [
                         {
-                          "workerIndex": 1,
+                          "workerIndex": 0,
                           "status": "passed",
-                          "duration": 2007,
+                          "duration": 2124,
                           "retry": 0,
-                          "startTime": "2026-10-28T07:49:34.693Z",
+                          "startTime": "2026-10-28T09:25:49.886Z",
                           "error": null,
                           "errors": [],
                           "steps": [
                             {
                               "title": "Before Hooks",
-                              "duration": 1535,
+                              "duration": 1766,
                               "error": null
                             },
                             {
                               "title": "Buka dan periksa rincian: Lihat detail menu dengan ikon view",
-                              "duration": 403,
+                              "duration": 295,
                               "error": null
                             },
                             {
                               "title": "After Hooks",
-                              "duration": 74,
+                              "duration": 70,
                               "error": null
                             }
                           ],
@@ -4797,7 +4733,7 @@
                             {
                               "name": "screenshot",
                               "contentType": "image/png",
-                              "path": "/attachments/screenshots/_TC-09__Lihat_detail_menu_dengan_ikon_view_1793174564914_test-finished-1.png"
+                              "path": "/attachments/screenshots/_TC-09__Lihat_detail_menu_dengan_ikon_view_1793179553268_test-finished-1.png"
                             }
                           ]
                         }

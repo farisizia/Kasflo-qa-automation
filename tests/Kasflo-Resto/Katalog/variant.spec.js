@@ -6,19 +6,54 @@ test.describe('Varian Menu', () => {
     return page.locator('table tbody tr:not(:has-text("No results found"))');
   }
 
-  // Shared login helper
-  async function loginBeforeTest(page) {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page.getByLabel(/Email atau Username/i)).toBeVisible({ timeout: 15000 });
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
 
-    await page.getByLabel(/Email atau Username/i).fill('qakasflo@automation.com');
+  // Shared resilient login helper
+  async function loginBeforeTest(page) {
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    try {
+      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch {
+      await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
+    }
+
+    await waitForPageReady(page);
+
+    if (page.url().includes('/admin/')) {
+      return page;
+    }
+
+    const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
+    await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
+    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
+    await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
-    // Wait for client-side navigation to admin area
-    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+    await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
+    await waitForPageReady(page);
     return page;
   }
 
@@ -26,13 +61,16 @@ test.describe('Varian Menu', () => {
   async function createVariant(page, variantName) {
     const addBtn = page.getByRole('link', { name: 'Tambah Varian' }).or(page.getByRole('button', { name: 'Tambah Varian' })).first();
     await expect(addBtn).toBeVisible({ timeout: 15000 });
+    await expect(addBtn).toBeEnabled({ timeout: 10000 });
     await addBtn.click();
 
     await expect(page).toHaveURL(/.*\/admin\/catalog\/variant\/add/, { timeout: 15000 });
+    await waitForPageReady(page);
 
     // 1. Nama Varian Utama
     const nameInput = page.locator('input[placeholder="Masukkan Nama Varian"]').first();
     await expect(nameInput).toBeVisible({ timeout: 10000 });
+    await expect(nameInput).toBeEnabled();
     await nameInput.fill(variantName);
 
     // 2. Mode Varian - Opsional
@@ -44,22 +82,27 @@ test.describe('Varian Menu', () => {
     // 4. List Varian (Nama pilihan & harga)
     const optionNameInput = page.locator('table input[placeholder="Masukkan Nama Varian"]').first();
     await expect(optionNameInput).toBeVisible({ timeout: 10000 });
+    await expect(optionNameInput).toBeEnabled();
     await optionNameInput.fill('Level 1');
 
     const optionPriceInput = page.locator('table input[placeholder="Masukkan Harga"]').first();
     await expect(optionPriceInput).toBeVisible({ timeout: 10000 });
+    await expect(optionPriceInput).toBeEnabled();
     await optionPriceInput.fill('3000');
 
     // 5. Simpan
     const saveBtn = page.getByRole('button', { name: 'Simpan' });
     await expect(saveBtn).toBeVisible();
+    await expect(saveBtn).toBeEnabled();
     await saveBtn.click();
 
     await expect(page).toHaveURL(/\/admin\/catalog\/variant$/, { timeout: 20000 });
+    await waitForPageReady(page);
   }
 
   // Ensure at least 1 variant exists for tests that inspect or view items
   async function ensureVariantExists(page) {
+    await waitForPageReady(page);
     const dataRows = getDataRows(page);
     if (await dataRows.count() === 0) {
       await createVariant(page, 'Varian ' + Date.now());
@@ -73,11 +116,11 @@ test.describe('Varian Menu', () => {
 
       // Step 2: Navigate to variant page
       await page.goto('/admin/catalog/variant', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify variant page loaded
       await expect(page).toHaveURL(/\/admin\/catalog\/variant/);
       await expect(page.locator('table')).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -128,22 +171,25 @@ test.describe('Varian Menu', () => {
 
       // Wait for edit page to load
       await expect(page).toHaveURL(/.*\/admin\/catalog\/variant\/edit\/.*/, { timeout: 15000 });
+      await waitForPageReady(page);
 
       // Modify name
-      const updatedName = 'Updated Var ' + Math.floor(Math.random() * 1000);
+      const updatedName = 'Updated Var ' + Date.now();
       const nameInput = page.locator('input[placeholder="Masukkan Nama Varian"]').first();
       await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await expect(nameInput).toBeEnabled();
       await nameInput.fill(updatedName);
 
       // Save changes (button says 'Update' or 'Simpan')
       const saveBtn = page.getByRole('button', { name: 'Update' }).or(page.getByRole('button', { name: 'Simpan' }));
       await expect(saveBtn).toBeVisible();
+      await expect(saveBtn).toBeEnabled();
       await saveBtn.click();
 
       // Verify returning to variant list page
       await expect(page).toHaveURL(/\/admin\/catalog\/variant$/, { timeout: 20000 });
+      await waitForPageReady(page);
       await expect(page.getByText(/Berhasil|Success/i).or(page.locator('table').getByText(updatedName)).first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -162,6 +208,7 @@ test.describe('Varian Menu', () => {
       // Klik tombol trash pada baris varian tersebut
       const deleteBtn = targetRow.locator('td').last().locator('button').last();
       await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await expect(deleteBtn).toBeEnabled({ timeout: 10000 });
       await deleteBtn.click();
 
       // Modal dialog konfirmasi harus muncul
@@ -171,6 +218,7 @@ test.describe('Varian Menu', () => {
 
       const confirmBtn = modal.getByRole('button', { name: 'Hapus' });
       await expect(confirmBtn).toBeVisible({ timeout: 5000 });
+      await expect(confirmBtn).toBeEnabled({ timeout: 5000 });
 
       // Tunggu request DELETE ke backend selesai dengan response 200 OK
       const [response] = await Promise.all([

@@ -17,44 +17,64 @@ test.describe('Menu Self Order', () => {
     return page.locator('table:visible tbody tr').filter({ hasText: text }).first();
   }
 
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Shared resilient login helper
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
     try {
-      await page.goto('/', { waitUntil: 'commit', timeout: 25000 });
+      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     } catch {
-      await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 25000 });
+      await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
+
+    await waitForPageReady(page);
 
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
-    await expect(emailInput).toBeVisible({ timeout: 20000 });
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
 
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
-    await expect(loginBtn).toBeEnabled({ timeout: 5000 });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
+    await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await page.waitForTimeout(500);
     await loginBtn.click();
 
     try {
-      await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
+      await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
         await page.waitForTimeout(1500);
         if (await loginBtn.isVisible().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }
-        await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+        await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -142,11 +162,11 @@ test.describe('Menu Self Order', () => {
 
       // Step 2: Navigate to Menu Self Order page
       await page.goto('/admin/catalog/self-order-menu', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify page loaded
       await expect(page).toHaveURL(/\/admin\/catalog\/self-order-menu/);
       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -416,11 +436,13 @@ test.describe('Menu Self Order', () => {
 
       const outletCodeInput = page.getByPlaceholder('Masukan Kode Toko/Outlet').first();
       await expect(outletCodeInput).toBeVisible({ timeout: 10000 });
-      await outletCodeInput.fill('KASFLO' + Math.floor(Math.random() * 900 + 100));
+      await expect(outletCodeInput).toBeEnabled();
+      await outletCodeInput.fill('KASFLO' + Date.now().toString().slice(-6));
 
       // Click Simpan and wait for backend API response
       const simpanBtn = page.getByRole('button', { name: 'Simpan' });
       await expect(simpanBtn).toBeVisible({ timeout: 5000 });
+      await expect(simpanBtn).toBeEnabled({ timeout: 5000 });
       await simpanBtn.scrollIntoViewIfNeeded();
 
       await Promise.all([

@@ -1,9 +1,17 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Pengaturan Area', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Helper login yang tangguh dan menghindari timeout
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -13,17 +21,29 @@ test.describe('Pengaturan Area', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
@@ -37,6 +57,7 @@ test.describe('Pengaturan Area', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -47,9 +68,10 @@ test.describe('Pengaturan Area', () => {
 
   // Helper menunggu tabel area termuat
   async function waitForAreaTable(page) {
+    await waitForPageReady(page);
     const table = page.locator('table:visible').first();
     await expect(table).toBeVisible({ timeout: 15000 });
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(800);
     return table;
   }
 
@@ -313,7 +335,7 @@ test.describe('Pengaturan Area', () => {
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Tambah Area/i }).first();
       await expect(modal).toBeVisible({ timeout: 5000 });
 
-      const uniqueAreaName = `Area VIP ${Date.now().toString().slice(-4)}`;
+      const uniqueAreaName = `Area VIP ${Date.now().toString().slice(-6)}`;
 
       // Isi field form
       await modal.getByPlaceholder('Masukkan Nama Area').fill(uniqueAreaName);
@@ -448,7 +470,7 @@ test.describe('Pengaturan Area', () => {
 
       const namaInput = modal.getByPlaceholder('Masukkan Nama Area');
       const oldName = await namaInput.inputValue();
-      const updatedName = `${oldName.replace(/ Updated.*$/, '')} Updated ${Date.now().toString().slice(-4)}`;
+      const updatedName = `${oldName.replace(/ Updated.*$/, '')} Updated ${Date.now().toString().slice(-6)}`;
 
       await namaInput.fill(updatedName);
 

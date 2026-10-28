@@ -1,0 +1,30 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://backoffice-dev.kasflo.id",
+      "localStorage": [
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJSUzI1NiIsInJla2EiOiJqd3QiLCJ0eXAiOiJKV1QifQ.eyJhZG1pbl9pZCI6ODExOCwiYWRtaW5fcm9sZSI6Ik9XTkVSIiwiZXhwIjoxNzk0OTc5NTI4LCJpYXQiOjE3OTMxNzk1MjgsInBhcnRuZXJfYnJhbmNoX2lkIjowLCJwYXJ0bmVyX2lkIjo1MzQ1LCJ1c2VybmFtZSI6Imthc2Zsb2VudGVwcmljZSJ9.g1oq_EsIOAOU7jOS9-dsiUGNB4PB5VqKpB0DsQGrCN0gH8xtBMcf60xmJeTKA2Y6dhDAYhXA2BBwiz2SYs1USY2hfDqdJMatxQHFGVqJRVIHtTp65wGUq1plcKu1kKuGwlaoYV5ytqOTuxx3pp1SPUyIIq2WtBSPaJIdTtL14Fk7ZOU_FtYYuUJ_r5tpmX-8NaasFgSFvYyKl2TJM_yrIUmMtAd9iWgwCXtfIP58_mgJ-q9Y84SNAlBdVl_6GuBjXrGz7c39dk1LEsEv3ZSqeDGvglKQviGEcnffd79CJxl8QMcCYPJWker_A57XqoPhf6TuOE-abXWRI-g5BIeqLQ"
+        },
+        {
+          "name": "partner_branch_id",
+          "value": "0"
+        },
+        {
+          "name": "role",
+          "value": "OWNER"
+        },
+        {
+          "name": "refresh_token",
+          "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE4MDA5NTU1MjgsInN1YiI6ODExOH0.WR71V32g0LR3xB_qoslOGDk1n8Nut6GN4W4VP6-mre4YcD6Jr2e4L-zH2zkm_ACYu1wKpGoQ6vuaYttQA2TU-xAl0m3NHtinghVbJwjpTakryOZrfdO3JqMFJMPtryx-y66BZuGM-q9IZYXDr9eCGjTDoqkh4mi_x2F5K1tJbwSU3KPRLtYk9UawYJBTCFS2Py_0R381qdHncrT0aVsp-fsYL1nij-Mk5sKvLhQvWF1kkmpowz56_q_qSeu_bX5GRRz8snOJC0ysaT-YeAi5nx6JHujUKkQn_f4BGLsEtZ8XguoZf1BOH1khxPBHbF4Th31epl5_UC9Ncr091RGpng"
+        },
+        {
+          "name": "profile",
+          "value": "{\"id\":8118,\"is_demo_account\":0,\"name\":\"Kasflo Automation \",\"username\":\"kasfloenteprice\",\"email\":\"qakasflo@automation.com\",\"role\":\"OWNER\",\"partner_id\":5345,\"partner_business_name\":\"Kasflo Automation Test\",\"business_type_id\":1,\"business_type_name\":\"Perseorangan\",\"product_types\":[{\"product_type_id\":6,\"product_type_name\":\"Restoran Family Style\"},{\"product_type_id\":4,\"product_type_name\":\"Restoran Fine Dining\"}],\"partner_branch_id\":0,\"partner_branch_name\":\"\",\"is_able_to_filled_additional_data\":1,\"is_additional_data_filled\":1,\"is_show_promotion_customer_display\":1,\"is_show_ingredient\":1,\"is_show_grab_food\":0,\"is_enable_subscription_feature\":true,\"is_show_reward\":1,\"is_show_web_self_order\":1,\"is_enable_early_withdrawal_deposit_balance\":0,\"is_enable_purchase_order\":0,\"is_enable_promotion_campaign_rule_transaction_types\":0,\"is_enable_promotion_campaign_discount_type_bundle\":1,\"can_add_branch\":1,\"can_delete_branch\":1,\"can_change_branch_status\":1,\"can_add_bank_account\":1,\"can_edit_bank_account\":1,\"can_change_pin_bank_account\":1,\"can_add_cash_account\":1,\"user_version\":\"v2\"}"
+        }
+      ]
+    }
+  ]
+}

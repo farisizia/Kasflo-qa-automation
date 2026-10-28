@@ -1,9 +1,17 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Manajemen User', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Shared resilient login helper
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -18,17 +26,29 @@ test.describe('Manajemen User', () => {
       }
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
@@ -42,6 +62,7 @@ test.describe('Manajemen User', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 

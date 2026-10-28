@@ -1,8 +1,16 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Pengaturan Struk', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -12,11 +20,22 @@ test.describe('Pengaturan Struk', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
@@ -24,6 +43,7 @@ test.describe('Pengaturan Struk', () => {
     await pwdInput.fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
 
     // Tekan Enter dan klik Masuk untuk menjamin submit form terpicu
@@ -41,6 +61,7 @@ test.describe('Pengaturan Struk', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -223,12 +244,14 @@ test.describe('Pengaturan Struk', () => {
       const alamatInput = page.getByPlaceholder('Masukkan Alamat Usaha');
       const footerInput = page.getByPlaceholder('Masukkan Footer');
 
-      const randomSuffix = Math.floor(Math.random() * 1000);
-      await headerInput.fill(`Header Resto QA ${randomSuffix}`);
-      await alamatInput.fill(`Jl. QA Otomasi No. ${randomSuffix}`);
-      await footerInput.fill(`Footer QA ${randomSuffix}`);
+      const uniqueSuffix = Date.now().toString().slice(-6);
+      await headerInput.fill(`Header Resto QA ${uniqueSuffix}`);
+      await alamatInput.fill(`Jl. QA Otomasi No. ${uniqueSuffix}`);
+      await footerInput.fill(`Footer QA ${uniqueSuffix}`);
 
       const simpanBtn = page.getByRole('button', { name: 'Simpan', exact: true });
+      await expect(simpanBtn).toBeVisible();
+      await expect(simpanBtn).toBeEnabled();
 
       // Tunggu request PUT save dan response
       const [putResponse] = await Promise.all([
@@ -243,7 +266,6 @@ test.describe('Pengaturan Struk', () => {
 
       // Pastikan loading spinner selesai dan tidak ada infinite spinner
       await expect(page.locator('.mantine-Loader-root').first()).not.toBeVisible({ timeout: 10000 }).catch(() => {});
-    
     });
   });
 
@@ -253,12 +275,14 @@ test.describe('Pengaturan Struk', () => {
       const alamatInput = page.getByPlaceholder('Masukkan Alamat Usaha');
       const footerInput = page.getByPlaceholder('Masukkan Footer');
 
-      const randomSuffix = Math.floor(Math.random() * 1000);
-      await headerInput.fill(`Resto Semua Cabang ${randomSuffix}`);
-      await alamatInput.fill(`Jl. Pusat Nasional No. ${randomSuffix}`);
-      await footerInput.fill(`Terima Kasih Seluruh Cabang ${randomSuffix}`);
+      const uniqueSuffix = Date.now().toString().slice(-6);
+      await headerInput.fill(`Resto Semua Cabang ${uniqueSuffix}`);
+      await alamatInput.fill(`Jl. Pusat Nasional No. ${uniqueSuffix}`);
+      await footerInput.fill(`Terima Kasih Seluruh Cabang ${uniqueSuffix}`);
 
       const simpanSemuaBtn = page.getByRole('button', { name: 'Simpan Semua Cabang', exact: true });
+      await expect(simpanSemuaBtn).toBeVisible();
+      await expect(simpanSemuaBtn).toBeEnabled();
 
       // Tangkap request PUT untuk verifikasi flag apply to all branches
       let requestPayload = null;

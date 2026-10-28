@@ -1,9 +1,17 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Pengaturan Meja', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Helper login yang tangguh dan menghindari timeout
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -13,17 +21,29 @@ test.describe('Pengaturan Meja', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
@@ -37,6 +57,7 @@ test.describe('Pengaturan Meja', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -48,7 +69,8 @@ test.describe('Pengaturan Meja', () => {
   // Helper menunggu halaman meja siap
   async function waitForTablePage(page) {
     await expect(page).toHaveURL(/\/admin\/branch-management\/setting-table/, { timeout: 20000 });
-    await page.waitForTimeout(1000);
+    await waitForPageReady(page);
+    await page.waitForTimeout(800);
   }
 
   test.beforeEach(async ({ page }) => {
@@ -278,8 +300,8 @@ test.describe('Pengaturan Meja', () => {
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Tambah Meja/i }).first();
       await expect(modal).toBeVisible({ timeout: 5000 });
 
-      // Nomor meja unik (3 digit acak antara 200 - 999)
-      const randomTableNum = Math.floor(Math.random() * 800 + 200).toString();
+      // Nomor meja unik dinamis berbasis timestamp
+      const randomTableNum = Date.now().toString().slice(-5);
 
       await modal.getByPlaceholder('Masukkan Nomor Meja').fill(randomTableNum);
       await modal.getByPlaceholder('Masukkan Jumlah Pax').fill('4');

@@ -8,9 +8,17 @@ test.describe('Data Pembukuan', () => {
     return page.locator('table:visible tbody tr:not(:has-text("Belum Ada Data")):not(:has-text("No results found"))');
   }
 
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Shared resilient login helper
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -20,17 +28,29 @@ test.describe('Data Pembukuan', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
@@ -44,6 +64,7 @@ test.describe('Data Pembukuan', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -72,11 +93,11 @@ test.describe('Data Pembukuan', () => {
 
       // Step 2: Navigate to Data Pembukuan page
       await page.goto('/admin/cash-account/data', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify page loaded
       await expect(page).toHaveURL(/\/admin\/cash-account\/data/, { timeout: 15000 });
       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 

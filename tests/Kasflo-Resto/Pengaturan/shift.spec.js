@@ -1,8 +1,16 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Pengaturan Shift', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -12,18 +20,29 @@ test.describe('Pengaturan Shift', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
-    await expect(emailInput).toBeVisible({ timeout: 20000 });
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
 
+    await expect(emailInput).toBeVisible({ timeout: 20000 });
     await emailInput.fill('qakasflo@automation.com');
     const pwdInput = page.getByLabel(/Kata Sandi/i);
     await pwdInput.fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
 
     // Tekan Enter dan klik Masuk untuk menjamin submit form terpicu
@@ -41,6 +60,7 @@ test.describe('Pengaturan Shift', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -175,8 +195,9 @@ test.describe('Pengaturan Shift', () => {
 
       const targetRow = page.locator('table tbody tr').last();
       const namaShiftInput = targetRow.getByPlaceholder('Masukkan Nama Shift');
-      await namaShiftInput.fill('Shift Siang QA');
-      await expect(namaShiftInput).toHaveValue('Shift Siang QA');
+      const shiftName = 'Shift Siang QA ' + Date.now().toString().slice(-5);
+      await namaShiftInput.fill(shiftName);
+      await expect(namaShiftInput).toHaveValue(shiftName);
 
       // Pilih Jam Mulai
       const jamMulaiInput = targetRow.getByPlaceholder('Masukkan Jam Mulai');
@@ -225,14 +246,23 @@ test.describe('Pengaturan Shift', () => {
 
   test('[TC-06] Berhasil menyimpan pengaturan shift untuk cabang aktif via tombol Simpan', async ({ page }) => {
     await test.step('Langkah Pengujian UAT: Berhasil menyimpan pengaturan shift untuk cabang aktif via tombol Simpan', async () => {
+      // Bersihkan baris shift berlebih jika sudah lebih dari 2 baris agar data tetap idempoten
+      const rows = page.locator('table tbody tr');
+      while (await rows.count() > 2) {
+        await rows.last().locator('button').click();
+        await page.waitForTimeout(300);
+      }
+
       // Tambah satu shift untuk memastikan data dirty dan valid
       const tambahShiftBtn = page.getByRole('button', { name: 'Tambah Shift' });
+      await expect(tambahShiftBtn).toBeVisible();
+      await expect(tambahShiftBtn).toBeEnabled();
       await tambahShiftBtn.click();
       await page.waitForTimeout(500);
 
       const newRow = page.locator('table tbody tr').last();
-      const randomSuffix = Math.floor(Math.random() * 1000);
-      await newRow.getByPlaceholder('Masukkan Nama Shift').fill(`Shift Simpan ${randomSuffix}`);
+      const uniqueSuffix = Date.now().toString().slice(-6);
+      await newRow.getByPlaceholder('Masukkan Nama Shift').fill(`Shift Simpan ${uniqueSuffix}`);
 
       // Pilih Jam Mulai
       await newRow.getByPlaceholder('Masukkan Jam Mulai').click();
@@ -245,6 +275,8 @@ test.describe('Pengaturan Shift', () => {
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').nth(10).click();
 
       const simpanBtn = page.getByRole('button', { name: 'Simpan', exact: true });
+      await expect(simpanBtn).toBeVisible();
+      await expect(simpanBtn).toBeEnabled();
 
       // Tunggu request PUT save dan response
       const [putResponse] = await Promise.all([
@@ -259,20 +291,28 @@ test.describe('Pengaturan Shift', () => {
 
       // Pastikan loading spinner selesai
       await expect(page.locator('.mantine-Loader-root').first()).not.toBeVisible({ timeout: 10000 }).catch(() => {});
-    
     });
   });
 
   test('[TC-07] Berhasil menyimpan pengaturan shift untuk semua cabang via tombol Simpan Semua Cabang', async ({ page }) => {
     await test.step('Langkah Pengujian UAT: Berhasil menyimpan pengaturan shift untuk semua cabang via tombol Simpan Semua Cabang', async () => {
+      // Bersihkan baris shift berlebih jika sudah lebih dari 2 baris agar data tetap idempoten
+      const rows = page.locator('table tbody tr');
+      while (await rows.count() > 2) {
+        await rows.last().locator('button').click();
+        await page.waitForTimeout(300);
+      }
+
       // Tambah satu shift atau edit nama shift
       const tambahShiftBtn = page.getByRole('button', { name: 'Tambah Shift' });
+      await expect(tambahShiftBtn).toBeVisible();
+      await expect(tambahShiftBtn).toBeEnabled();
       await tambahShiftBtn.click();
       await page.waitForTimeout(500);
 
       const newRow = page.locator('table tbody tr').last();
-      const randomSuffix = Math.floor(Math.random() * 1000);
-      await newRow.getByPlaceholder('Masukkan Nama Shift').fill(`Shift Semua ${randomSuffix}`);
+      const uniqueSuffix = Date.now().toString().slice(-6);
+      await newRow.getByPlaceholder('Masukkan Nama Shift').fill(`Shift Semua ${uniqueSuffix}`);
 
       // Pilih Jam Mulai
       await newRow.getByPlaceholder('Masukkan Jam Mulai').click();
@@ -285,6 +325,8 @@ test.describe('Pengaturan Shift', () => {
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').nth(12).click();
 
       const simpanSemuaBtn = page.getByRole('button', { name: 'Simpan Semua Cabang', exact: true });
+      await expect(simpanSemuaBtn).toBeVisible();
+      await expect(simpanSemuaBtn).toBeEnabled();
 
       let requestBody = null;
       page.on('request', req => {

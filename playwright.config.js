@@ -2,11 +2,12 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 60_000,
-  expect: { timeout: 15_000 },
+  globalSetup: require.resolve('./global-setup.js'),
+  timeout: 60000,
+  expect: { timeout: 15000 },
   fullyParallel: false,
   workers: 1,
-  retries: 1,
+  retries: 2,
   reporter: [
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
@@ -29,8 +30,8 @@ module.exports = defineConfig({
   ],
   use: {
     baseURL: 'https://backoffice-dev.kasflo.id',
-    navigationTimeout: 30_000,
-    actionTimeout: 15_000,
+    navigationTimeout: 30000,
+    actionTimeout: 30000,
     trace: 'retain-on-failure',
     screenshot: 'on',
     video: 'retain-on-failure',
@@ -41,7 +42,10 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'Kasflo Resto',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
+      },
       testMatch: ['**/Kasflo-Resto/**/*.spec.js'],
     },
     {

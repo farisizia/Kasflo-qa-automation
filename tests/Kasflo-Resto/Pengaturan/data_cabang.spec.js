@@ -1,9 +1,17 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Data Cabang', () => {
+  async function waitForPageReady(page) {
+    const loader = page.locator(
+      '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
+    );
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
   // Shared resilient login helper
   async function loginBeforeTest(page) {
     if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
       return page;
     }
 
@@ -13,17 +21,29 @@ test.describe('Data Cabang', () => {
       await page.goto('/', { waitUntil: 'commit', timeout: 30000 });
     }
 
+    await waitForPageReady(page);
+
     if (page.url().includes('/admin/')) {
       return page;
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
+    ]);
+    if (page.url().includes('/admin/')) {
+      await waitForPageReady(page);
+      return page;
+    }
+
     await expect(emailInput).toBeVisible({ timeout: 20000 });
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
+    await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
     await loginBtn.click();
 
@@ -37,6 +57,7 @@ test.describe('Data Cabang', () => {
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
       }
     }
+    await waitForPageReady(page);
     return page;
   }
 
@@ -47,6 +68,7 @@ test.describe('Data Cabang', () => {
 
   // Helper menunggu tabel cabang dan baris data siap termuat
   async function waitForBranchTable(page) {
+    await waitForPageReady(page);
     const table = page.locator('table:visible').first();
     await expect(table).toBeVisible({ timeout: 15000 });
     const firstRow = getDataRows(page).first();
@@ -297,7 +319,7 @@ test.describe('Data Cabang', () => {
       await page.goto('/admin/branch-management/branch/add', { waitUntil: 'domcontentloaded' });
       await expect(page).toHaveURL(/\/admin\/branch-management\/branch\/add/);
 
-      const uniqueId = Date.now().toString().slice(-5);
+      const uniqueId = Date.now().toString().slice(-6);
       const branchName = `Cabang QA Auto ${uniqueId}`;
       const branchEmail = `cabang.auto.${uniqueId}@kasflo.id`;
 
