@@ -18,7 +18,7 @@ test.describe('Manajemen User', () => {
     try {
       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     } catch {
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
       try {
         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
       } catch {
@@ -146,7 +146,7 @@ test.describe('Manajemen User', () => {
     const searchInput = page.getByPlaceholder('Cari disini...').first();
     await searchInput.clear();
     await searchInput.fill(username);
-    await page.waitForTimeout(1000);
+    await waitForPageReady(page);
 
     const userRow = page.locator('table tbody tr').filter({ hasText: username }).first();
     if (await userRow.isVisible({ timeout: 5000 }).catch(() => false)) {
@@ -164,7 +164,7 @@ test.describe('Manajemen User', () => {
       await confirmHapusBtn.click();
 
       await expect(modal).toBeHidden({ timeout: 10000 });
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await searchInput.clear();
     }
   }
@@ -442,7 +442,7 @@ test.describe('Manajemen User', () => {
       const searchInput = page.getByPlaceholder('Cari disini...').first();
       await searchInput.clear();
       await searchInput.fill(username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const userRow = page.locator('table tbody tr').filter({ hasText: username }).first();
       await expect(userRow).toBeVisible({ timeout: 10000 });
@@ -472,7 +472,7 @@ test.describe('Manajemen User', () => {
       // Verifikasi data terupdate pada tabel
       await searchInput.clear();
       await searchInput.fill(username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       const updatedRow = page.locator('table tbody tr').filter({ hasText: username }).first();
       await expect(updatedRow).toBeVisible({ timeout: 10000 });
       await expect(updatedRow).toContainText(updatedName);
@@ -509,10 +509,10 @@ test.describe('Manajemen User', () => {
       await expect(modal).toBeHidden({ timeout: 10000 });
 
       // Verifikasi data user sudah tidak ada di tabel
-      await page.waitForTimeout(1500);
+      await waitForPageReady(page);
       await searchInput.clear();
       await searchInput.fill(username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page.locator('table tbody tr').filter({ hasText: username })).toHaveCount(0);
     
     });
@@ -527,7 +527,7 @@ test.describe('Manajemen User', () => {
       const searchInput = page.getByPlaceholder('Cari disini...').first();
       await searchInput.clear();
       await searchInput.fill(user.username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const userRow = page.locator('table tbody tr').filter({ hasText: user.username }).first();
       await expect(userRow).toBeVisible({ timeout: 10000 });
@@ -537,7 +537,7 @@ test.describe('Manajemen User', () => {
       if (await statusSwitch.isVisible({ timeout: 3000 }).catch(() => false)) {
         const initialState = await statusSwitch.isChecked();
         await statusSwitch.locator('xpath=..').click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
 
         // Konfirmasi modal jika muncul
         const modal = page.locator('[role="dialog"]:visible').first();
@@ -564,7 +564,7 @@ test.describe('Manajemen User', () => {
       const searchInput = page.getByPlaceholder('Cari disini...').first();
       await searchInput.clear();
       await searchInput.fill(user.username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const userRow = page.locator('table tbody tr').filter({ hasText: user.username }).first();
       await expect(userRow).toBeVisible({ timeout: 10000 });
@@ -595,10 +595,10 @@ test.describe('Manajemen User', () => {
 
       // Verifikasi modal tertutup dan user terhapus
       await expect(modal).toBeHidden({ timeout: 10000 });
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await searchInput.clear();
       await searchInput.fill(user.username);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page.locator('table tbody tr').filter({ hasText: user.username })).toHaveCount(0);
     
     });

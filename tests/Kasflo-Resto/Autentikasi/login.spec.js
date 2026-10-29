@@ -97,4 +97,35 @@ test.describe('Login Kasflo Resto', () => {
       await expect(page.getByRole('link', { name: /Dashboard/i }).first()).toBeVisible({ timeout: 15000 });
     });
   });
+
+  test('[TC-08] Validasi format email tidak valid dan fitur tampilkan/sembunyikan kata sandi', async ({ page }) => {
+    await test.step('Uji skenario negatif format email tanpa domain dan toggle visibilitas password', async () => {
+      const email = page.getByLabel(/Email atau Username/i);
+      const password = page.getByLabel(/Kata Sandi/i);
+
+      await email.fill('format_email_tanpa_at');
+      await password.fill('Rahasia123!');
+
+      // Verifikasi tipe input password awalnya tersembunyi ('password')
+      await expect(password).toHaveAttribute('type', 'password');
+
+      // Klik tombol toggle visibility password jika ada
+      const toggleBtn = page.locator('button[aria-label*="password" i], .mantine-PasswordInput-visibilityToggle').first();
+      if (await toggleBtn.isVisible().catch(() => false)) {
+        await toggleBtn.click();
+        await expect(password).toHaveAttribute('type', 'text');
+        await toggleBtn.click();
+        await expect(password).toHaveAttribute('type', 'password');
+      }
+
+      // Klik tombol Masuk dengan kredensial tidak valid
+      const loginBtn = page.getByRole('button', { name: 'Masuk' });
+      await expect(loginBtn).toBeEnabled();
+      await loginBtn.click();
+
+      // Verifikasi pengguna tidak dialihkan ke dashboard
+      await expect(page).not.toHaveURL(/.*\/admin\/dashboard/);
+      await expect(loginBtn).toBeVisible();
+    });
+  });
 });

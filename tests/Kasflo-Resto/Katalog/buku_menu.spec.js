@@ -45,7 +45,6 @@ test.describe('Buku Menu', () => {
     await expect(emailInput).toBeVisible({ timeout: 20000 });
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
-    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
@@ -314,6 +313,76 @@ test.describe('Buku Menu', () => {
         await expect(page.getByText(bmName, { exact: false }).first()).toBeVisible({ timeout: 10000 });
       }
     
+    });
+  });
+
+  test('[TC-08] Validasi form tambah buku menu saat field wajib dikosongkan', async ({ page }) => {
+    await test.step('Uji skenario negatif: Submit form tambah buku menu tanpa mengisi nama buku menu', async () => {
+      const addBtn = page.getByRole('link', { name: 'Tambah Buku Menu' }).or(page.getByRole('button', { name: 'Tambah Buku Menu' })).first();
+      await expect(addBtn).toBeVisible({ timeout: 15000 });
+      await addBtn.click();
+
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
+
+      const saveBtn = page.getByRole('button', { name: 'Simpan' });
+      await expect(saveBtn).toBeVisible();
+      await saveBtn.click();
+
+      // Verifikasi tetap di halaman form tambah dan tidak tersimpan
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/);
+      const errorMsg = page.locator('.mantine-InputWrapper-error, [role="alert"], .mantine-Notification-root').first();
+      const stayedOnForm = page.url().includes('/book-menu/add');
+      expect(stayedOnForm || await errorMsg.isVisible().catch(() => false)).toBeTruthy();
+    });
+  });
+
+  test('[TC-09] Tombol batalkan pada form tambah buku menu mengembalikan ke halaman list', async ({ page }) => {
+    await test.step('Uji pembatalan form: Klik tombol Batal/Kembali pada halaman tambah buku menu', async () => {
+      const addBtn = page.getByRole('link', { name: 'Tambah Buku Menu' }).or(page.getByRole('button', { name: 'Tambah Buku Menu' })).first();
+      await expect(addBtn).toBeVisible({ timeout: 15000 });
+      await addBtn.click();
+
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
+
+      const tempName = 'Batal BM ' + Date.now();
+      const nameInput = page.getByPlaceholder('Masukkan Nama Buku Menu').or(page.getByLabel(/Nama Buku Menu/i)).first();
+      await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await nameInput.fill(tempName);
+
+      const cancelBtn = page.getByRole('button', { name: /Batal|Kembali/i }).or(page.getByRole('link', { name: /Batal|Kembali|Buku Menu/i })).first();
+      await expect(cancelBtn).toBeVisible({ timeout: 10000 });
+      await cancelBtn.click();
+
+      await expect(page).toHaveURL(/\/admin\/catalog\/book-menu$/, { timeout: 15000 });
+      await waitForPageReady(page);
+      await expect(page.locator('table').getByText(tempName)).not.toBeVisible({ timeout: 5000 });
+    });
+  });
+
+  test('[TC-10] Batal menghapus buku menu melalui modal konfirmasi', async ({ page }) => {
+    await test.step('Uji pembatalan hapus: Klik Batal pada modal konfirmasi hapus buku menu', async () => {
+      await ensureBookMenuExists(page);
+
+      const targetCell = page.locator('table tbody tr td:first-child').filter({ hasNotText: 'No results found' }).first();
+      await expect(targetCell).not.toBeEmpty({ timeout: 10000 });
+      const bmName = (await targetCell.innerText()).trim();
+
+      const targetRow = page.locator('table tbody tr').filter({ hasText: bmName }).first();
+      const deleteBtn = targetRow.locator('td').last().locator('button').last();
+      await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await deleteBtn.click();
+
+      const modal = page.locator('[role="dialog"], .mantine-Modal-content').last();
+      await expect(modal).toBeVisible({ timeout: 5000 });
+
+      const cancelBtn = modal.getByRole('button', { name: /Batal/i });
+      await expect(cancelBtn).toBeVisible();
+      await cancelBtn.click();
+
+      await expect(modal).not.toBeVisible({ timeout: 5000 });
+      await expect(page.locator('table').getByText(bmName).first()).toBeVisible({ timeout: 5000 });
     });
   });
 });

@@ -41,7 +41,7 @@ test.describe('Manajemen Stok', () => {
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
@@ -52,7 +52,7 @@ test.describe('Manajemen Stok', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         if (await loginBtn.isVisible().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }
@@ -364,11 +364,11 @@ test.describe('Manajemen Stok', () => {
       // Atur kondisi stok tersedia: Stok Habis = Nonaktif & Stok Unlimited = Nonaktif
       if ((await habisSwitch.innerText()).includes('Aktif')) {
         await habisSwitch.click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
       if ((await unlimitedSwitch.innerText()).includes('Aktif')) {
         await unlimitedSwitch.click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
 
       // Verifikasi kedua toggle berstatus Nonaktif saat stok kuantitas tersedia
@@ -406,19 +406,19 @@ test.describe('Manajemen Stok', () => {
       // Pastikan Unlimited Nonaktif di awal
       if ((await unlimitedSwitch.innerText()).includes('Aktif')) {
         await unlimitedSwitch.click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
       await expect(stockInput).toBeEnabled();
 
       // 1. Saat Stok Unlimited Aktif -> input stok harus DISABLE
       await unlimitedSwitch.click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await expect(unlimitedSwitch).toContainText('Aktif');
       await expect(stockInput).toBeDisabled();
 
       // 2. Saat Stok Unlimited dinonaktifkan kembali -> input stok harus ENABLED
       await unlimitedSwitch.click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await expect(unlimitedSwitch).toContainText('Nonaktif');
       await expect(stockInput).toBeEnabled();
 
@@ -454,11 +454,11 @@ test.describe('Manajemen Stok', () => {
       // Pastikan stok berstatus tersedia (Habis = Nonaktif, Unlimited = Nonaktif)
       if ((await habisSwitch.innerText()).includes('Aktif')) {
         await habisSwitch.click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
       if ((await unlimitedSwitch.innerText()).includes('Aktif')) {
         await unlimitedSwitch.click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
 
       // Ubah nilai stok kuantitas
@@ -508,7 +508,7 @@ test.describe('Manajemen Stok', () => {
 
       // Edit stok pada kategori pertama
       await firstCatBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const firstCatRow = page.locator('table tbody tr').first();
       const firstStockInput = firstCatRow.locator('input[type="text"], input[type="number"]').last();
@@ -520,7 +520,7 @@ test.describe('Manajemen Stok', () => {
       if (catCount > 1) {
         const secondCatBtn = categoryButtons.nth(1);
         await secondCatBtn.click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
 
         const secondCatRow = page.locator('table tbody tr').first();
         const secondStockInput = secondCatRow.locator('input[type="text"], input[type="number"]').last();
@@ -561,7 +561,7 @@ test.describe('Manajemen Stok', () => {
       const tanpaKategoriBtn = page.locator('button:visible').filter({ hasText: 'Tanpa Kategori' }).first();
       await expect(tanpaKategoriBtn).toBeVisible({ timeout: 15000 });
       await tanpaKategoriBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // Cari baris menu paketan
       const paketRow = page.locator('table tbody tr').filter({ hasText: /Paket/i }).first();

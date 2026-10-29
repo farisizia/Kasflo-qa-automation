@@ -49,7 +49,7 @@ test.describe('Kategori Bahan Baku', () => {
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
     await loginBtn.click();
 
     try {
@@ -165,7 +165,7 @@ test.describe('Kategori Bahan Baku', () => {
       const searchInput = page.getByPlaceholder('Cari disini...');
       if (await searchInput.isVisible({ timeout: 5000 }).catch(() => false)) {
         await searchInput.fill(catName);
-        await page.waitForTimeout(500);
+        await waitForPageReady(page);
       }
 
       // Verify created category is visible in table

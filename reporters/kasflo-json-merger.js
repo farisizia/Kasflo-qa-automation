@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 /**
  * Kasflo Smart Multi-App JSON Merger Reporter for Playwright
@@ -109,10 +110,13 @@ class KasfloJsonMergerReporter {
       const existingSuites = existingApp.suites || [];
       const updatedSuitesMap = new Map();
 
-      // Put existing suites into map keyed by suite.file || suite.title
+      // Put existing suites into map keyed by suite.file || suite.title (only if file still exists on disk)
       for (const s of existingSuites) {
         const key = s.file || s.title;
         if (key) {
+          if (s.file && !fs.existsSync(path.resolve(process.cwd(), s.file))) {
+            continue;
+          }
           updatedSuitesMap.set(key, s);
         }
       }
@@ -192,6 +196,12 @@ class KasfloJsonMergerReporter {
     }
 
     fs.writeFileSync(this.outputFile, JSON.stringify(existingData, null, 2), 'utf-8');
+    try {
+      const distDataFile = path.resolve(process.cwd(), 'qa-dashboard/dist/data/kasflo-results.json');
+      if (fs.existsSync(path.dirname(distDataFile))) {
+        fs.writeFileSync(distDataFile, JSON.stringify(existingData, null, 2), 'utf-8');
+      }
+    } catch (e) {}
     console.log(`\n[KasfloReporter] Updated kasflo-results.json: [${Object.keys(projectsInRun).join(', ')}] merged successfully.`);
   }
 
@@ -326,10 +336,24 @@ class KasfloJsonMergerReporter {
 
     // Already a web path
     if (att.path.startsWith('/attachments/')) {
+      const isWebm = /\.webm$/i.test(att.path);
+      if (isWebm) {
+        const mp4RelPath = att.path.replace(/\.webm$/i, '.mp4');
+        const publicMp4 = path.resolve(process.cwd(), 'qa-dashboard/public', mp4RelPath.replace(/^\//, ''));
+        if (fs.existsSync(publicMp4)) {
+          return {
+            name: att.name || 'video',
+            contentType: 'video/mp4',
+            path: mp4RelPath,
+            webmPath: att.path,
+          };
+        }
+      }
       return {
         name: att.name || 'screenshot',
         contentType: att.contentType || 'image/png',
         path: att.path,
+        ...(att.webmPath ? { webmPath: att.webmPath } : {}),
       };
     }
 
@@ -350,6 +374,38 @@ class KasfloJsonMergerReporter {
         const distTarget = path.join(distDir, fileName);
         if (fs.existsSync(path.dirname(distDir))) {
           try { fs.copyFileSync(att.path, distTarget); } catch (e) {}
+        }
+
+        const isVideo = (att.contentType && att.contentType.includes('video')) || /\.webm$/i.test(att.path);
+        if (isVideo && /\.webm$/i.test(fileName)) {
+          const mp4FileName = fileName.replace(/\.webm$/i, '.mp4');
+          const mp4PublicTarget = path.join(publicDir, mp4FileName);
+          const mp4DistTarget = path.join(distDir, mp4FileName);
+          const ffmpegBin = fs.existsSync('/opt/homebrew/bin/ffmpeg') ? '/opt/homebrew/bin/ffmpeg' : 'ffmpeg';
+          try {
+            execFileSync(ffmpegBin, [
+              '-y', '-v', 'error',
+              '-i', publicTarget,
+              '-c:v', 'libx264',
+              '-preset', 'ultrafast',
+              '-pix_fmt', 'yuv420p',
+              '-movflags', '+faststart',
+              mp4PublicTarget
+            ], { timeout: 25000 });
+            if (fs.existsSync(mp4PublicTarget) && fs.statSync(mp4PublicTarget).size > 0) {
+              if (fs.existsSync(path.dirname(distDir))) {
+                try { fs.copyFileSync(mp4PublicTarget, mp4DistTarget); } catch (e) {}
+              }
+              return {
+                name: att.name || 'video',
+                contentType: 'video/mp4',
+                path: `/attachments/screenshots/${mp4FileName}`,
+                webmPath: `/attachments/screenshots/${fileName}`,
+              };
+            }
+          } catch (transcodeErr) {
+            console.warn('[KasfloReporter] Could not transcode video to MP4, falling back to WebM:', transcodeErr.message);
+          }
         }
 
         return {

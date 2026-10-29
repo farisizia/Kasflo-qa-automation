@@ -51,7 +51,7 @@ test.describe('Pajak & Biaya Lainnya', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }
@@ -231,7 +231,7 @@ test.describe('Pajak & Biaya Lainnya', () => {
 
       // Tunggu hingga form dan nilai awal selesai termuat dari server
       await expect(pajakInput).toBeVisible({ timeout: 10000 });
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // 1. Isi Pajak %
       await pajakInput.click();

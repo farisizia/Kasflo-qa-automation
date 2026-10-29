@@ -86,7 +86,7 @@ test.describe('Data Cabang', () => {
     const provOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
     await expect(provOption).toBeVisible({ timeout: 8000 });
     await provOption.click();
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
 
     // 2. Kota
     const kotaInput = page.getByPlaceholder('Pilih Kota').first();
@@ -95,7 +95,7 @@ test.describe('Data Cabang', () => {
     const kotaOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
     await expect(kotaOption).toBeVisible({ timeout: 8000 });
     await kotaOption.click();
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
 
     // 3. Kecamatan
     const kecInput = page.getByPlaceholder('Pilih Kecamatan').first();
@@ -171,13 +171,13 @@ test.describe('Data Cabang', () => {
 
       // Cari cabang yang ada
       await searchInput.fill(firstRowName);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(getDataRows(page).first()).toContainText(firstRowName);
 
       // Cari kata kunci yang tidak mungkin ada
       await searchInput.clear();
       await searchInput.fill('CabangRandomNonExistent123456');
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const hasNoData = (await page.getByText(/Belum Ada Data|Tidak ada data|No results/i).count() > 0)
         || (await page.locator('table tbody tr').filter({ hasText: 'CabangRandomNonExistent123456' }).count() === 0);
@@ -185,7 +185,7 @@ test.describe('Data Cabang', () => {
 
       // Reset pencarian
       await searchInput.clear();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(getDataRows(page).first()).toContainText(firstRowName);
     
     });
@@ -207,13 +207,13 @@ test.describe('Data Cabang', () => {
 
       // Pilih opsi Aktif
       await options.filter({ hasText: /^Aktif$/i }).first().click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // Kembalikan ke Semua Status
       await statusDropdown.click();
       await page.locator('[role="option"]:visible, .mantine-Select-option:visible')
         .filter({ hasText: /^Semua Status$/i }).first().click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
     
     });
   });
@@ -370,7 +370,7 @@ test.describe('Data Cabang', () => {
       // Cari cabang baru di input pencarian untuk membuktikan data tersimpan di database
       const searchInput = page.getByPlaceholder('Cari disini...').first();
       await searchInput.fill(branchName);
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const newBranchRow = page.locator('table tbody tr').filter({ hasText: branchName }).first();
       await expect(newBranchRow).toBeVisible({ timeout: 10000 });
@@ -523,7 +523,7 @@ test.describe('Data Cabang', () => {
       // Tunggu data cabang termuat pada form
       const namaInput = page.getByPlaceholder('Masukkan Nama Cabang');
       await expect(namaInput).not.toHaveValue('', { timeout: 15000 });
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       // Ubah data alamat cabang
       const alamatInput = page.getByPlaceholder('Masukkan Alamat Cabang');
@@ -714,7 +714,7 @@ test.describe('Data Cabang', () => {
       await page.reload({ waitUntil: 'domcontentloaded' });
       const searchInput = page.getByPlaceholder('Cari disini...').first();
       await searchInput.fill(expectedBranchName);
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
       await expect(page.locator('table tbody tr').filter({ hasText: expectedBranchName })).not.toBeVisible({ timeout: 10000 });
     
     });

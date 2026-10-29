@@ -47,7 +47,7 @@ test.describe('Atur Rekening', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }
@@ -217,7 +217,7 @@ test.describe('Atur Rekening', () => {
       // Membuka dropdown Bank
       const bankSelect = modalTambah.getByPlaceholder('Pilih Bank');
       await bankSelect.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       // Memilih bank dari daftar (Bank BCA)
       const bankOption = page.locator('.mantine-Select-option, [role="option"]').filter({ hasText: 'Bank BCA' }).first();

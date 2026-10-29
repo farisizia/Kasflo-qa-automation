@@ -54,7 +54,7 @@ test.describe('Pengaturan Struk', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 30000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }
@@ -96,8 +96,9 @@ test.describe('Pengaturan Struk', () => {
 
       const outletInput = page.getByPlaceholder('Pilih Outlet');
       await expect(outletInput).toBeVisible({ timeout: 15000 });
+      await expect(outletInput).not.toHaveValue('', { timeout: 10000 }).catch(() => {});
       await expect(page.getByPlaceholder('Masukkan Header')).toBeVisible({ timeout: 10000 });
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
     
     });
   });
@@ -181,9 +182,24 @@ test.describe('Pengaturan Struk', () => {
       const testAlamat = 'Jl. Kemang Raya No. 123, Jakarta Selatan';
       const testFooter = 'Terima Kasih Atas Kunjungan Anda! Datang Kembali';
 
+      await waitForPageReady(page);
       await headerInput.fill(testHeader);
       await alamatInput.fill(testAlamat);
       await footerInput.fill(testFooter);
+
+      if ((await headerInput.inputValue()) !== testHeader) {
+        await headerInput.fill(testHeader);
+      }
+      if ((await alamatInput.inputValue()) !== testAlamat) {
+        await alamatInput.fill(testAlamat);
+      }
+      if ((await footerInput.inputValue()) !== testFooter) {
+        await footerInput.fill(testFooter);
+      }
+
+      await expect(headerInput).toHaveValue(testHeader);
+      await expect(alamatInput).toHaveValue(testAlamat);
+      await expect(footerInput).toHaveValue(testFooter);
 
       // Verifikasi teks langsung tampil pada kolom Live Preview struk di sebelah kanan
       const previewContainer = page.locator('.mantine-Grid-col').last();
@@ -203,7 +219,7 @@ test.describe('Pengaturan Struk', () => {
       const existingHapusBtn = page.getByRole('button', { name: 'Hapus' });
       if (await existingHapusBtn.isVisible().catch(() => false)) {
         await existingHapusBtn.click();
-        await page.waitForTimeout(500);
+        await waitForPageReady(page);
       }
 
       const fileInput = page.locator('input[type="file"]');

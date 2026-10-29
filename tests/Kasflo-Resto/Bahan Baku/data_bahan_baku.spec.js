@@ -41,7 +41,7 @@ test.describe('Data Bahan Baku', () => {
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
@@ -52,7 +52,7 @@ test.describe('Data Bahan Baku', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         if (await loginBtn.isVisible().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }

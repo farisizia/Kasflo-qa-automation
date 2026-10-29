@@ -53,7 +53,7 @@ test.describe('Pengaturan Shift', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 30000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }
@@ -102,7 +102,7 @@ test.describe('Pengaturan Shift', () => {
       const outletInput = page.getByPlaceholder('Pilih Outlet');
       await expect(outletInput).toBeVisible({ timeout: 15000 });
       await expect(page.locator('table')).toBeVisible({ timeout: 10000 });
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
     
     });
   });
@@ -149,7 +149,7 @@ test.describe('Pengaturan Shift', () => {
       // Klik track / label switch untuk mengubah status
       const switchTrack = page.locator('.mantine-Switch-track, .mantine-Switch-root').first();
       await switchTrack.click();
-      await page.waitForTimeout(400);
+      await waitForPageReady(page);
 
       // Verifikasi status checked berubah
       const toggledChecked = await switchInput.isChecked();
@@ -157,7 +157,7 @@ test.describe('Pengaturan Shift', () => {
 
       // Klik sekali lagi untuk mengembalikan ke status awal
       await switchTrack.click();
-      await page.waitForTimeout(400);
+      await waitForPageReady(page);
       const restoredChecked = await switchInput.isChecked();
       expect(restoredChecked).toBe(initialChecked);
     
@@ -166,13 +166,13 @@ test.describe('Pengaturan Shift', () => {
 
   test('[TC-03] Menambah baris baru shift via tombol Tambah Shift', async ({ page }) => {
     await test.step('Langkah Pengujian UAT: Menambah baris baru shift via tombol Tambah Shift', async () => {
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
       const rows = page.locator('table tbody tr');
       const initialRowsCount = await rows.count();
 
       const tambahShiftBtn = page.getByRole('button', { name: 'Tambah Shift' });
       await tambahShiftBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const newRowsCount = await rows.count();
       expect(newRowsCount).toBe(initialRowsCount + 1);
@@ -191,7 +191,7 @@ test.describe('Pengaturan Shift', () => {
     await test.step('Langkah Pengujian UAT: Mengisi nama shift serta memilih Jam Mulai dan Jam Berakhir', async () => {
       const tambahShiftBtn = page.getByRole('button', { name: 'Tambah Shift' });
       await tambahShiftBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const targetRow = page.locator('table tbody tr').last();
       const namaShiftInput = targetRow.getByPlaceholder('Masukkan Nama Shift');
@@ -202,7 +202,7 @@ test.describe('Pengaturan Shift', () => {
       // Pilih Jam Mulai
       const jamMulaiInput = targetRow.getByPlaceholder('Masukkan Jam Mulai');
       await jamMulaiInput.click();
-      await page.waitForTimeout(400);
+      await waitForPageReady(page);
 
       const mulaiOption = page.locator('.mantine-Select-option:visible, [role="option"]:visible').first();
       const mulaiText = await mulaiOption.innerText();
@@ -212,7 +212,7 @@ test.describe('Pengaturan Shift', () => {
       // Pilih Jam Berakhir
       const jamBerakhirInput = targetRow.getByPlaceholder('Masukkan Jam Berakhir');
       await jamBerakhirInput.click();
-      await page.waitForTimeout(400);
+      await waitForPageReady(page);
 
       const berakhirOption = page.locator('.mantine-Select-option:visible, [role="option"]:visible').nth(8);
       const berakhirText = await berakhirOption.innerText();
@@ -229,14 +229,14 @@ test.describe('Pengaturan Shift', () => {
       let rowsCount = await rows.count();
       if (rowsCount === 0) {
         await page.getByRole('button', { name: 'Tambah Shift' }).click();
-        await page.waitForTimeout(500);
+        await waitForPageReady(page);
         rowsCount = await rows.count();
       }
 
       const countBeforeDelete = rowsCount;
       const deleteBtn = rows.last().locator('button');
       await deleteBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const countAfterDelete = await rows.count();
       expect(countAfterDelete).toBe(countBeforeDelete - 1);
@@ -250,7 +250,7 @@ test.describe('Pengaturan Shift', () => {
       const rows = page.locator('table tbody tr');
       while (await rows.count() > 2) {
         await rows.last().locator('button').click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
 
       // Tambah satu shift untuk memastikan data dirty dan valid
@@ -258,7 +258,7 @@ test.describe('Pengaturan Shift', () => {
       await expect(tambahShiftBtn).toBeVisible();
       await expect(tambahShiftBtn).toBeEnabled();
       await tambahShiftBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const newRow = page.locator('table tbody tr').last();
       const uniqueSuffix = Date.now().toString().slice(-6);
@@ -266,12 +266,12 @@ test.describe('Pengaturan Shift', () => {
 
       // Pilih Jam Mulai
       await newRow.getByPlaceholder('Masukkan Jam Mulai').click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').first().click();
 
       // Pilih Jam Berakhir
       await newRow.getByPlaceholder('Masukkan Jam Berakhir').click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').nth(10).click();
 
       const simpanBtn = page.getByRole('button', { name: 'Simpan', exact: true });
@@ -300,7 +300,7 @@ test.describe('Pengaturan Shift', () => {
       const rows = page.locator('table tbody tr');
       while (await rows.count() > 2) {
         await rows.last().locator('button').click();
-        await page.waitForTimeout(300);
+        await waitForPageReady(page);
       }
 
       // Tambah satu shift atau edit nama shift
@@ -308,7 +308,7 @@ test.describe('Pengaturan Shift', () => {
       await expect(tambahShiftBtn).toBeVisible();
       await expect(tambahShiftBtn).toBeEnabled();
       await tambahShiftBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const newRow = page.locator('table tbody tr').last();
       const uniqueSuffix = Date.now().toString().slice(-6);
@@ -316,12 +316,12 @@ test.describe('Pengaturan Shift', () => {
 
       // Pilih Jam Mulai
       await newRow.getByPlaceholder('Masukkan Jam Mulai').click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').first().click();
 
       // Pilih Jam Berakhir
       await newRow.getByPlaceholder('Masukkan Jam Berakhir').click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await page.locator('.mantine-Select-option:visible, [role="option"]:visible').nth(12).click();
 
       const simpanSemuaBtn = page.getByRole('button', { name: 'Simpan Semua Cabang', exact: true });

@@ -18,7 +18,7 @@ test.describe('Absensi Karyawan', () => {
     try {
       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     } catch {
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
       try {
         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
       } catch {
@@ -149,7 +149,7 @@ test.describe('Absensi Karyawan', () => {
       await expect(refreshBtn).toBeEnabled();
 
       await refreshBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page).toHaveURL(/\/admin\/user-management\/absence/);
     
     });
@@ -197,7 +197,7 @@ test.describe('Absensi Karyawan', () => {
       const options = page.locator('[role="option"]:visible, .mantine-Select-option:visible');
       if (await options.count() > 0) {
         await options.first().click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         await expect(page).toHaveURL(/\/admin\/user-management\/absence/);
       } else {
         await page.keyboard.press('Escape');

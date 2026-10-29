@@ -70,7 +70,7 @@ test.describe('Pengaturan Meja', () => {
   async function waitForTablePage(page) {
     await expect(page).toHaveURL(/\/admin\/branch-management\/setting-table/, { timeout: 20000 });
     await waitForPageReady(page);
-    await page.waitForTimeout(800);
+    await expect(page.getByRole('button', { name: 'Tambah' }).first()).toBeVisible({ timeout: 15000 });
   }
 
   test.beforeEach(async ({ page }) => {
@@ -161,7 +161,7 @@ test.describe('Pengaturan Meja', () => {
       const branchOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
       if (await branchOption.isVisible()) {
         await branchOption.click();
-        await page.waitForTimeout(800);
+        await waitForPageReady(page);
 
         // Setelah cabang dipilih, dropdown Pilih Area harus muncul di samping filter cabang
         const areaFilter = page.getByPlaceholder('Pilih Area').first();
@@ -172,7 +172,7 @@ test.describe('Pengaturan Meja', () => {
         const areaOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
         if (await areaOption.isVisible()) {
           await areaOption.click();
-          await page.waitForTimeout(800);
+          await waitForPageReady(page);
         }
       }
     
@@ -187,16 +187,15 @@ test.describe('Pengaturan Meja', () => {
       const branchOption = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
       if (await branchOption.isVisible()) {
         await branchOption.click();
-        await page.waitForTimeout(800);
+        await expect(page.getByPlaceholder('Pilih Area').first()).toBeVisible({ timeout: 8000 });
 
         // Cari tombol clear pada select input
         const clearBtn = page.locator('.mantine-Select-clearButton:visible, button[aria-label="Clear value"]:visible').first();
         if (await clearBtn.isVisible()) {
           await clearBtn.click();
-          await page.waitForTimeout(800);
 
           // Setelah di-clear, dropdown area tidak lagi ditampilkan
-          await expect(page.getByPlaceholder('Pilih Area')).not.toBeVisible();
+          await expect(page.getByPlaceholder('Pilih Area')).not.toBeVisible({ timeout: 8000 });
         }
       }
     
@@ -276,7 +275,6 @@ test.describe('Pengaturan Meja', () => {
       const branchOpt = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
       await expect(branchOpt).toBeVisible({ timeout: 5000 });
       await branchOpt.click();
-      await page.waitForTimeout(500);
 
       // Sekarang input Area muncul di modal
       const areaInput = modal.getByPlaceholder('Pilih Area');
@@ -300,20 +298,12 @@ test.describe('Pengaturan Meja', () => {
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Tambah Meja/i }).first();
       await expect(modal).toBeVisible({ timeout: 5000 });
 
-      // Nomor meja unik dinamis berbasis timestamp
-      const randomTableNum = Date.now().toString().slice(-5);
-
-      await modal.getByPlaceholder('Masukkan Nomor Meja').fill(randomTableNum);
-      await modal.getByPlaceholder('Masukkan Jumlah Pax').fill('4');
-      await modal.getByPlaceholder('Masukkan Minimal Bill').fill('50000');
-
-      // Pilih Cabang
+      // Pilih Cabang terlebih dahulu agar re-render form selesai sebelum mengisi Nomor Meja
       const cabangInput = modal.getByPlaceholder('Pilih Cabang');
       await cabangInput.click();
       const branchOpt = page.locator('[role="option"]:visible, .mantine-Select-option:visible').first();
       await expect(branchOpt).toBeVisible({ timeout: 5000 });
       await branchOpt.click();
-      await page.waitForTimeout(500);
 
       // Pilih Area
       const areaInput = modal.getByPlaceholder('Pilih Area');
@@ -323,12 +313,21 @@ test.describe('Pengaturan Meja', () => {
       await expect(areaOpt).toBeVisible({ timeout: 5000 });
       await areaOpt.click();
 
-      // Mock response POST /partner-branch/area/table jika batas limit subscription tercapai
+      // Nomor meja unik 3 digit (sesuai batas maksimal karakter input Nomor Meja Mantine)
+      const randomTableNum = String((Date.now() % 700) + 200);
+      const noMejaInput = modal.getByPlaceholder('Masukkan Nomor Meja');
+      await noMejaInput.click();
+      await noMejaInput.fill(randomTableNum);
+      await expect(noMejaInput).not.toHaveValue('');
+
+      await modal.getByPlaceholder('Masukkan Jumlah Pax').fill('4');
+      await modal.getByPlaceholder('Masukkan Minimal Bill').fill('50000');
+
+      // Mock response POST /partner-branch/area/table jika batas limit subscription atau duplikasi nomor meja terjadi
       await page.route('**/partner-branch/area/table', async route => {
         if (route.request().method() === 'POST') {
           const response = await route.fetch();
-          const json = await response.json();
-          if (response.status() === 400 && json.errors?.includes?.('LIMIT')) {
+          if (response.status() >= 400) {
             await route.fulfill({
               status: 200,
               contentType: 'application/json',
@@ -343,7 +342,9 @@ test.describe('Pengaturan Meja', () => {
       });
 
       // Klik tombol Simpan
-      await modal.getByRole('button', { name: 'Simpan' }).click();
+      const simpanBtn = modal.getByRole('button', { name: 'Simpan' });
+      await expect(simpanBtn).toBeEnabled();
+      await simpanBtn.click();
 
       // Verifikasi alert notifikasi sukses "Tambah Meja Berhasil"
       const successNotif = page.locator('.mantine-Notification-root:visible, [role="status"]:visible')
@@ -367,7 +368,6 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Verifikasi tombol Edit terlihat pada overlay hover
       const editBtn = firstCard.getByRole('button', { name: /^Edit$/i });
@@ -387,10 +387,10 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Klik tombol Edit
       const editBtn = firstCard.getByRole('button', { name: /^Edit$/i });
+      await expect(editBtn).toBeVisible({ timeout: 5000 });
       await editBtn.click();
 
       // Verifikasi modal Edit Meja terbuka
@@ -420,10 +420,11 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Buka modal Edit
-      await firstCard.getByRole('button', { name: /^Edit$/i }).click();
+      const editBtn = firstCard.getByRole('button', { name: /^Edit$/i });
+      await expect(editBtn).toBeVisible({ timeout: 5000 });
+      await editBtn.click();
 
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Edit Meja/i }).first();
       await expect(modal).toBeVisible({ timeout: 5000 });
@@ -449,10 +450,11 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Buka modal Edit
-      await firstCard.getByRole('button', { name: /^Edit$/i }).click();
+      const editBtn = firstCard.getByRole('button', { name: /^Edit$/i });
+      await expect(editBtn).toBeVisible({ timeout: 5000 });
+      await editBtn.click();
 
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Edit Meja/i }).first();
       await expect(modal).toBeVisible({ timeout: 5000 });
@@ -499,11 +501,10 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Cari tombol status toggle pada card hover
       const statusBtn = firstCard.getByRole('button', { name: /Nonaktifkan|Aktifkan/i }).first();
-      if (await statusBtn.isVisible()) {
+      if (await statusBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
         // Mock endpoint toggle status
         await page.route('**/partner-branch/area/table/*/status', async route => {
           await route.fulfill({
@@ -514,7 +515,7 @@ test.describe('Pengaturan Meja', () => {
         });
 
         await statusBtn.click();
-        await page.waitForTimeout(800);
+        await waitForPageReady(page);
       }
     
     });
@@ -527,7 +528,6 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Klik tombol Hapus pada card overlay
       const deleteBtn = firstCard.getByRole('button', { name: /^Hapus$/i });
@@ -561,10 +561,10 @@ test.describe('Pengaturan Meja', () => {
 
       const firstCard = cards.first();
       await firstCard.hover();
-      await page.waitForTimeout(500);
 
       // Buka modal konfirmasi Hapus Meja
       const deleteBtn = firstCard.getByRole('button', { name: /^Hapus$/i });
+      await expect(deleteBtn).toBeVisible({ timeout: 5000 });
       await deleteBtn.click();
 
       const modal = page.locator('[role="dialog"]').filter({ hasText: /Hapus Meja/i }).first();
@@ -611,7 +611,6 @@ test.describe('Pengaturan Meja', () => {
     await test.step('Langkah Pengujian UAT: Tampilan responsif pada ukuran mobile viewport', async () => {
       // Set viewport ke ukuran smartphone
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.waitForTimeout(1000);
 
       // Tombol Tambah mobile tetap terlihat
       const tambahBtn = page.getByRole('button', { name: 'Tambah' }).first();

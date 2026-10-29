@@ -136,13 +136,13 @@ test.describe('Laporan Rangkuman Penjualan', () => {
       await bulananTab.click();
 
       // Verify month picker button or monthly metrics are displayed
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page).toHaveURL(/\/admin\/report\/summary/);
 
       // Switch back to Harian
       const harianTab = page.getByRole('tab', { name: /Harian/i });
       await harianTab.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
     
     });
   });
@@ -179,7 +179,7 @@ test.describe('Laporan Rangkuman Penjualan', () => {
       const options = page.locator('[role="option"]:visible, .mantine-Select-option:visible');
       if (await options.count() > 0) {
         await options.first().click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         await expect(page).toHaveURL(/\/admin\/report\/summary/);
       } else {
         await page.keyboard.press('Escape');

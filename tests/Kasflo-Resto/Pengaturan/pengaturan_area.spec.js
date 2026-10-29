@@ -71,7 +71,7 @@ test.describe('Pengaturan Area', () => {
     await waitForPageReady(page);
     const table = page.locator('table:visible').first();
     await expect(table).toBeVisible({ timeout: 15000 });
-    await page.waitForTimeout(800);
+    await waitForPageReady(page);
     return table;
   }
 
@@ -179,14 +179,14 @@ test.describe('Pengaturan Area', () => {
 
         // Ketik nama area yang ada
         await searchInput.fill(firstRowName);
-        await page.waitForTimeout(600);
+        await waitForPageReady(page);
 
         // Baris pertama tetap mengandung nama yang dicari
         await expect(rows.first()).toContainText(firstRowName);
 
         // Reset pencarian
         await searchInput.clear();
-        await page.waitForTimeout(600);
+        await waitForPageReady(page);
         expect(await rows.count()).toBeGreaterThanOrEqual(1);
       }
     
@@ -199,7 +199,7 @@ test.describe('Pengaturan Area', () => {
       const searchInput = page.getByPlaceholder('Cari disini...').first();
 
       await searchInput.fill('AreaNonExistentRandom999XYZ');
-      await page.waitForTimeout(600);
+      await waitForPageReady(page);
 
       const noRecords = page.locator('table tbody tr')
         .filter({ hasText: /No records to display|Belum Ada Data|No results/i });
@@ -207,7 +207,7 @@ test.describe('Pengaturan Area', () => {
 
       // Reset pencarian
       await searchInput.clear();
-      await page.waitForTimeout(600);
+      await waitForPageReady(page);
     
     });
   });
@@ -225,7 +225,7 @@ test.describe('Pengaturan Area', () => {
       if (await branchOption.isVisible()) {
         const branchName = (await branchOption.innerText()).trim();
         await branchOption.click();
-        await page.waitForTimeout(800);
+        await waitForPageReady(page);
 
         // Verifikasi nilai dropdown terisi
         await expect(branchFilter).toHaveValue(branchName);
@@ -234,7 +234,7 @@ test.describe('Pengaturan Area', () => {
         const clearBtn = page.locator('.mantine-Select-clearButton:visible, button[aria-label="Clear value"]:visible').first();
         if (await clearBtn.isVisible()) {
           await clearBtn.click();
-          await page.waitForTimeout(600);
+          await waitForPageReady(page);
         }
       }
     
@@ -527,7 +527,7 @@ test.describe('Pengaturan Area', () => {
 
         // Klik switch
         await statusSwitch.click({ force: true });
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
       }
     
     });
@@ -621,7 +621,7 @@ test.describe('Pengaturan Area', () => {
     await test.step('Langkah Pengujian UAT: Tampilan responsif pada ukuran mobile viewport', async () => {
       // Set viewport ke ukuran smartphone
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // Tombol Filter mobile terlihat
       const mobileFilterBtn = page.getByRole('button', { name: /Filter/i }).first();
@@ -629,7 +629,7 @@ test.describe('Pengaturan Area', () => {
 
       // Klik tombol Filter untuk membuka drawer filter mobile
       await mobileFilterBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       // Verifikasi komponen filter di dalam drawer
       const drawer = page.locator('.mantine-Drawer-content:visible, [role="dialog"]:visible').first();
@@ -641,7 +641,7 @@ test.describe('Pengaturan Area', () => {
       // Tutup drawer
       const closeDrawerBtn = drawer.locator('button[aria-label="Close"], button:has-text("Reset")').first();
       await closeDrawerBtn.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
     
     });
   });

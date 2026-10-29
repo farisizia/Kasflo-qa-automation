@@ -11,7 +11,7 @@ test.describe('Manajemen Menu', () => {
     const loader = page.locator(
       '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
     );
-    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+    await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => { });
   }
 
   // Shared resilient login helper
@@ -34,11 +34,8 @@ test.describe('Manajemen Menu', () => {
     }
 
     const emailInput = page.getByLabel(/Email atau Username/i);
-    await Promise.race([
-      page.waitForURL(/.*\/admin\/.*/, { timeout: 15000 }).catch(() => {}),
-      emailInput.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {}),
-    ]);
-    if (page.url().includes('/admin/')) {
+    const isLoginVisible = await emailInput.isVisible({ timeout: 5000 }).catch(() => false);
+    if (!isLoginVisible && page.url().includes('/admin/')) {
       await waitForPageReady(page);
       return page;
     }
@@ -46,7 +43,6 @@ test.describe('Manajemen Menu', () => {
     await expect(emailInput).toBeVisible({ timeout: 20000 });
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
-    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
@@ -57,9 +53,8 @@ test.describe('Manajemen Menu', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
         if (await loginBtn.isVisible().catch(() => false)) {
-          await loginBtn.click({ timeout: 5000 }).catch(() => {});
+          await loginBtn.click({ timeout: 5000 }).catch(() => { });
         }
         await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
       }
@@ -186,7 +181,7 @@ test.describe('Manajemen Menu', () => {
       await expect(tableHeader.getByText('Kategori', { exact: true }).first()).toBeVisible();
       await expect(tableHeader.getByText('Status', { exact: true }).first()).toBeVisible();
       await expect(tableHeader.getByText('Action', { exact: true }).first()).toBeVisible();
-    
+
     });
   });
 
@@ -197,7 +192,7 @@ test.describe('Manajemen Menu', () => {
 
       // Verify created menu is visible in table
       await expect(page.locator('table').getByText(menuName).first()).toBeVisible({ timeout: 15000 });
-    
+
     });
   });
 
@@ -253,13 +248,14 @@ test.describe('Manajemen Menu', () => {
       await expect(firstOption).toBeVisible({ timeout: 10000 });
       await firstOption.click();
 
-      // 5. Isi Qty isi paket (kolom ke-3: Qty)
+      // 5. Isi Qty isi paket (kolom ke-3 pada tabel Isi Paket: td.nth(2))
       const isiPaketTable = page.locator('table').nth(1);
       const qtyInput = isiPaketTable.locator('tbody tr').first().locator('td').nth(2).locator('input').first();
       await expect(qtyInput).toBeVisible({ timeout: 10000 });
       await expect(qtyInput).toBeEnabled();
       await qtyInput.click();
       await qtyInput.fill('1');
+      await expect(qtyInput).toHaveValue('1');
 
       // 6. Klik tombol Simpan
       const saveBtn = page.getByRole('button', { name: 'Simpan' });
@@ -361,7 +357,7 @@ test.describe('Manajemen Menu', () => {
         await expect(page.locator('table').getByText(menuNameToDelete)).not.toBeVisible({ timeout: 5000 });
         await searchInput.clear();
       }
-    
+
     });
   });
 
@@ -379,7 +375,6 @@ test.describe('Manajemen Menu', () => {
 
       // Search for first menu name
       await searchInput.fill(firstMenuName);
-      await page.waitForTimeout(500);
 
       // Verify table shows matching results
       const matchedRow = page.locator('table tbody tr').filter({ hasText: firstMenuName });
@@ -387,9 +382,8 @@ test.describe('Manajemen Menu', () => {
 
       // Clear search
       await searchInput.clear();
-      await page.waitForTimeout(500);
       await expect(targetCell).toBeVisible({ timeout: 5000 });
-    
+
     });
   });
 
@@ -409,7 +403,7 @@ test.describe('Manajemen Menu', () => {
       await menuSatuanTab.click();
       await expect(menuSatuanTab).toHaveAttribute('aria-selected', 'true', { timeout: 5000 });
       await expect(page.locator('table')).toBeVisible();
-    
+
     });
   });
 
@@ -436,7 +430,7 @@ test.describe('Manajemen Menu', () => {
       await cancelBtn.click();
 
       await expect(modal).not.toBeVisible({ timeout: 5000 });
-    
+
     });
   });
 
@@ -459,7 +453,76 @@ test.describe('Manajemen Menu', () => {
       if (menuName) {
         await expect(page.getByText(menuName, { exact: false }).first()).toBeVisible({ timeout: 10000 });
       }
-    
+
+    });
+  });
+
+  test('[TC-10] Validasi form tambah menu satuan saat field wajib dikosongkan', async ({ page }) => {
+    await test.step('Uji skenario negatif: Submit form tambah menu satuan tanpa mengisi field wajib', async () => {
+      const addBtn = page.getByRole('link', { name: 'Tambah Menu Satuan' }).or(page.getByRole('button', { name: 'Tambah Menu Satuan' })).first();
+      await expect(addBtn).toBeVisible({ timeout: 15000 });
+      await addBtn.click();
+
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/menu\/unit\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
+
+      const saveBtn = page.getByRole('button', { name: 'Simpan' });
+      await expect(saveBtn).toBeVisible();
+      await saveBtn.click();
+
+      // Verifikasi tetap di halaman form tambah menu satuan
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/menu\/unit\/add/);
+      const errorMsg = page.locator('.mantine-InputWrapper-error, [role="alert"], .mantine-Notification-root').first();
+      expect(page.url().includes('/menu/unit/add') || await errorMsg.isVisible().catch(() => false)).toBeTruthy();
+    });
+  });
+
+  test('[TC-11] Tombol batalkan pada form tambah menu satuan mengembalikan ke halaman list', async ({ page }) => {
+    await test.step('Uji pembatalan form: Klik tombol Batal/Kembali pada halaman tambah menu satuan', async () => {
+      const addBtn = page.getByRole('link', { name: 'Tambah Menu Satuan' }).or(page.getByRole('button', { name: 'Tambah Menu Satuan' })).first();
+      await expect(addBtn).toBeVisible({ timeout: 15000 });
+      await addBtn.click();
+
+      await expect(page).toHaveURL(/.*\/admin\/catalog\/menu\/unit\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
+
+      const tempName = 'Batal Menu ' + Date.now();
+      const nameInput = page.getByPlaceholder('Masukkan Nama Menu').or(page.getByLabel(/Nama Menu/i)).first();
+      await expect(nameInput).toBeVisible({ timeout: 10000 });
+      await nameInput.fill(tempName);
+
+      const cancelBtn = page.getByRole('button', { name: /Batal|Kembali/i }).or(page.getByRole('link', { name: /Batal|Kembali|Menu/i })).first();
+      await expect(cancelBtn).toBeVisible({ timeout: 10000 });
+      await cancelBtn.click();
+
+      await expect(page).toHaveURL(/\/admin\/catalog\/menu$/, { timeout: 15000 });
+      await waitForPageReady(page);
+      await expect(page.locator('table').getByText(tempName)).not.toBeVisible({ timeout: 5000 });
+    });
+  });
+
+  test('[TC-12] Batal menghapus menu satuan melalui modal konfirmasi', async ({ page }) => {
+    await test.step('Uji pembatalan hapus: Klik Batal pada modal konfirmasi hapus menu satuan', async () => {
+      await ensureMenuExists(page);
+
+      const targetCell = page.locator('table tbody tr td:first-child').filter({ hasNotText: 'No results found' }).first();
+      await expect(targetCell).not.toBeEmpty({ timeout: 10000 });
+      const menuName = (await targetCell.innerText()).trim().split('\n')[0].trim();
+
+      const targetRow = page.locator('table tbody tr').filter({ hasText: menuName }).first();
+      const deleteBtn = targetRow.locator('td').last().locator('button').last();
+      await expect(deleteBtn).toBeVisible({ timeout: 10000 });
+      await deleteBtn.click();
+
+      const modal = page.locator('[role="dialog"], .mantine-Modal-content').last();
+      await expect(modal).toBeVisible({ timeout: 5000 });
+
+      const cancelBtn = modal.getByRole('button', { name: /Batal/i });
+      await expect(cancelBtn).toBeVisible();
+      await cancelBtn.click();
+
+      await expect(modal).not.toBeVisible({ timeout: 5000 });
+      await expect(page.locator('table').getByText(menuName).first()).toBeVisible({ timeout: 5000 });
     });
   });
 });

@@ -22,11 +22,12 @@ module.exports = async function globalSetup() {
   try {
     const context = await browser.newContext({
       baseURL: 'https://backoffice-dev.kasflo.id',
+      storageState: AUTH_FILE,
     });
     const page = await context.newPage();
 
     try {
-      await page.goto('https://backoffice-dev.kasflo.id', {
+      await page.goto('https://backoffice-dev.kasflo.id/admin/dashboard', {
         waitUntil: 'domcontentloaded',
         timeout: 30000,
       });
@@ -37,22 +38,33 @@ module.exports = async function globalSetup() {
       });
     }
 
+    const emailInput = page.getByLabel(/Email atau Username/i);
+    await Promise.race([
+      page.waitForURL(/.*\/admin\/.*/, { timeout: 10000 }).catch(() => {}),
+      emailInput.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {}),
+    ]);
+
     if (!page.url().includes('/admin/')) {
-      const emailInput = page.getByLabel(/Email atau Username/i);
       await expect(emailInput).toBeVisible({ timeout: 20000 });
       await emailInput.fill('qakasflo@automation.com');
 
       const passwordInput = page.getByLabel(/Kata Sandi/i);
       await expect(passwordInput).toBeVisible({ timeout: 10000 });
       await passwordInput.fill('password');
-      await page.waitForTimeout(500);
 
       const loginBtn = page.getByRole('button', { name: 'Masuk' });
       await expect(loginBtn).toBeVisible({ timeout: 10000 });
       await expect(loginBtn).toBeEnabled({ timeout: 10000 });
       await loginBtn.click();
 
-      await expect(page).toHaveURL(/.*\/admin\/dashboard.*/, { timeout: 35000 });
+      try {
+        await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+      } catch {
+        if (!page.url().includes('/admin/') && (await loginBtn.isEnabled().catch(() => false))) {
+          await loginBtn.click({ timeout: 5000 }).catch(() => {});
+        }
+        await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 20000 });
+      }
     }
 
     // Wait for dashboard sidebar and loading indicators to settle completely
@@ -71,4 +83,3 @@ module.exports = async function globalSetup() {
     await browser.close();
   }
 };
-

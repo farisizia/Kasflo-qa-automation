@@ -192,7 +192,7 @@ test.describe('Laporan Promosi', () => {
       await expect(tampilkanBtn).toBeEnabled();
 
       await tampilkanBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page).toHaveURL(/\/admin\/report\/promotion/);
     
     });

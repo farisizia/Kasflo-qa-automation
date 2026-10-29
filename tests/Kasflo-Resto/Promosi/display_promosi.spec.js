@@ -99,7 +99,8 @@ test.describe('Display Promosi', () => {
           const confirmBtn = page.locator('.mantine-Modal-content button:has-text("Hapus")').first();
           await expect(confirmBtn).toBeVisible({ timeout: 5000 });
           await confirmBtn.click();
-          await page.waitForTimeout(1500);
+          await expect(confirmBtn).not.toBeVisible({ timeout: 10000 });
+          await waitForPageReady(page);
         }
       }
     }
@@ -237,7 +238,7 @@ test.describe('Display Promosi', () => {
         const batalBtn = page.getByRole('button', { name: /Batal/i }).first();
         if (await batalBtn.isVisible().catch(() => false)) {
           await batalBtn.click();
-          await page.waitForTimeout(1000);
+          await waitForPageReady(page);
         }
         await expect(page).toHaveURL(/\/admin\/promotion\/display/);
       }
@@ -253,6 +254,7 @@ test.describe('Display Promosi', () => {
       await cabangInput.click();
 
       const options = page.locator('[role="option"]:visible, .mantine-Select-option:visible');
+      await expect(options.first()).toBeVisible({ timeout: 5000 });
       const optionCount = await options.count();
       expect(optionCount).toBeGreaterThan(0);
 
@@ -271,7 +273,7 @@ test.describe('Display Promosi', () => {
       const refreshBtn = page.locator('.mantine-Select-section button, button:has(.tabler-icon-refresh)').first();
       if (await refreshBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
         await refreshBtn.click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         await expect(page).toHaveURL(/\/admin\/promotion\/display/);
       }
     
@@ -380,7 +382,8 @@ test.describe('Display Promosi', () => {
         }
 
         // Verifikasi media banner promosi tampil di grid
-        await expect(page.locator('.mantine-SimpleGrid-root img, img[src*="topindoku"]').first()).toBeVisible({ timeout: 10000 });
+        await waitForPageReady(page);
+        await expect(page.locator('.mantine-SimpleGrid-root img:visible, img[src*="topindoku"]:visible').first()).toBeVisible({ timeout: 10000 });
       } finally {
         // Bersihkan file temporary
         if (fs.existsSync(dummyImagePath)) {

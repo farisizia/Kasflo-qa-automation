@@ -245,6 +245,7 @@ function parseSingleApp(appName, appKey, accentColor, appObj) {
               name: att.name || 'attachment',
               contentType: att.contentType || 'application/octet-stream',
               path: att.path || '',
+              webmPath: att.webmPath || '',
               fileName: att.path ? att.path.split(/[/\\]/).pop() : att.name,
             });
           }

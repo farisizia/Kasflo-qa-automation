@@ -174,7 +174,7 @@ test.describe('Laporan Laba Rugi', () => {
       await expect(tampilkanBtn).toBeEnabled();
 
       await tampilkanBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page).toHaveURL(/\/admin\/report\/profit-and-loss/);
     
     });

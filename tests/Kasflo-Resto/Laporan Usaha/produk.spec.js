@@ -18,7 +18,7 @@ test.describe('Laporan Produk', () => {
     try {
       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     } catch {
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
       try {
         await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
       } catch {
@@ -205,7 +205,7 @@ test.describe('Laporan Produk', () => {
       await expect(tampilkanBtn).toBeEnabled();
 
       await tampilkanBtn.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page).toHaveURL(/\/admin\/report\/product/);
     
     });

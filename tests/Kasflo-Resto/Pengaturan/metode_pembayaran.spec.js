@@ -51,7 +51,7 @@ test.describe('Metode Pembayaran', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }

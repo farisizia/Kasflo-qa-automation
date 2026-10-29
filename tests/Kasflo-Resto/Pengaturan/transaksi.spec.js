@@ -47,7 +47,7 @@ test.describe('Pengaturan Transaksi', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 3000 }).catch(() => {});
         }
@@ -153,7 +153,7 @@ test.describe('Pengaturan Transaksi', () => {
 
       // Klik dropdown outlet untuk melihat daftar pilihan
       await outletInput.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       const options = page.locator('.mantine-Select-option, [role="option"]');
       await expect(options.first()).toBeVisible({ timeout: 5000 });
@@ -162,7 +162,7 @@ test.describe('Pengaturan Transaksi', () => {
 
       // Pilih opsi pertama untuk memastikan interaksi stabil
       await options.first().click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
     
     });
   });
@@ -172,7 +172,7 @@ test.describe('Pengaturan Transaksi', () => {
       const targetInput = page.getByPlaceholder('Masukkan Target Transaksi');
       await expect(targetInput).toBeVisible();
 
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await targetInput.click();
       await targetInput.press('ControlOrMeta+a');
       await targetInput.press('Backspace');
@@ -190,7 +190,7 @@ test.describe('Pengaturan Transaksi', () => {
       const cashDrawerInput = page.getByPlaceholder('Masukkan Maksimal Uang di Cash Drawer');
       await expect(cashDrawerInput).toBeVisible();
 
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
       await cashDrawerInput.click();
       await cashDrawerInput.press('ControlOrMeta+a');
       await cashDrawerInput.press('Backspace');
@@ -211,7 +211,7 @@ test.describe('Pengaturan Transaksi', () => {
       // 1. Klik opsi 'Ya' pada Pengaturan Pembulatan menggunakan .mantine-Radio-root
       const yaRadioRoot = pembulatanSection.locator('.mantine-Radio-root').filter({ hasText: 'Ya' });
       await yaRadioRoot.click();
-      await page.waitForTimeout(800);
+      await waitForPageReady(page);
 
       // Field konfigurasi pembulatan harus muncul
       const modeSelect = page.getByPlaceholder('Pilih Mode Pembulatan');
@@ -222,7 +222,7 @@ test.describe('Pengaturan Transaksi', () => {
       // 2. Klik opsi 'Tidak'
       const tidakRadioRoot = pembulatanSection.locator('.mantine-Radio-root').filter({ hasText: 'Tidak' });
       await tidakRadioRoot.click();
-      await page.waitForTimeout(800);
+      await waitForPageReady(page);
 
       // Field konfigurasi pembulatan harus tersembunyi
       await expect(modeSelect).toBeHidden({ timeout: 5000 });
@@ -244,11 +244,11 @@ test.describe('Pengaturan Transaksi', () => {
 
       // Klik toggle untuk verifikasi interaksi
       await switchTrack.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
 
       // Klik kembali untuk mengembalikan status
       await switchTrack.click();
-      await page.waitForTimeout(500);
+      await waitForPageReady(page);
     
     });
   });
@@ -264,12 +264,12 @@ test.describe('Pengaturan Transaksi', () => {
       // 1. Klik opsi 'Ya'
       const yaRadioRoot = catatanSection.locator('.mantine-Radio-root').filter({ hasText: 'Ya' });
       await yaRadioRoot.click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
 
       // 2. Klik opsi 'Tidak'
       const tidakRadioRoot = catatanSection.locator('.mantine-Radio-root').filter({ hasText: 'Tidak' });
       await tidakRadioRoot.click();
-      await page.waitForTimeout(300);
+      await waitForPageReady(page);
     
     });
   });

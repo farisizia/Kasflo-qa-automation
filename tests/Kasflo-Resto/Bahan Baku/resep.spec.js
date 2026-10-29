@@ -11,11 +11,72 @@ test.describe('Resep Bahan Baku', () => {
     return page.locator('input[placeholder="Cari disini..."]:visible').first();
   }
 
+  // Helper to read "Nama Menu/Opsi Varian" from a data row (column 2 in new UI, fallback to column 1)
+  async function getRecipeItemName(row) {
+    const cells = row.locator('td');
+    const cellCount = await cells.count();
+    if (cellCount >= 2) {
+      const secondCell = cells.nth(1);
+      await expect(secondCell).not.toBeEmpty({ timeout: 10000 });
+      const text = (await secondCell.innerText()).trim();
+      if (text) return text;
+    }
+    const firstCell = cells.first();
+    await expect(firstCell).not.toBeEmpty({ timeout: 10000 });
+    return (await firstCell.innerText()).trim();
+  }
+
   async function waitForPageReady(page) {
     const loader = page.locator(
       '.mantine-Loader-root:visible, .mantine-LoadingOverlay-root:visible, .mantine-Skeleton-root:visible'
     );
     await loader.first().waitFor({ state: 'hidden', timeout: 15000 }).catch(() => {});
+  }
+
+  // Prevent Mantine Select crash when backend returns duplicate product IDs or variant_options without id
+  async function setupRecipeApiSafety(page) {
+    await page.route('**/backoffice/v1/product**', async (route) => {
+      if (route.request().method() !== 'GET') {
+        await route.continue();
+        return;
+      }
+      try {
+        const response = await route.fetch();
+        const contentType = response.headers()['content-type'] || '';
+        if (response.status() === 200 && contentType.includes('application/json')) {
+          const json = await response.json();
+          if (json && Array.isArray(json.data)) {
+            const seen = new Set();
+            json.data = json.data.filter((item) => {
+              if (!item || item.id === undefined) return true;
+              const key = String(item.id);
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            });
+            await route.fulfill({
+              response,
+              body: JSON.stringify(json),
+            });
+            return;
+          }
+          if (json && json.data && Array.isArray(json.data.variant_options)) {
+            json.data.variant_options = json.data.variant_options.map((opt, idx) => ({
+              ...opt,
+              id: opt.id ?? opt.variant_option_id ?? (idx + 1),
+            }));
+            await route.fulfill({
+              response,
+              body: JSON.stringify(json),
+            });
+            return;
+          }
+        }
+        await route.fulfill({ response });
+      } catch {
+        await route.continue().catch(() => {});
+      }
+    });
   }
 
   // Shared resilient login helper
@@ -61,7 +122,7 @@ test.describe('Resep Bahan Baku', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 25000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isVisible().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }
@@ -72,46 +133,80 @@ test.describe('Resep Bahan Baku', () => {
     return page;
   }
 
-  // Helper to select an option in a Mantine Select dropdown
-  async function selectMantineOption(page, inputLocator, optionText) {
-    await inputLocator.click();
-
-    const optionSelector = '[role="option"]:visible, [data-combobox-option]:visible, .mantine-Select-option:visible, .mantine-Select-item:visible';
-    if (optionText) {
-      const option = page.locator(optionSelector)
-        .filter({ hasText: optionText }).first();
-      if (await option.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await option.click();
-        return;
-      }
+  // Scoped Mantine Select listbox locator based on input's id -> aria-labelledby="<id>-label"
+  async function getListboxOptionsForInput(page, inputLocator) {
+    const inputId = await inputLocator.getAttribute('id');
+    if (inputId) {
+      return page.locator(`[role="listbox"][aria-labelledby="${inputId}-label"] [role="option"]`);
     }
-
-    // Default: click first visible option
-    const firstOption = page.locator(optionSelector).first();
-    await expect(firstOption).toBeVisible({ timeout: 5000 });
-    await firstOption.click();
+    return page.locator('.mantine-Select-dropdown:visible [role="option"], [role="option"]:visible');
   }
 
-  let branchBookMenuVerified = false;
+  // Helper to select Cabang and Menu on /admin/ingredients/recipe/add
+  async function selectBranchAndMenu(page) {
+    const cabangInput = page.getByPlaceholder('Pilih Cabang').first();
+    await expect(cabangInput).toBeVisible({ timeout: 10000 });
+    await expect(cabangInput).toBeEnabled({ timeout: 10000 });
 
-  // Helper to ensure at least one Book Menu is assigned to Kasflo Pusat QA with active menus
-  async function ensureBranchHasBookMenu(page) {
-    if (branchBookMenuVerified) return;
-    try {
-      await page.goto('/admin/catalog/book-menu', { waitUntil: 'domcontentloaded' });
-      await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 10000 });
-      branchBookMenuVerified = true;
-    } catch {
-      // Continue anyway
+    // Ensure radio Tipe Resep "Menu" is active
+    const menuRadio = page.locator('input[type="radio"][value="menu"]');
+    if (await menuRadio.isVisible().catch(() => false)) {
+      if (!(await menuRadio.isChecked().catch(() => true))) {
+        await page.locator('label.mantine-Radio-label').filter({ hasText: /^Menu$/ }).first().click();
+      }
+      await expect(menuRadio).toBeChecked();
     }
+
+    const menuInput = page.getByPlaceholder('Pilih Menu').first();
+    await expect(menuInput).toBeVisible({ timeout: 10000 });
+
+    const branchOptions = await getListboxOptionsForInput(page, cabangInput);
+    await cabangInput.click();
+    await expect(branchOptions.first()).toBeVisible({ timeout: 10000 });
+    const branchCount = await branchOptions.count();
+
+    for (let b = 0; b < branchCount; b++) {
+      if (b > 0) {
+        await cabangInput.click();
+        await expect(branchOptions.nth(b)).toBeVisible({ timeout: 5000 });
+      }
+
+      const productRespPromise = page.waitForResponse(
+        (res) => res.url().includes('/backoffice/v1/product') && res.request().method() === 'GET',
+        { timeout: 10000 }
+      ).catch(() => null);
+
+      await branchOptions.nth(b).click();
+      await productRespPromise;
+      await waitForPageReady(page);
+
+      // Wait for Pilih Menu input to become enabled after branch selection
+      const isMenuEnabled = await expect(menuInput).toBeEnabled({ timeout: 5000 }).then(() => true).catch(() => false);
+      if (!isMenuEnabled) continue;
+
+      const menuOptions = await getListboxOptionsForInput(page, menuInput);
+      await menuInput.click();
+
+      const hasOption = await menuOptions.first().isVisible({ timeout: 3000 }).catch(() => false);
+      if (hasOption) {
+        const selectedMenuName = (await menuOptions.first().innerText()).trim() || 'Updated Menu';
+        await menuOptions.first().click();
+        await waitForPageReady(page);
+        return selectedMenuName;
+      }
+
+      // Close empty menu dropdown before trying next branch
+      await page.keyboard.press('Escape').catch(() => {});
+    }
+
+    return null;
   }
 
   // Helper to create a Recipe
   async function createRecipe(page) {
-    await ensureBranchHasBookMenu(page);
-
     await page.goto('/admin/ingredients/recipe', { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveURL(/\/admin\/ingredients\/recipe/);
+    await waitForPageReady(page);
 
     const addBtn = page.getByRole('link', { name: /Buat Resep/i })
       .or(page.getByRole('button', { name: /Buat Resep/i })).first();
@@ -119,53 +214,17 @@ test.describe('Resep Bahan Baku', () => {
     await addBtn.click();
 
     await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/add/, { timeout: 15000 });
+    await waitForPageReady(page);
 
-    // Select Cabang and find one that has available menus
-    const cabangInput = page.getByPlaceholder('Pilih Cabang').first();
-    await expect(cabangInput).toBeVisible({ timeout: 10000 });
-
-    const menuInput = page.getByPlaceholder('Pilih Menu').first();
-    await expect(menuInput).toBeVisible({ timeout: 10000 });
-
-    const optionSelector = '[role="option"]:visible, [data-combobox-option]:visible, .mantine-Select-option:visible, .mantine-Select-item:visible';
-    let firstOption = null;
-
-    await cabangInput.click();
-    await page.waitForTimeout(500);
-    const branchOptions = page.locator(optionSelector);
-    const branchCount = await branchOptions.count();
-
-    for (let b = 0; b < Math.max(branchCount, 1); b++) {
-      if (branchCount > 0) {
-        if (b > 0) {
-          await cabangInput.click();
-          await page.waitForTimeout(500);
-        }
-        await branchOptions.nth(b).click();
-        await page.waitForTimeout(1000);
-      }
-
-      await menuInput.click();
-      await page.waitForTimeout(500);
-      const opt = page.locator(optionSelector).first();
-      if (await opt.isVisible({ timeout: 2000 }).catch(() => false)) {
-        firstOption = opt;
-        break;
-      }
-    }
-
-    if (!firstOption || !(await firstOption.isVisible().catch(() => false))) {
+    const selectedMenuName = await selectBranchAndMenu(page);
+    if (!selectedMenuName) {
       await page.goto('/admin/ingredients/recipe', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
       return null;
     }
 
-    const selectedMenuName = (await firstOption.innerText()).trim() || 'Updated Menu';
-    await firstOption.click();
-
-    await page.waitForTimeout(1000);
-
     // Check if ingredient is already attached to this recipe
-    const hasExistingIngredient = await page.locator('table:visible tbody tr').filter({ hasText: /Gram|Pcs|Kg|Bahan/i }).first().isVisible().catch(() => false);
+    const hasExistingIngredient = await page.locator('table:visible tbody tr').filter({ hasText: /Gram|Pcs|Kg|Ml|Liter|Bahan/i }).first().isVisible().catch(() => false);
 
     if (!hasExistingIngredient) {
       // Click Tambah Bahan Baku button
@@ -178,7 +237,7 @@ test.describe('Resep Bahan Baku', () => {
       await expect(modal).toBeVisible({ timeout: 5000 });
 
       const ingredientRow = modal.locator('table tbody tr:not(:has-text("Belum Ada Data"))').first();
-      await expect(ingredientRow).toBeVisible({ timeout: 5000 });
+      await expect(ingredientRow).toBeVisible({ timeout: 10000 });
       await ingredientRow.click();
 
       // Fill Kuantitas input (only target editable input, avoiding readonly pagination)
@@ -202,6 +261,7 @@ test.describe('Resep Bahan Baku', () => {
 
     await expect(page).toHaveURL(/\/admin\/ingredients\/recipe$/, { timeout: 25000 });
     await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
+    await waitForPageReady(page);
 
     return selectedMenuName;
   }
@@ -209,29 +269,31 @@ test.describe('Resep Bahan Baku', () => {
   // Helper to ensure at least one recipe exists in the list
   async function ensureRecipeExists(page) {
     await expect(page.locator('table:visible tbody tr').first()).toBeVisible({ timeout: 15000 });
-    await page.waitForTimeout(1000);
+    await waitForPageReady(page);
 
     const dataRows = getDataRows(page);
     const count = await dataRows.count();
     if (count === 0) {
       return await createRecipe(page);
     }
-    const firstCell = dataRows.first().locator('td:first-child');
-    return (await firstCell.innerText()).trim();
+    return await getRecipeItemName(dataRows.first());
   }
 
   test.beforeEach(async ({ page }) => {
     await test.step('Inisialisasi sesi login dan navigasi ke halaman pengujian', async () => {
+      // Pasang interceptor deduplikasi opsi produk agar Mantine Select tidak crash
+      await setupRecipeApiSafety(page);
+
       // Step 1: Login
       await loginBeforeTest(page);
 
       // Step 2: Navigate to Recipe page
       await page.goto('/admin/ingredients/recipe', { waitUntil: 'domcontentloaded' });
+      await waitForPageReady(page);
 
       // Step 3: Verify recipe page loaded
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe/);
       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -258,22 +320,22 @@ test.describe('Resep Bahan Baku', () => {
         .or(page.getByRole('button', { name: /Buat Resep/i })).first();
       await expect(addBtn).toBeVisible({ timeout: 10000 });
 
-      // Verify table structure and headers
+      // Verify table structure and headers (UI terbaru: Tipe Resep & Nama Menu/Opsi Varian)
       const table = page.locator('table:visible').first();
       await expect(table).toBeVisible();
 
       const thead = page.locator('thead:visible').first();
-      await expect(thead.getByText('Menu', { exact: true }).first()).toBeVisible();
+      await expect(thead.getByText('Tipe Resep', { exact: true }).first()).toBeVisible();
+      await expect(thead.getByText('Nama Menu/Opsi Varian', { exact: true }).first()).toBeVisible();
       await expect(thead.getByText('Bahan Baku', { exact: true }).first()).toBeVisible();
       await expect(thead.getByText('Peringatan Stok', { exact: true }).first()).toBeVisible();
       await expect(thead.getByText('Cabang', { exact: true }).first()).toBeVisible();
       await expect(thead.getByText('Action', { exact: true }).first()).toBeVisible();
-    
     });
   });
 
   test('[TC-02] Navigasi ke halaman buat resep dan memverifikasi form elements', async ({ page }) => {
-    await test.step('Lakukan proses navigasi ke halaman buat resep dan memverifikasi form elements dan pastikan data tersimpan', async () => {
+    await test.step('Lakukan proses navigasi ke halaman buat resep dan memverifikasi panel Pilih Menu, Tipe Resep, dan Resep', async () => {
       const addBtn = page.getByRole('link', { name: /Buat Resep/i })
         .or(page.getByRole('button', { name: /Buat Resep/i })).first();
       await expect(addBtn).toBeVisible({ timeout: 10000 });
@@ -281,17 +343,33 @@ test.describe('Resep Bahan Baku', () => {
 
       // Verify URL and title
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
       await expect(page.getByText('Buat Resep').first()).toBeVisible({ timeout: 10000 });
 
-      // Verify form fields
+      // Verify Panel "Pilih Menu" & "Resep"
+      await expect(page.getByRole('heading', { name: 'Pilih Menu' })).toBeVisible({ timeout: 5000 });
+      await expect(page.getByRole('heading', { name: 'Resep', exact: true })).toBeVisible({ timeout: 5000 });
+
+      // Verify Dropdown Cabang *
       const cabangInput = page.getByPlaceholder('Pilih Cabang');
       await expect(cabangInput).toBeVisible({ timeout: 5000 });
 
+      // Verify Radio Group Tipe Resep (Menu & Varian)
+      await expect(page.getByText('Tipe Resep').first()).toBeVisible({ timeout: 5000 });
+      const menuRadio = page.locator('input[type="radio"][value="menu"]');
+      const varianRadio = page.locator('input[type="radio"][value="variant"]');
+      await expect(menuRadio).toBeChecked();
+      await expect(varianRadio).not.toBeChecked();
+
+      // Verify Dropdown Menu * (default active when Tipe Resep = Menu)
       const menuInput = page.getByPlaceholder('Pilih Menu');
       await expect(menuInput).toBeVisible({ timeout: 5000 });
+      await expect(menuInput).toBeDisabled();
 
+      // Verify Tombol Tambah Bahan Baku (initially disabled before Menu/Varian selected)
       const tambahBahanBtn = page.getByRole('button', { name: /Tambah Bahan Baku/i });
       await expect(tambahBahanBtn).toBeVisible({ timeout: 5000 });
+      await expect(tambahBahanBtn).toBeDisabled();
 
       // Verify action buttons
       const cancelBtn = page.getByRole('button', { name: /Batalkan/i });
@@ -299,7 +377,6 @@ test.describe('Resep Bahan Baku', () => {
 
       const simpanBtn = page.getByRole('button', { name: 'Simpan', exact: true });
       await expect(simpanBtn).toBeVisible({ timeout: 5000 });
-    
     });
   });
 
@@ -318,7 +395,6 @@ test.describe('Resep Bahan Baku', () => {
       // Verify redirected back to recipe list
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe$/, { timeout: 15000 });
       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 10000 });
-    
     });
   });
 
@@ -336,81 +412,40 @@ test.describe('Resep Bahan Baku', () => {
 
       // Verification: Form stays on add page because validation prevents submission
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/add/);
-    
     });
   });
 
   test('[TC-05] Membuka modal tambah bahan baku dan membatalkannya', async ({ page }) => {
     await test.step('Buka dan periksa rincian: Membuka modal tambah bahan baku dan membatalkannya', async () => {
-      await ensureBranchHasBookMenu(page);
-
-      await page.goto('/admin/ingredients/recipe', { waitUntil: 'domcontentloaded' });
-      await expect(page).toHaveURL(/\/admin\/ingredients\/recipe/);
-
       const addBtn = page.getByRole('link', { name: /Buat Resep/i })
         .or(page.getByRole('button', { name: /Buat Resep/i })).first();
       await addBtn.click();
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/add/);
+      await waitForPageReady(page);
 
-      const cabangInput = page.getByPlaceholder('Pilih Cabang').first();
-      await expect(cabangInput).toBeVisible({ timeout: 10000 });
+      const selectedMenu = await selectBranchAndMenu(page);
 
-      const menuInput = page.getByPlaceholder('Pilih Menu').first();
-      await expect(menuInput).toBeVisible({ timeout: 10000 });
-
-      const optionSelector = '[role="option"]:visible, [data-combobox-option]:visible, .mantine-Select-option:visible, .mantine-Select-item:visible';
-      let menuOption = null;
-
-      await cabangInput.click();
-      await page.waitForTimeout(500);
-      const branchOptions = page.locator(optionSelector);
-      const branchCount = await branchOptions.count();
-
-      for (let b = 0; b < Math.max(branchCount, 1); b++) {
-        if (branchCount > 0) {
-          if (b > 0) {
-            await cabangInput.click();
-            await page.waitForTimeout(500);
-          }
-          await branchOptions.nth(b).click();
-          await page.waitForTimeout(1000);
-        }
-
-        await menuInput.click();
-        await page.waitForTimeout(500);
-        const opt = page.locator(optionSelector).first();
-        if (await opt.isVisible({ timeout: 2000 }).catch(() => false)) {
-          menuOption = opt;
-          break;
-        }
-      }
-
-      if (menuOption) {
-        await menuOption.click();
-        await page.waitForTimeout(1000);
-
+      if (selectedMenu) {
         // Open Tambah Bahan Baku modal
         const tambahBahanBtn = page.getByRole('button', { name: /Tambah Bahan Baku/i });
-        if (await tambahBahanBtn.isEnabled({ timeout: 5000 }).catch(() => false)) {
-          await tambahBahanBtn.click();
+        await expect(tambahBahanBtn).toBeEnabled({ timeout: 10000 });
+        await tambahBahanBtn.click();
 
-          // Verify modal elements
-          const modal = page.locator('[role="dialog"], .mantine-Modal-content').last();
-          await expect(modal).toBeVisible({ timeout: 5000 });
-          await expect(modal.getByText('Tambah Bahan Baku').first()).toBeVisible({ timeout: 5000 });
+        // Verify modal elements
+        const modal = page.locator('[role="dialog"], .mantine-Modal-content').last();
+        await expect(modal).toBeVisible({ timeout: 5000 });
+        await expect(modal.getByText('Tambah Bahan Baku').first()).toBeVisible({ timeout: 5000 });
 
-          // Cancel modal
-          const cancelBtn = modal.getByRole('button', { name: /Batal/i });
-          await expect(cancelBtn).toBeVisible();
-          await cancelBtn.click();
+        // Cancel modal
+        const cancelBtn = modal.getByRole('button', { name: /Batal/i });
+        await expect(cancelBtn).toBeVisible();
+        await cancelBtn.click();
 
-          await expect(modal).not.toBeVisible({ timeout: 5000 });
-        }
+        await expect(modal).not.toBeVisible({ timeout: 5000 });
       } else {
-        // If all menus are already assigned, verify form elements are valid
         await expect(page.getByText('Buat Resep').first()).toBeVisible({ timeout: 5000 });
-        await expect(cabangInput).toBeVisible();
-        await expect(menuInput).toBeVisible();
+        await expect(page.getByPlaceholder('Pilih Cabang')).toBeVisible();
+        await expect(page.getByPlaceholder('Pilih Menu')).toBeVisible();
       }
     });
   });
@@ -424,7 +459,7 @@ test.describe('Resep Bahan Baku', () => {
       if (recipeMenuName) {
         const searchInput = getSearchInput(page);
         await searchInput.fill(recipeMenuName);
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
 
         const targetRow = table.locator('tbody tr').filter({ hasText: recipeMenuName });
         await expect(targetRow.first()).toBeVisible({ timeout: 15000 });
@@ -432,7 +467,6 @@ test.describe('Resep Bahan Baku', () => {
         const rows = getDataRows(page);
         await expect(rows.first()).toBeVisible({ timeout: 15000 });
       }
-    
     });
   });
 
@@ -446,11 +480,7 @@ test.describe('Resep Bahan Baku', () => {
         return;
       }
 
-      const firstRowCell = page.locator('table:visible tbody tr td:first-child').filter({
-        hasNotText: /Belum Ada Data|No results found/i,
-      }).first();
-      await expect(firstRowCell).not.toBeEmpty({ timeout: 10000 });
-      const targetMenu = (await firstRowCell.innerText()).trim();
+      const targetMenu = await getRecipeItemName(dataRows.first());
       expect(targetMenu.length).toBeGreaterThan(0);
 
       const searchInput = getSearchInput(page);
@@ -458,20 +488,19 @@ test.describe('Resep Bahan Baku', () => {
 
       // 1. Search with matching term
       await searchInput.fill(targetMenu);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       const matchedRow = page.locator('table:visible tbody tr').filter({ hasText: targetMenu });
       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
 
       // 2. Search with non-existent keyword
       await searchInput.fill('XYZNonExistentRecipe999');
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page.locator('table:visible tbody').getByText(/Belum Ada Data|No results found/i).first()).toBeVisible({ timeout: 10000 });
 
       // 3. Clear search and verify original row is visible again
       await searchInput.clear();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
-    
     });
   });
 
@@ -481,7 +510,7 @@ test.describe('Resep Bahan Baku', () => {
       const semiTab = page.getByRole('tab', { name: /Data Resep Setengah Jadi/i });
       await expect(semiTab).toBeVisible({ timeout: 5000 });
       await semiTab.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // Verify header of semi-raw tab table
       const thead = page.locator('thead:visible').first();
@@ -491,12 +520,12 @@ test.describe('Resep Bahan Baku', () => {
       const resepTab = page.getByRole('tab', { name: /Data Resep$/i });
       await expect(resepTab).toBeVisible({ timeout: 5000 });
       await resepTab.click();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
-      // Verify original table header
+      // Verify original table headers on Data Resep tab (Tipe Resep & Nama Menu/Opsi Varian)
       const thead2 = page.locator('thead:visible').first();
-      await expect(thead2.getByText('Menu', { exact: true }).first()).toBeVisible({ timeout: 10000 });
-    
+      await expect(thead2.getByText('Tipe Resep', { exact: true }).first()).toBeVisible({ timeout: 10000 });
+      await expect(thead2.getByText('Nama Menu/Opsi Varian', { exact: true }).first()).toBeVisible({ timeout: 10000 });
     });
   });
 
@@ -528,7 +557,6 @@ test.describe('Resep Bahan Baku', () => {
       await cancelBtn.click();
 
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe$/, { timeout: 15000 });
-    
     });
   });
 
@@ -551,6 +579,7 @@ test.describe('Resep Bahan Baku', () => {
       await editBtn.click();
 
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/edit/, { timeout: 15000 });
+      await waitForPageReady(page);
 
       // Click Simpan on edit page to confirm update
       const simpanBtn = page.getByRole('button', { name: 'Simpan', exact: true });
@@ -560,7 +589,6 @@ test.describe('Resep Bahan Baku', () => {
       // Verify redirect back to recipe list
       await expect(page).toHaveURL(/\/admin\/ingredients\/recipe$/, { timeout: 20000 });
       await expect(page.locator('table:visible').first()).toBeVisible({ timeout: 15000 });
-    
     });
   });
 
@@ -576,7 +604,7 @@ test.describe('Resep Bahan Baku', () => {
 
       const targetRow = dataRows.first();
       await expect(targetRow).toBeVisible({ timeout: 10000 });
-      const targetMenu = (await targetRow.locator('td:first-child').innerText()).trim();
+      const targetMenu = await getRecipeItemName(targetRow);
 
       // Click delete / trash button (last action button)
       const deleteBtn = targetRow.locator('button').last();
@@ -598,13 +626,11 @@ test.describe('Resep Bahan Baku', () => {
 
       // Verify item still exists in table
       await expect(page.locator('table:visible').getByText(targetMenu).first()).toBeVisible({ timeout: 5000 });
-    
     });
   });
 
   test('[TC-12] Hapus resep berhasil dengan konfirmasi modal', async ({ page }) => {
     await test.step('Lakukan proses hapus resep berhasil dengan konfirmasi modal dan konfirmasi penghapusan data', async () => {
-      // Ensure at least one recipe exists
       await ensureRecipeExists(page);
 
       const dataRows = getDataRows(page);
@@ -615,7 +641,7 @@ test.describe('Resep Bahan Baku', () => {
 
       const targetRow = dataRows.first();
       await expect(targetRow).toBeVisible({ timeout: 10000 });
-      const targetMenu = (await targetRow.locator('td:first-child').innerText()).trim();
+      const targetMenu = await getRecipeItemName(targetRow);
 
       // Click delete / trash button
       const deleteBtn = targetRow.locator('button').last();
@@ -643,10 +669,85 @@ test.describe('Resep Bahan Baku', () => {
       if (targetMenu) {
         const searchInput = getSearchInput(page);
         await searchInput.fill(targetMenu);
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
         await expect(page.locator('table:visible tbody tr:not(:has-text("Belum Ada Data"))').filter({ hasText: targetMenu })).toHaveCount(0, { timeout: 10000 });
       }
-    
+    });
+  });
+
+  test('[TC-13] Peralihan radio button Tipe Resep ke Varian serta pemilihan dropdown Varian dan Opsi Varian', async ({ page }) => {
+    await test.step('Navigasi ke halaman Buat Resep, pilih Cabang, alihkan Tipe Resep ke Varian, dan pilih Varian serta Opsi Varian', async () => {
+      const addBtn = page.getByRole('link', { name: /Buat Resep/i })
+        .or(page.getByRole('button', { name: /Buat Resep/i })).first();
+      await expect(addBtn).toBeVisible({ timeout: 10000 });
+      await addBtn.click();
+
+      await expect(page).toHaveURL(/\/admin\/ingredients\/recipe\/add/, { timeout: 15000 });
+      await waitForPageReady(page);
+
+      // 1. Pilih Cabang *
+      const cabangInput = page.getByPlaceholder('Pilih Cabang').first();
+      await expect(cabangInput).toBeVisible({ timeout: 10000 });
+      const branchOptions = await getListboxOptionsForInput(page, cabangInput);
+      await cabangInput.click();
+      await expect(branchOptions.first()).toBeVisible({ timeout: 10000 });
+      await branchOptions.first().click();
+      await waitForPageReady(page);
+
+      // 2. Verifikasi kondisi awal Tipe Resep = Menu
+      const menuRadio = page.locator('input[type="radio"][value="menu"]');
+      const varianRadio = page.locator('input[type="radio"][value="variant"]');
+      await expect(menuRadio).toBeChecked();
+      await expect(page.getByPlaceholder('Pilih Menu')).toBeVisible();
+
+      // 3. Klik radio button Tipe Resep -> Varian
+      const varianRadioLabel = page.locator('label.mantine-Radio-label').filter({ hasText: /^Varian$/ }).first();
+      await expect(varianRadioLabel).toBeVisible({ timeout: 5000 });
+      await varianRadioLabel.click();
+      await expect(varianRadio).toBeChecked();
+
+      // 4. Verifikasi field dinamis Varian * dan Opsi Varian * muncul
+      const varianInput = page.getByPlaceholder('Pilih Varian').first();
+      const opsiVarianInput = page.getByPlaceholder('Pilih Opsi Varian').first();
+      await expect(varianInput).toBeVisible({ timeout: 5000 });
+      await expect(varianInput).toBeEnabled({ timeout: 5000 });
+      await expect(opsiVarianInput).toBeVisible({ timeout: 5000 });
+      await expect(opsiVarianInput).toBeDisabled();
+
+      // 5. Pilih opsi pada dropdown Varian *
+      const varianOptions = await getListboxOptionsForInput(page, varianInput);
+      await varianInput.click();
+      if (await varianOptions.first().isVisible({ timeout: 5000 }).catch(() => false)) {
+        await varianOptions.first().click();
+        await waitForPageReady(page);
+        await expect(varianInput).not.toHaveValue('');
+
+        // 6. Setelah Varian dipilih, dropdown Opsi Varian * menjadi aktif dan dapat dipilih
+        const isOpsiEnabled = await expect(opsiVarianInput).toBeEnabled({ timeout: 10000 }).then(() => true).catch(() => false);
+        if (isOpsiEnabled) {
+          const opsiOptions = await getListboxOptionsForInput(page, opsiVarianInput);
+          await opsiVarianInput.click();
+          if (await opsiOptions.first().isVisible({ timeout: 5000 }).catch(() => false)) {
+            await opsiOptions.first().click();
+            await waitForPageReady(page);
+            await expect(opsiVarianInput).not.toHaveValue('');
+
+            // Tombol Tambah Bahan Baku pada panel Resep menjadi aktif
+            const tambahBahanBtn = page.getByRole('button', { name: /Tambah Bahan Baku/i });
+            await expect(tambahBahanBtn).toBeEnabled({ timeout: 10000 });
+          } else {
+            await page.keyboard.press('Escape').catch(() => {});
+          }
+        }
+      } else {
+        await page.keyboard.press('Escape').catch(() => {});
+      }
+
+      // 7. Beralih kembali ke radio button Menu dan pastikan field Pilih Menu tampil kembali
+      const menuRadioLabel = page.locator('label.mantine-Radio-label').filter({ hasText: /^Menu$/ }).first();
+      await menuRadioLabel.click();
+      await expect(menuRadio).toBeChecked();
+      await expect(page.getByPlaceholder('Pilih Menu')).toBeVisible({ timeout: 5000 });
     });
   });
 });

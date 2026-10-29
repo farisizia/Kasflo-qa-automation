@@ -171,6 +171,168 @@ function ScreenshotCard({ att, idx, onZoom }) {
   );
 }
 
+function VideoCard({ att }) {
+  const buildCandidateUrls = (attachment, bustCache = false) => {
+    const primary = getAttachmentUrl(attachment?.path || '');
+    const explicitWebm = attachment?.webmPath ? getAttachmentUrl(attachment.webmPath) : '';
+    const baseName = attachment?.fileName || (attachment?.path ? attachment.path.split(/[/\\]/).pop() : '');
+    const suffix = bustCache ? `?t=${Date.now()}` : '';
+
+    const candidates = [];
+    const addCandidate = (url, mime) => {
+      if (!url) return;
+      const finalUrl = suffix ? `${url}${url.includes('?') ? '&' : '?'}${suffix.slice(1)}` : url;
+      if (!candidates.some(c => c.url === finalUrl)) {
+        candidates.push({ url: finalUrl, mime });
+      }
+    };
+
+    if (/\.mp4(\?.*)?$/i.test(primary)) {
+      addCandidate(primary, 'video/mp4');
+      addCandidate(explicitWebm || primary.replace(/\.mp4(\?.*)?$/i, '.webm$1'), 'video/webm');
+    } else if (/\.webm(\?.*)?$/i.test(primary)) {
+      addCandidate(primary.replace(/\.webm(\?.*)?$/i, '.mp4$1'), 'video/mp4');
+      addCandidate(primary, 'video/webm');
+    } else if (primary) {
+      addCandidate(primary, attachment?.contentType || 'video/mp4');
+    }
+
+    if (baseName) {
+      const cleanBase = baseName.replace(/\.(webm|mp4)$/i, '');
+      addCandidate(`/attachments/screenshots/${cleanBase}.mp4`, 'video/mp4');
+      addCandidate(`/attachments/screenshots/${cleanBase}.webm`, 'video/webm');
+    }
+
+    return candidates;
+  };
+
+  const [candidates, setCandidates] = useState(() => buildCandidateUrls(att, false));
+  const [candidateIdx, setCandidateIdx] = useState(0);
+  const [status, setStatus] = useState('loading'); // 'loading' | 'ready' | 'error'
+
+  useEffect(() => {
+    const nextCandidates = buildCandidateUrls(att, false);
+    setCandidates(nextCandidates);
+    setCandidateIdx(0);
+    setStatus(nextCandidates.length > 0 ? 'loading' : 'error');
+  }, [att?.path, att?.webmPath, att?.fileName]);
+
+  const activeCandidate = candidates[candidateIdx] || { url: getAttachmentUrl(att?.path || ''), mime: 'video/mp4' };
+  const activeUrl = activeCandidate.url;
+  const formatBadge = /\.webm/i.test(activeUrl) ? 'WEBM' : 'MP4';
+
+  const handleVideoError = () => {
+    if (candidateIdx + 1 < candidates.length) {
+      setCandidateIdx(prev => prev + 1);
+      setStatus('loading');
+    } else {
+      setStatus('error');
+    }
+  };
+
+  const handleRetry = () => {
+    const refreshed = buildCandidateUrls(att, true);
+    setCandidates(refreshed);
+    setCandidateIdx(0);
+    setStatus(refreshed.length > 0 ? 'loading' : 'error');
+  };
+
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs dark:bg-slate-900/90 dark:border-slate-800">
+      <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between text-xs dark:bg-slate-900/60 dark:border-slate-800/80">
+        <div className="flex items-center space-x-2.5 overflow-hidden pr-2">
+          <span className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 shrink-0">
+            <Film className="w-4 h-4" />
+          </span>
+          <div className="truncate">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block truncate">
+              {att.name && att.name !== 'video' ? att.name : 'Rekaman Layar Pengujian'}
+            </span>
+            <span className="text-[10px] text-slate-500 font-mono block truncate dark:text-slate-400">
+              {att.fileName}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center space-x-2 shrink-0">
+          <a
+            href={activeUrl}
+            download={att.fileName || 'test-recording.mp4'}
+            className="text-[11px] text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-brand-400 flex items-center gap-1 font-medium px-2 py-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-slate-800 transition"
+            title="Unduh rekaman video"
+          >
+            <Download className="w-3 h-3" />
+            <span className="hidden sm:inline">Unduh</span>
+          </a>
+          <a
+            href={activeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-indigo-600 dark:text-brand-400 hover:underline flex items-center gap-1 font-medium px-2 py-1 rounded-lg bg-indigo-50/70 dark:bg-brand-500/10"
+            title="Buka rekaman di tab baru"
+          >
+            <ExternalLink className="w-3 h-3" />
+            <span>Buka di Tab Baru</span>
+          </a>
+          <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-950/60 dark:text-emerald-400">
+            {formatBadge}
+          </span>
+        </div>
+      </div>
+
+      <div className="relative p-2 bg-slate-950 flex items-center justify-center min-h-[200px]">
+        {status === 'error' ? (
+          <div className="flex flex-col items-center justify-center py-8 px-4 text-center space-y-3 text-slate-300">
+            <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+              <Film className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-white">
+                Rekaman Video Tidak Dapat Diputar
+              </p>
+              <p className="text-[11px] text-slate-400 max-w-xs mt-0.5">
+                File rekaman video tidak ditemukan atau format belum selesai diproses. Anda tetap dapat mengunduh file asli di bawah ini.
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={handleRetry}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Muat Ulang</span>
+              </button>
+              <a
+                href={activeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Unduh File Video</span>
+              </a>
+            </div>
+          </div>
+        ) : (
+          <video
+            key={activeUrl}
+            src={activeUrl}
+            controls
+            preload="metadata"
+            playsInline
+            onLoadedMetadata={() => setStatus('ready')}
+            onCanPlay={() => setStatus('ready')}
+            onError={handleVideoError}
+            className="w-full max-h-[380px] rounded-lg bg-black shadow-inner"
+          >
+            Browser Anda tidak mendukung pemutaran video langsung.
+          </video>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const isImageAttachment = (att) => {
   if (!att) return false;
   if (att.contentType && att.contentType.includes('image')) return true;
@@ -465,46 +627,9 @@ export default function TestDetailDrawer({ test, onClose, onPrev, onNext, hasPre
                         <span>Rekaman Pengujian Video ({videoAttachments.length})</span>
                       </h4>
                       <div className="space-y-3">
-                        {videoAttachments.map((att, idx) => {
-                          const url = getAttachmentUrl(att.path);
-                          return (
-                            <div 
-                              key={idx}
-                              className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs dark:bg-slate-900/90 dark:border-slate-800"
-                            >
-                              <div className="px-4 py-2 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between text-xs dark:bg-slate-900/60 dark:border-slate-800/80">
-                                <span className="font-semibold text-slate-900 dark:text-slate-200 truncate">{att.fileName}</span>
-                                <div className="flex items-center space-x-2 shrink-0">
-                                  <a 
-                                    href={url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-[11px] text-indigo-600 dark:text-brand-400 hover:underline flex items-center gap-1 font-medium"
-                                    title="Buka rekaman di tab baru atau unduh"
-                                  >
-                                    <ExternalLink className="w-3 h-3" />
-                                    <span>Buka di Tab Baru</span>
-                                  </a>
-                                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold dark:bg-emerald-950/60 dark:text-emerald-400">
-                                    VIDEO
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="p-2 bg-black flex items-center justify-center">
-                                <video 
-                                  controls 
-                                  preload="metadata"
-                                  playsInline
-                                  className="w-full max-h-72 rounded-lg bg-black" 
-                                >
-                                  <source src={url} type="video/webm" />
-                                  <source src={url} type="video/mp4" />
-                                  Browser Anda tidak mendukung tag video. <a href={url} target="_blank" rel="noopener noreferrer" className="underline text-indigo-400 ml-1">Klik di sini untuk mengunduh / memutar.</a>
-                                </video>
-                              </div>
-                            </div>
-                          );
-                        })}
+                        {videoAttachments.map((att, idx) => (
+                          <VideoCard key={`${att.path || idx}-${idx}`} att={att} />
+                        ))}
                       </div>
                     </div>
                   )}

@@ -60,14 +60,14 @@ test.describe('Menu Self Order', () => {
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
     await expect(loginBtn).toBeEnabled({ timeout: 10000 });
-    await page.waitForTimeout(500);
+    await waitForPageReady(page);
     await loginBtn.click();
 
     try {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1500);
+        await waitForPageReady(page);
         if (await loginBtn.isVisible().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }
@@ -81,7 +81,7 @@ test.describe('Menu Self Order', () => {
   // Helper to ensure at least one Self Order entry exists (generated via Book Menu + Branch)
   async function ensureSelfOrderExists(page) {
     await expect(page.locator('table:visible tbody tr').first()).toBeVisible({ timeout: 15000 });
-    await page.waitForTimeout(1000);
+    await waitForPageReady(page);
 
     const dataRows = getDataRows(page);
     const count = await dataRows.count();
@@ -99,7 +99,7 @@ test.describe('Menu Self Order', () => {
         }
 
         await expect(page).toHaveURL(/.*\/admin\/catalog\/book-menu\/edit/, { timeout: 15000 });
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
 
         const hasQAPill = await page.locator('.mantine-MultiSelect-pill, .mantine-Pill-root')
           .filter({ hasText: /Kasflo Pusat QA/i }).first().isVisible().catch(() => false);
@@ -108,7 +108,7 @@ test.describe('Menu Self Order', () => {
           const cabangContainer = page.locator('input[placeholder*="Cabang"], .mantine-MultiSelect-inputField, .mantine-MultiSelect-input').first();
           if (await cabangContainer.isVisible({ timeout: 5000 }).catch(() => false)) {
             await cabangContainer.click();
-            await page.waitForTimeout(500);
+            await waitForPageReady(page);
 
             const branchOption = page.locator('[role="option"]:visible, [data-combobox-option]:visible, .mantine-MultiSelect-option:visible')
               .filter({ hasText: /Kasflo Pusat QA/i }).first();
@@ -225,18 +225,18 @@ test.describe('Menu Self Order', () => {
 
       // 1. Search with matching branch name
       await searchInput.fill(cabangName);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       const matchedRow = page.locator('table:visible tbody tr').filter({ hasText: cabangName });
       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
 
       // 2. Search with non-existent keyword
       await searchInput.fill('XYZTermNotExist999');
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(page.locator('table:visible tbody').getByText(/Belum Ada Data|No results found/i).first()).toBeVisible({ timeout: 10000 });
 
       // 3. Clear search and verify original row is visible again
       await searchInput.clear();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
     
     });
@@ -336,14 +336,14 @@ test.describe('Menu Self Order', () => {
       const searchInput = page.locator('input[placeholder="Cari disini..."]:visible').first();
       await expect(searchInput).toBeVisible({ timeout: 10000 });
       await searchInput.fill(menuName);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       const matchedRow = page.locator('table tbody tr').filter({ hasText: menuName });
       await expect(matchedRow.first()).toBeVisible({ timeout: 10000 });
 
       // Clear search
       await searchInput.clear();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(firstMenuCell).toBeVisible({ timeout: 5000 });
     
     });
@@ -512,7 +512,7 @@ test.describe('Menu Self Order', () => {
       const searchInput = page.locator('input[placeholder="Cari disini..."]:visible').first();
       await expect(searchInput).toBeVisible({ timeout: 10000 });
       await searchInput.fill(menuName);
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
 
       // Verify matched menu is visible
       const matchedRow = menuTable.locator('tbody tr').filter({ hasText: menuName });
@@ -520,7 +520,7 @@ test.describe('Menu Self Order', () => {
 
       // Clear search
       await searchInput.clear();
-      await page.waitForTimeout(1000);
+      await waitForPageReady(page);
       await expect(firstMenuCell).toBeVisible({ timeout: 5000 });
 
       // Dismiss with Batalkan

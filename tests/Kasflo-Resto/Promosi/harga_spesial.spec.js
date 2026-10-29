@@ -8,9 +8,11 @@ test.describe('Harga Spesial', () => {
 
   // Helper to wait until table rows or empty state is loaded
   async function waitForTableReady(page) {
+    await waitForPageReady(page);
     const table = page.locator('table:visible').first();
     await expect(table).toBeVisible({ timeout: 15000 });
     await expect(table.locator('tbody tr').first()).toBeVisible({ timeout: 15000 });
+    await waitForPageReady(page);
   }
 
   async function waitForPageReady(page) {
@@ -53,7 +55,6 @@ test.describe('Harga Spesial', () => {
 
     await emailInput.fill('qakasflo@automation.com');
     await page.getByLabel(/Kata Sandi/i).fill('password');
-    await page.waitForTimeout(500);
 
     const loginBtn = page.getByRole('button', { name: 'Masuk' });
     await expect(loginBtn).toBeVisible({ timeout: 10000 });
@@ -64,7 +65,6 @@ test.describe('Harga Spesial', () => {
       await expect(page).toHaveURL(/.*\/admin\/.*/, { timeout: 35000 });
     } catch {
       if (!page.url().includes('/admin/')) {
-        await page.waitForTimeout(1000);
         if (await loginBtn.isEnabled().catch(() => false)) {
           await loginBtn.click({ timeout: 5000 }).catch(() => {});
         }
@@ -114,8 +114,8 @@ test.describe('Harga Spesial', () => {
 
     const optionSelector = '[role="option"]:visible, .mantine-Select-option:visible, .mantine-Select-item:visible';
     await cabangInput.click();
-    await page.waitForTimeout(500);
     const branchOptions = page.locator(optionSelector);
+    await branchOptions.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
     const branchCount = await branchOptions.count();
 
     let menuSelected = false;
@@ -123,10 +123,10 @@ test.describe('Harga Spesial', () => {
       if (branchCount > 0) {
         if (b > 0) {
           await cabangInput.click();
-          await page.waitForTimeout(500);
+          await branchOptions.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         }
         await page.locator(optionSelector).nth(b).click();
-        await page.waitForTimeout(1000);
+        await waitForPageReady(page);
       }
 
       // Add Menu via Modal (Daftar Menu is visible after selecting Cabang)
@@ -237,6 +237,7 @@ test.describe('Harga Spesial', () => {
 
   // Helper to ensure at least one promo exists
   async function ensurePromoExists(page) {
+    await waitForTableReady(page);
     const dataRows = getDataRows(page);
     const count = await dataRows.count();
     if (count === 0) {
@@ -246,6 +247,7 @@ test.describe('Harga Spesial', () => {
       return null;
     }
     const firstCell = dataRows.first().locator('td:first-child');
+    await expect(firstCell).not.toBeEmpty({ timeout: 10000 });
     return (await firstCell.innerText()).trim();
   }
 
@@ -526,10 +528,13 @@ test.describe('Harga Spesial', () => {
   test('[TC-11] Batal menghapus harga spesial melalui modal konfirmasi', async ({ page }) => {
     await test.step('Uji pembatalan aksi: Batal menghapus harga spesial melalui modal konfirmasi', async () => {
       await ensurePromoExists(page);
+      await waitForTableReady(page);
 
       const targetRow = getDataRows(page).first();
       await expect(targetRow).toBeVisible({ timeout: 10000 });
-      const targetName = (await targetRow.locator('td:first-child').innerText()).trim();
+      const firstCell = targetRow.locator('td:first-child');
+      await expect(firstCell).not.toBeEmpty({ timeout: 10000 });
+      const targetName = (await firstCell.innerText()).trim();
 
       // Delete button is the button in the action column
       const deleteBtn = targetRow.locator('button').last();
@@ -550,7 +555,11 @@ test.describe('Harga Spesial', () => {
       await expect(modal).not.toBeVisible({ timeout: 5000 });
 
       // Verify promo still exists in table
-      await expect(page.locator('table:visible').getByText(targetName)).toBeVisible({ timeout: 5000 });
+      if (targetName) {
+        await expect(page.locator('table:visible').getByText(targetName).first()).toBeVisible({ timeout: 5000 });
+      } else {
+        await expect(getDataRows(page).first()).toBeVisible({ timeout: 5000 });
+      }
     
     });
   });
