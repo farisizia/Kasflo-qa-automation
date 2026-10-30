@@ -5,7 +5,7 @@
       "value": "3LMRaZUQU7lRmUGVGyNvivav9ig.1793262014624",
       "domain": ".tiktok.com",
       "path": "/",
-      "expires": 1826958014.766316,
+      "expires": 1827040751.870558,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -15,7 +15,7 @@
       "value": "1",
       "domain": ".kasflo.id",
       "path": "/",
-      "expires": 1826958014,
+      "expires": 1827040751,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -25,27 +25,7 @@
       "value": "01M63BXMG2DEX6JT13ZKKNCWPT_.tt.1.1793262014978",
       "domain": ".kasflo.id",
       "path": "/",
-      "expires": 1826958014,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "ttcsid",
-      "value": "1793262014982::linMqqG3Bct30aAhtFDR.1.1793262015484.0::1.-11506.0::0.0.0.0::0.0.0",
-      "domain": ".kasflo.id",
-      "path": "/",
-      "expires": 1826958015,
-      "httpOnly": false,
-      "secure": false,
-      "sameSite": "Lax"
-    },
-    {
-      "name": "ttcsid_CRP79DJC77U9Q4TC94J0",
-      "value": "1793262014982::zmbL2hMfRSON-Z7G0rsL.1.1793262015484.0",
-      "domain": ".kasflo.id",
-      "path": "/",
-      "expires": 1826958015,
+      "expires": 1827040751,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -56,6 +36,26 @@
       "domain": ".kasflo.id",
       "path": "/",
       "expires": 1801040283,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ttcsid_CRP79DJC77U9Q4TC94J0",
+      "value": "1793344751877::GKoZQTh7117-HZcBriU2.3.1793344751880.0",
+      "domain": ".kasflo.id",
+      "path": "/",
+      "expires": 1827040751,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "ttcsid",
+      "value": "1793344751877::AYATjWp-c-a0UIIyD30Y.3.1793344751880.0",
+      "domain": ".kasflo.id",
+      "path": "/",
+      "expires": 1827040751,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -71,7 +71,7 @@
         },
         {
           "name": "_gcl_ls",
-          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1793264283138},\"expires\":1801040283138},\"gsid_dc\":{\"value\":{\"joinId\":\"yAgV-zAlL5e8rGgsE-dWPNTbdy75zqWLTg\",\"lastJoinedTimeMs\":1793264624467},\"expires\":1793264924467}}"
+          "value": "{\"schema\":\"gcl\",\"version\":1,\"gcl_ctr\":{\"value\":{\"value\":0,\"timeouts\":0,\"errors\":0,\"eopCount\":0,\"creationTimeMs\":1793264283138},\"expires\":1801040283138},\"gsid_dc\":{\"value\":{\"joinId\":\"o7KGeXXhmTaHAjRUU47Yo2qwqIPuuD-gJw\",\"lastJoinedTimeMs\":1793344751449},\"expires\":1793345051449}}"
         },
         {
           "name": "partner_branch_id",
